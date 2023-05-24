@@ -19,7 +19,14 @@ export default function Detail() {
           style={{ display: 'none' }}
           onChange={handleFileUpload}
         />
-        <div class="inset-0 flex items-center justify-center">
+        <div class="inset-0 flex flex-col justify-center">
+          <div class="bg-gray-100 p-3 rounded-3xl mb-4 w-24 text-center border border-gray-300">
+            <p class="text-gray-800 font-bold">회사명</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl shadow drop-shadow-md mb-9 w-full h-52">
+            </div>
+
           <div class="bg-white p-4 rounded-2xl shadow drop-shadow-lg w-full">
             <div className="flex flex-col">
               <div className="flex flex-col mb-4">
