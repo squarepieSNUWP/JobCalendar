@@ -51,7 +51,7 @@ export default function Jobs() {
                 <div onClick={() => handleClick(j)} key={index} className="border-b border-gray-300 dark:border-gray-700 my-4 py-4 cursor-pointer">
                     <h2 className="text-2xl font-bold text-primary mb-3">{j.title}</h2>
                     <h3 className="text-xl font-bold text-tertiary">{j.company}</h3>
-                    <p className="text-lg text-gray-700 dark:text-gray-400 mb-2">{j.summary}</p>
+                    {/* <p className="text-lg text-gray-700 dark:text-gray-400 mb-2">{j.summary}</p> */}
                     <p>
                         <span className="text-gray-400">{(new Date(j.startDate)).toLocaleDateString()} </span> 
                         ~
