@@ -44,6 +44,7 @@ body {
 
 * {
   box-sizing: border-box;
+  white-space: pre-line; /* React에서 줄바꿈 인식하게 하는 코드, 연속 공백 유지하려면 pre-wrap 사용해도 된다. */
 }
 
 h1 {
