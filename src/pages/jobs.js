@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { jobs } from "@/data";
+import Link from "next/link";
 import { useState } from "react";
 
 const PopUp = ({handleClose, job}) => {
@@ -17,9 +18,9 @@ const PopUp = ({handleClose, job}) => {
                     <div className="text-lg text-gray-600 dark:text-gray-400">{job.summary}</div>
                 </div>
                 <div className="flex justify-end">
-                    <button className="px-4 py-2 mr-2 font-bold text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:shadow-outline" type="button">
+                    <Link href="/detail" className="px-4 py-2 mr-2 font-bold text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:shadow-outline">
                         지원하기
-                    </button>
+                    </Link>
                     <button className="px-4 py-2 font-bold text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:shadow-outline" type="button" onClick={handleClose}>
                         취소
                     </button>
