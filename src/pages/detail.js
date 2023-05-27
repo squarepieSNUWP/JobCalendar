@@ -29,12 +29,19 @@ export default function Detail() {
     setActiveFile(fileType);
   };
 
+  const handleFileChange = (fileType) => {
+    setActiveFile(null);
+    setFiles(prevFiles => ({ ...prevFiles, [fileType]: null }));
+    fileInputRefs[fileType].current.value = null;
+  };
+
   const renderFileContent = () => {
     if (activeFile && files[activeFile]) {
       return <embed src={URL.createObjectURL(files[activeFile])} type="application/pdf" width="100%" height="100%" />;
     }
     return <div>Please select a file.</div>;
   };
+
 
   return (
     <Layout>
@@ -54,12 +61,29 @@ export default function Detail() {
             <div className="bg-white p-4 rounded-2xl mb-3">
               <div className="flex flex-col mb-1">
                 <span className="font-normal ml-2">이력서</span>
-                <button
-                  className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                  onClick={() => handleFileView('resume')}
-                >
-                  {files.resume ? '파일 보기' : 'PDF 파일 선택'}
-                </button>
+                {files.resume ? (
+                  <div className="flex">
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 mr-2"
+                      onClick={() => handleFileView('resume')}
+                    >
+                      파일 보기
+                    </button>
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                      onClick={() => handleFileChange('resume')}
+                    >
+                      파일 삭제
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                    onClick={() => openFileExplorer('resume')}
+                  >
+                    PDF 파일 선택
+                  </button>
+                )}
                 <input
                   type="file"
                   ref={fileInputRefs.resume}
@@ -71,12 +95,29 @@ export default function Detail() {
             <div className="bg-white p-4 rounded-2xl mb-3">
               <div className="flex flex-col mb-1">
                 <span className="font-normal ml-2">자소서</span>
-                <button
-                  className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                  onClick={() => handleFileView('coverLetter')}
-                >
-                  {files.coverLetter ? '파일 보기' : 'PDF 파일 선택'}
-                </button>
+                {files.coverLetter ? (
+                  <div className="flex">
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 mr-2"
+                      onClick={() => handleFileView('coverLetter')}
+                    >
+                      파일 보기
+                    </button>
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                      onClick={() => handleFileChange('coverLetter')}
+                    >
+                      파일 삭제
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                    onClick={() => openFileExplorer('coverLetter')}
+                  >
+                    PDF 파일 선택
+                  </button>
+                )}
                 <input
                   type="file"
                   ref={fileInputRefs.coverLetter}
@@ -88,12 +129,29 @@ export default function Detail() {
             <div className="bg-white p-4 rounded-2xl mb-3">
               <div className="flex flex-col mb-1">
                 <span className="font-normal ml-2">포트폴리오</span>
-                <button
-                  className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                  onClick={() => handleFileView('portfolio')}
-                >
-                  {files.portfolio ? '파일 보기' : 'PDF 파일 선택'}
-                </button>
+                {files.portfolio ? (
+                  <div className="flex">
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 mr-2"
+                      onClick={() => handleFileView('portfolio')}
+                    >
+                      파일 보기
+                    </button>
+                    <button
+                      className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                      onClick={() => handleFileChange('portfolio')}
+                    >
+                      파일 삭제
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
+                    onClick={() => openFileExplorer('portfolio')}
+                  >
+                    PDF 파일 선택
+                  </button>
+                )}
                 <input
                   type="file"
                   ref={fileInputRefs.portfolio}
