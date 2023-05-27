@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Link from "next/link";
 import React, { useRef, useState } from 'react';
 
 export default function Detail() {
@@ -48,7 +49,9 @@ export default function Detail() {
       <div>
         <div class="inset-0 flex flex-col justify-end">
             <div class="bg-primary p-0 rounded-full w-8 h-8 text-center">
-              <p class="text-white font-bold place-self-center pt-1">X</p>
+              <Link href="/" className="text-2xl font-bold text-center text-secondary mb-6">
+                  X
+              </Link>
             </div>
 
             <div class="place-self-center bg-white p-4 rounded-2xl shadow drop-shadow-md mt-8 mb-9 w-full h-52">
