@@ -1,4 +1,5 @@
-export default function Day({weekdays}) {
+'use client'
+export default function Day({ weekdays }) {
   return (
     <div className="w-full flex">
       {weekdays.map((weekday, index) => {

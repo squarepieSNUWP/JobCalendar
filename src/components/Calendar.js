@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
@@ -9,8 +10,8 @@ export default function Calendar() {
     let today = {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
-      date: new Date().getDate(),
-    };
+      date: new Date().getDate()
+    }
 
     let [selectedYear, setSelectedYear] = useState(today.year);
     let [selectedMonth, setSelectedMonth] = useState(today.month);
@@ -48,7 +49,7 @@ export default function Calendar() {
       }
 
       let Dates = prevDates.concat(thisDates, nextDates);
-      return Dates;
+      return Dates
     }
 
     return (

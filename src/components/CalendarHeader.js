@@ -1,3 +1,4 @@
+'use client'
 export default function CalendarHeader({ months, today, selectedYear, selectedMonth, setSelectedYear, setSelectedMonth }) {
 
   function goPrev() {
