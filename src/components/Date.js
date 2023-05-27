@@ -8,8 +8,6 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
 
   let isPrev = index < firstDate;
   let isNext = index > lastDate;
-  console.log(isNext)
-
 
   useEffect(() => {
     if (isPrev || isNext) {

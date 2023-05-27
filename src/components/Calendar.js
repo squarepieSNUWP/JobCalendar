@@ -15,6 +15,7 @@ export default function Calendar() {
 
     let [selectedYear, setSelectedYear] = useState(today.year);
     let [selectedMonth, setSelectedMonth] = useState(today.month);
+    let [modal, setModal] = useState(false);
 
     function getDates(year, month) {
       // 입력받은 연도 달에서 이전 달의 요일과 날짜를 저장
@@ -52,22 +53,24 @@ export default function Calendar() {
       return Dates
     }
 
+    
+
     return (
       <div className="w-900 h-600 bg-gray-200 p-6 rounded-lg shadow-md">
-            <CalendarHeader
-                months={months}
-                today={today}
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                setSelectedYear={setSelectedYear}
-                setSelectedMonth={setSelectedMonth} />
+        <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
 
-            <CalendarBody
-                weekdays={weekdays}
-                today={today}
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                dates={getDates(selectedYear, selectedMonth)} />
+        <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} />
+
+        <div className="flex h-10 justify-end items-center">
+          <button
+            className="py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mt-4"
+            onClick={() => {
+              setModal(true);
+            }}
+          >
+            Add Job Posting
+          </button>
+        </div>
       </div>
     );
 }
