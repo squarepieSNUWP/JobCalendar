@@ -2,6 +2,7 @@
 import { useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
+import Modal from "./Modal";
 
 export default function Calendar() {
     const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -16,6 +17,7 @@ export default function Calendar() {
     let [selectedYear, setSelectedYear] = useState(today.year);
     let [selectedMonth, setSelectedMonth] = useState(today.month);
     let [modal, setModal] = useState(false);
+    let [posts, setPosts] = useState([]);
 
     function getDates(year, month) {
       // 입력받은 연도 달에서 이전 달의 요일과 날짜를 저장
@@ -56,7 +58,7 @@ export default function Calendar() {
     
 
     return (
-      <div className="w-900 h-600 bg-gray-200 p-6 rounded-lg shadow-md">
+      <div className="max-w-900 h-600 bg-gray-200 p-6 rounded-lg shadow-md">
         <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
 
         <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} />
@@ -71,6 +73,10 @@ export default function Calendar() {
             Add Job Posting
           </button>
         </div>
+        
+        {
+          modal && <Modal setModal={setModal} posts={posts} setPosts={setPosts} />
+        }
       </div>
     );
 }
