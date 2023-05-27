@@ -3,7 +3,7 @@
 import Date from "./Date";
 import Day from "./Day";
 
-export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, dates }) {
+export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, dates, posts, setPosts }) {
 
   let last = [31, selectedYear % 4 == 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   let firstDate = dates.indexOf(1);
@@ -26,7 +26,8 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
               selectedMonth={selectedMonth}
               firstDate={firstDate}
               lastDate={lastDate}
-
+              posts={posts}
+              setPosts={setPosts}
             />
           )
         })}
