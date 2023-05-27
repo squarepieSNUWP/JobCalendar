@@ -74,7 +74,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
     <div className="h-24 border border-gray-700 text-gray-700 font-semibold text-sm transition duration-700 ease-in-out cursor-pointer flex flex-col relative hover:bg-gray-300">
       {isToday && <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-teal-400 z-1"></div>}
       <div
-        className="flex justify-end relative pt-2 pr-2 z-2"
+        className="flex justify-end relative pt-2 pr-2 pb-1 z-2"
         style={{
           color: isToday ? "white" : differentMonth ? "grey" : null,
           fontWeight: isToday ? 600 : null,
@@ -82,24 +82,29 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
       >
         {date}
       </div>
-      {
-        content.length > 0 &&
-        (
-          <div>
-            {content.map((item) => {
-              return (
-                <div className="
-                bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline">
-                  <span>{item.company}</span>
-                </div>
-              );
-            })}
+
+      {content.length > 0 && content.length <= 3 && (
+        <>
+          {content.slice(0, 3).map((item) => (
+            <div className="bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline" key={item.id}>
+              <span>{item.company}</span>
+            </div>
+          ))}
+        </>
+      )}
+
+      {content.length > 3 && (
+        <>
+          {content.slice(0, 2).map((item) => (
+            <div className="bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline" key={item.id}>
+              <span>{item.company}</span>
+            </div>
+          ))}
+          <div className="bg-transparent px-1 text-xs mx-0.5 my-0.5">
+            <span>...외 {content.length - 2}개</span>
           </div>
-        )
-      }
-      
-
-
+        </>
+      )}
     </div>
   );
 }
