@@ -52,20 +52,21 @@ export default function Calendar() {
     }
 
     return (
-      <div>
+      <div className="w-900 h-600 bg-gray-200 p-6 rounded-lg shadow-md">
             <CalendarHeader
                 months={months}
                 today={today}
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
-                setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth}/>
-            
+                setSelectedYear={setSelectedYear}
+                setSelectedMonth={setSelectedMonth} />
+
             <CalendarBody
                 weekdays={weekdays}
                 today={today}
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
-                dates={getDates(selectedYear, selectedMonth)}/>
+                dates={getDates(selectedYear, selectedMonth)} />
       </div>
     );
 }
