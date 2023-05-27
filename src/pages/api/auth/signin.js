@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
-import "public/google.png";
+import google from "public/google.png";
 import { auth, signInWithEmailAndPassword } from "../../../firebase/index";
-import google from "../../../../public/google.png";
-import kakao from "../../../../public/kakao.png";
-import naver from "../../../../public/naver.png";
+import kakao from "public/kakao.png";
+import naver from "public/naver.png";
 
 export default function SignIn() {
   const router = useRouter();
@@ -18,6 +17,13 @@ export default function SignIn() {
   const [typingEmail, setTypingEmail] = useState("");
   const [typingPassword, setTypingPassword] = useState("");
 
+  useEffect(() => {
+    if (session) {
+      router.replace("/");
+    }
+  }, [session]);
+
+  //TODO - nextauth credentials로 구현 | 세션 조작 방식 찾기
   const handleLogin = async () => {
     try {
       const userInfo = await signInWithEmailAndPassword(
@@ -34,7 +40,9 @@ export default function SignIn() {
 
   return (
     <div className="flex flex-col items-center justify-between">
-      <div className="text-5xl font-bold text-primary mt-10">🔥취뽀달력🔥</div>
+      <Link href="/" className="text-5xl font-bold text-primary mt-10">
+        🔥취뽀달력🔥
+      </Link>
       <form className="w-full pt-10 flex flex-col justify-between items-center">
         <div className="bg-gray-100 inline-flex h-16 items-center px-4 py-2 font-bold border-solid border-2 w-5/12 mb-4">
           <input
@@ -74,23 +82,27 @@ export default function SignIn() {
           className="bg-[#ffffff] inline-flex h-16 items-center px-4 py-2 w-5/12 font-bold"
           onClick={() => signIn("google")}
         >
-          <Image src={google} className="h-8 w-8 mr-5"></Image>
+          <Image
+            src={google}
+            alt="google logo"
+            className="h-8 w-8 mr-5"
+          ></Image>
           구글로 로그인하기
         </button>
         <button
           className="bg-[#F9E000] inline-flex h-16 items-center px-4 py-2 font-bold w-5/12"
           onClick={() => signIn("kakao")}
         >
-          <Image src={kakao} className="h-9 w-9 mr-4"></Image>
+          <Image src={kakao} alt="kakao logo" className="h-9 w-9 mr-4"></Image>
           카카오로 로그인하기
         </button>
         <button className="bg-[#2DB400] inline-flex h-16 items-center px-4 py-2 font-bold w-5/12">
-          <Image src={naver} className="h-8 w-8 mr-4"></Image>
+          <Image src={naver} alt="naver logo" className="h-8 w-8 mr-4"></Image>
           네이버로 로그인하기
         </button>
       </div>
       <div className="flex-row text-center w-full m-auto text-sm mt-5 text-gray-600">
-        아직 취뽀달력의 회원이 아니신가요?{" "}
+        아직 취뽀달력의 회원이 아니신가요?
         <Link href="/signup" className="underline underline-offset-1">
           회원가입
         </Link>
