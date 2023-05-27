@@ -1,3 +1,11 @@
+import CalendarBody from "./CalendarBody"
+import CalendarHeader from "./CalendarHeader"
+
 export default function Calendar() {
-    return <h1>Calendar</h1>
+    return (
+        <div>
+            <CalendarHeader />
+            <CalendarBody />
+        </div>
+    )
 }
