@@ -58,7 +58,7 @@ export default function Calendar() {
     
 
     return (
-      <div className="max-w-4xl h-600 bg-gray-200 p-6 rounded-lg shadow-md mx-auto">
+      <div className="max-w-4xl h-600 bg-zinc-100 p-6 rounded-lg shadow-inner mx-auto">
         <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
 
         <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} posts={posts} setPosts={setPosts} />

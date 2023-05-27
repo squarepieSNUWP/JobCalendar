@@ -10,11 +10,10 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
   let lastDate = dates.indexOf(last[selectedMonth - 1], 7);
 
   return (
-
     <div className="w-full p-4 text-base flex flex-col border border-black rounded">
       <Day weekdays={weekdays} />
 
-      <div className="w-full h-full grid grid-cols-7 gap-0.5 items-center justify-center">
+      <div className="w-full h-full grid grid-cols-7 items-center justify-center">
         {dates.map((date, index) => {
           return (
             <Date
@@ -29,7 +28,7 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
               posts={posts}
               setPosts={setPosts}
             />
-          )
+          );
         })}
       </div>
     </div>
