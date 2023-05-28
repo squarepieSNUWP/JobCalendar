@@ -6,6 +6,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
   let [differentMonth, setDifferentMonth] = useState(false);
   let [isToday, setIsToday] = useState(false);
   let [content, setContent] = useState([]);
+  console.log(content)
 
   let isPrev = index < firstDate;
   let isNext = index > lastDate;
@@ -20,7 +21,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
     }
 
     let matchingInputs = posts.filter((item) => {
-      const [itemYear, itemMonth, itemDate] = item.deadline.split("-");
+      const [itemYear, itemMonth, itemDate] = item.date.split("-");
       if (!isPrev && !isNext) {
         return (
           Number(itemYear) == selectedYear &&
@@ -89,6 +90,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
         <>
           {content.slice(0, 3).map((item) => (
             <div className="bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline" key={item.id}>
+              <span>{item.type}</span>
               <span>{item.company}</span>
             </div>
           ))}
@@ -99,6 +101,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
         <>
           {content.slice(0, 2).map((item) => (
             <div className="bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline" key={item.id}>
+              <span></span>
               <span>{item.company}</span>
             </div>
           ))}
