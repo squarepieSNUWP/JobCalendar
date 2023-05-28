@@ -10,53 +10,58 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
   let isPrev = index < firstDate;
   let isNext = index > lastDate;
 
-  useEffect(() => {
-    if (isPrev || isNext) {
-      setDifferentMonth(true);
-    }
-
-    if (selectedYear == today.year && selectedMonth == today.month && date == today.date) {
-      setIsToday(true);
-    }
-
-    let matchingInputs = posts.filter((item) => {
+  function getMatchingPosts() {
+    const matchingPosts = posts.filter((item) => {
       const [itemYear, itemMonth, itemDate] = item.date.split("-");
       if (!isPrev && !isNext) {
         return (
           Number(itemYear) == selectedYear &&
           Number(itemMonth) == selectedMonth &&
-          Number(itemDate) == date
-        )
+          Number(itemDate) == date)
+        
       } else if (isPrev && selectedMonth == 1) {
         return (
           Number(itemYear) == selectedYear - 1 &&
           Number(itemMonth) == 12 &&
-          Number(itemDate) == date
-        )
+          Number(itemDate) == date)
+        
       } else if (isNext && selectedMonth == 12) {
         return (
           Number(itemYear) == selectedYear + 1 &&
           Number(itemMonth) == 1 &&
-          Number(itemDate) == date
-        )
+          Number(itemDate) == date)
+        
       } else if (isPrev) {
         return (
           Number(itemYear) == selectedYear &&
           Number(itemMonth) == selectedMonth - 1 &&
-          Number(itemDate) == date
-        )
+          Number(itemDate) == date);
+        
       } else if (isNext) {
         return (
           Number(itemYear) == selectedYear &&
           Number(itemMonth) == selectedMonth + 1 &&
-          Number(itemDate) == date
-        )
+          Number(itemDate) == date)
       }
     });
+    return matchingPosts || []
+  }
 
-    if (matchingInputs.length > 0) {
-      const contents = matchingInputs;
-      setContent(contents);
+  useEffect(() => {
+    if (isPrev || isNext) {
+      setDifferentMonth(true);
+    }
+
+    if (selectedYear == today.year &&
+      selectedMonth == today.month &&
+      date == today.date) {
+      setIsToday(true);
+    }
+
+    let matchingPosts = getMatchingPosts()
+    if (matchingPosts.length > 0) {
+      const contents = matchingPosts
+      setContent(contents)
     } else {
       setContent([]);
     }
@@ -88,7 +93,7 @@ export default function Date({ date, today, index, selectedYear, selectedMonth, 
       {content.length > 0 && content.length <= 3 && (
         <>
           {content.slice(0, 3).map((item) => (
-            <div className="bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline" key={item.id}>
+            <div className={`bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline ${!differentMonth ? 'z-30' : null}`} key={item.id}>
               <span className="bg-white my-0.5 mr-0.5 rounded-5">
                 {item.type}
               </span>
