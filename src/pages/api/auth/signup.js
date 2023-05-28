@@ -1,124 +1,78 @@
-import { useState } from "react";
-import { auth, createUserWithEmailAndPassword } from "../../../firebase/index";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { db } from "@/firebase";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 
-export default function SignUp() {
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [checkPassword, setCheckPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const router = useRouter();
-  const [isComplete, setIsComplete] = useState(false);
+async function handler(req, res) {
+  const collectionRef = collection(db, "users_collection");
 
-  const handleRegister = async () => {
-    try {
-      if (registerPassword !== checkPassword) {
-        setErrorMsg("비밀번호가 일치하지 않습니다.");
-        setIsComplete(false);
-        return;
-      }
-      const createdUser = await createUserWithEmailAndPassword(
-        auth,
-        registerEmail,
-        registerPassword
-      );
-      setRegisterEmail("");
-      setRegisterPassword("");
-      setIsComplete(true);
-      setErrorMsg("");
-    } catch (error) {
-      switch (error.code) {
-        case "auth/weak-password":
-          setErrorMsg("비밀번호는 6자리 이상이어야 합니다.");
-          break;
-        case "auth/invalid-email":
-          setErrorMsg("잘못된 이메일 주소입니다.");
-          break;
-        case "auth/email-already-in-use":
-          setErrorMsg("이미 가입되어 있는 계정입니다.");
-          break;
-      }
-    }
+  const querySnapshot = await getDocs(collectionRef);
+  const numUsers = querySnapshot.size;
+
+  if (req.method !== "POST") {
+    return;
+  }
+
+  const data = req.body;
+
+  const { name, email, password, checkpassword } = data;
+
+  if (!name) {
+    res.status(422).json({
+      message: "아이디를 입력해 주세요",
+      error: true,
+    });
+    return;
+  } else if (!email) {
+    res.status(422).json({
+      message: "이메일을 입력해 주세요",
+      error: true,
+    });
+    return;
+  } else if (!email.includes("@")) {
+    res.status(422).json({
+      message: "이메일 형식을 확인해 주세요",
+      error: true,
+    });
+  } else if (!password) {
+    res.status(422).json({
+      message: "비밀번호를 입력해 주세요",
+      error: true,
+    });
+    return;
+  } else if (password.trim().length < 7) {
+    res.status(422).json({
+      message: "비밀번호를 7자리 이상으로 설정해 주세요",
+      error: true,
+    });
+    return;
+  } else if (password !== checkpassword) {
+    res.status(422).json({
+      message: "비밀번호가 일치하지 않습니다",
+      error: true,
+    });
+    return;
+  }
+
+  const newUserRef = {
+    name: name,
+    email: email,
+    password: password,
   };
 
-  const handleNavigation = () => {
-    if (isComplete) {
-      router.replace("/");
-    }
-  };
+  try {
+    const newDocRef = doc(collectionRef, `${numUsers + 1}`);
+    await setDoc(newDocRef, newUserRef);
+  } catch (error) {
+    console.log("error while adding doc");
+  }
 
-  return (
-    <div className="w-full flex flex-col items-center mt-14">
-      <Link href="/" className="text-5xl font-bold text-primary mt-14">
-        🔥취뽀달력🔥
-      </Link>
-      <div className="flex flex-col h-96 w-5/12 mt-14 justify-between">
-        <form>
-          <div className="h-16 px-4 py-2 font-bold border-solid border-2 mb-4">
-            <input
-              className="bg-gray-100 w-full h-full"
-              id="register-email"
-              value={registerEmail}
-              placeholder="이메일"
-              onChange={(e) => {
-                const input = e.target.value;
-                setRegisterEmail(input);
-              }}
-            />
-          </div>
-          <div className="h-16 px-4 py-2 font-bold border-solid border-2 mb-4">
-            <input
-              className="bg-gray-100 w-full h-full"
-              id="register-password"
-              value={registerPassword}
-              type="password"
-              placeholder="비밀번호"
-              onChange={(e) => {
-                const input = e.target.value;
-                setRegisterPassword(input);
-              }}
-            />
-          </div>
-          <div className="h-16 px-4 py-2 font-bold border-solid border-2 mb-10">
-            <input
-              className="bg-gray-100 w-full h-full"
-              id="password-check"
-              value={checkPassword}
-              type="password"
-              placeholder="비밀번호 확인"
-              onChange={(e) => {
-                const input = e.target.value;
-                setCheckPassword(input);
-              }}
-            />
-          </div>
-          <div
-            className="bg-primary inline-flex items-center h-16 px-4 py-2 font-bold w-full text-white cursor-pointer"
-            onClick={handleRegister}
-          >
-            회원가입
-          </div>
-        </form>
-      </div>
-      {errorMsg ? (
-        <div className="text-sm mt-5 font-bold text-gray-500">{errorMsg}</div>
-      ) : (
-        <></>
-      )}
-      {isComplete ? (
-        <div className="flex text-gray-500 font-bold">
-          회원가입이 완료되었습니다!{" "}
-          <div
-            className="ml-2 underline underline-offset-1 cursor-pointer"
-            onClick={handleNavigation}
-          >
-            로그인하러 가기
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+  const userId = newUserRef.id;
+  const result = { id: userId, name: name, email: email };
+
+  if (result) {
+    res.status(201).json({ message: "Created user!", error: false });
+  } else {
+    res.status(422).json({ message: "error occurred", error: true });
+  }
 }
+
+export default handler;
