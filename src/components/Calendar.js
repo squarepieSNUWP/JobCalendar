@@ -52,18 +52,19 @@ export default function Calendar() {
         nextDates.push(i);
       }
 
-      let Dates = {prev: prevDates, this: thisDates, next: nextDates}
+      let dates = prevDates.concat(thisDates, nextDates)
+      let firstIndex = prevDates.length
+      let lastIndex = prevDates.length + thisDates.length - 1
       // prevDates.concat(thisDates, nextDates);
-      return Dates
+      return {dates, firstIndex, lastIndex}
     }
-    console.log(posts)
     
 
     return (
       <div className="max-w-4xl h-600 bg-zinc-100 p-6 rounded-lg shadow-inner mx-auto">
         <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
 
-        <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} posts={posts} setPosts={setPosts} />
+        <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} getDates={getDates(selectedYear, selectedMonth)} posts={posts} setPosts={setPosts} />
 
         <div className="flex h-10 justify-end items-center">
           <button

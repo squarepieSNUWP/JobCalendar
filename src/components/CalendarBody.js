@@ -1,18 +1,40 @@
 'use client'
 
+import { useState } from "react";
 import Date from "./Date";
 import Day from "./Day";
 
-export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, dates, posts, setPosts }) {
+export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, getDates, posts, setPosts }) {
+  const { dates, firstIndex, lastIndex } = getDates;
+
+  const prevYear = selectedMonth === 1 ? selectedYear - 1 : selectedYear;
+  const prevMonth = selectedMonth === 1 ? 12 : selectedMonth - 1;
+  const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
+  const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
 
 
-  function getMatchingPosts(year, month, date) {
+  function getMatchingPosts(date, index) {
+    let isPrev = index < firstIndex;
+    let isNext = index > lastIndex;
+
     const matchingPosts = posts.filter((post) => {
+      if (isPrev) {
+        return post.date ==
+          `${prevYear}-${String(prevMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
+      } else if (isNext) {
+        return post.date ==
+          `${nextYear}-${String(nextMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
+      } else {
+        return post.date ==
+          `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`
+      }
+    })
 
-      let calendatDate = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`
-      return post.date == calendatDate
+    const matchingPostsWithIndex = matchingPosts.map((matchingPost) => {
+      return { post: matchingPost, index };
     });
-    return matchingPosts
+
+    return matchingPostsWithIndex || [];
   }
 
   return (
@@ -20,60 +42,16 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
       <Day weekdays={weekdays} />
 
       <div className="w-full h-full grid grid-cols-7 items-center justify-center">
-        {dates.prev.map((date, index) => {
-          const year =
-            selectedMonth === 1 ? selectedYear - 1 : selectedYear;
-          const month =
-            selectedMonth === 1 ? 12 : selectedMonth - 1;
-          const matchingPosts = getMatchingPosts(year, month, date);
+        {dates.map((date, index) => {
+          const matchingPosts = getMatchingPosts(date, index);
+  
           return (
             <Date
               key={index}
-              type={'prev'}
               date={date}
               index={index}
-              today={today}
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              posts={posts}
-              setPosts={setPosts}
-              matchingPosts={matchingPosts}
-            />
-          );
-        })}
-
-        {dates.this.map((date, index) => {
-          const year = selectedYear
-          const month = selectedMonth
-          const matchingPosts = getMatchingPosts(year, month, date);
-          return (
-            <Date
-              key={index}
-              type={'this'}
-              date={date}
-              index={index}
-              today={today}
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              posts={posts}
-              setPosts={setPosts}
-              matchingPosts={matchingPosts}
-            />
-          );
-        })}
-
-        {dates.next.map((date, index) => {
-          const year =
-            selectedMonth === 12 ? selectedYear + 1 : selectedYear;
-          const month =
-            selectedMonth === 12 ? 1 : selectedMonth + 1;
-          const matchingPosts = getMatchingPosts(year, month, date);
-          return (
-            <Date
-              key={index}
-              type={'next'}
-              date={date}
-              index={index}
+              firstIndex={firstIndex}
+              lastIndex={lastIndex}
               today={today}
               selectedYear={selectedYear}
               selectedMonth={selectedMonth}
