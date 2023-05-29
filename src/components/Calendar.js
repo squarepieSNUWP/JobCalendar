@@ -7,6 +7,7 @@ import Modal from "./Modal";
 export default function Calendar() {
     const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
 
     let today = {
       year: new Date().getFullYear(),
@@ -51,10 +52,11 @@ export default function Calendar() {
         nextDates.push(i);
       }
 
-      let Dates = prevDates.concat(thisDates, nextDates);
+      let Dates = {prev: prevDates, this: thisDates, next: nextDates}
+      // prevDates.concat(thisDates, nextDates);
       return Dates
     }
-
+    console.log(posts)
     
 
     return (
