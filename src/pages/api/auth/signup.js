@@ -1,5 +1,12 @@
 import { db } from "@/firebase";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  query,
+  where,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 
 async function handler(req, res) {
   const collectionRef = collection(db, "users_collection");
@@ -14,6 +21,8 @@ async function handler(req, res) {
   const data = req.body;
 
   const { name, email, password, checkpassword } = data;
+  const q = query(collectionRef, where("email", "==", email));
+  const queryDocs = await getDocs(q);
 
   if (!name) {
     res.status(422).json({
@@ -47,6 +56,12 @@ async function handler(req, res) {
   } else if (password !== checkpassword) {
     res.status(422).json({
       message: "비밀번호가 일치하지 않습니다",
+      error: true,
+    });
+    return;
+  } else if (!queryDocs.empty) {
+    res.status(422).json({
+      message: "이미 가입된 유저입니다",
       error: true,
     });
     return;
