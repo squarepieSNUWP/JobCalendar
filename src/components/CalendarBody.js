@@ -7,34 +7,23 @@ import Day from "./Day";
 export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, getDates, posts, setPosts }) {
   const { dates, firstIndex, lastIndex } = getDates;
 
-  const prevYear = selectedMonth === 1 ? selectedYear - 1 : selectedYear;
-  const prevMonth = selectedMonth === 1 ? 12 : selectedMonth - 1;
-  const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
-  const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
-
-
-  function getMatchingPosts(date, index) {
-    let isPrev = index < firstIndex;
-    let isNext = index > lastIndex;
-
+  function getMatchingPosts(date) {
     const matchingPosts = posts.filter((post) => {
-      if (isPrev) {
-        return post.date ==
-          `${prevYear}-${String(prevMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
-      } else if (isNext) {
-        return post.date ==
-          `${nextYear}-${String(nextMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
-      } else {
-        return post.date ==
-          `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(date).padStart(2, "0")}`
-      }
+      const [postYear, postMonth, postDate] = post.date.split('-')
+      return (
+        Number(postYear) === date.y &&
+        Number(postMonth) === date.m &&
+        Number(postDate) === date.d
+      )
     })
 
-    const matchingPostsWithIndex = matchingPosts.map((matchingPost) => {
-      return { post: matchingPost, index };
-    });
+    return matchingPosts
 
-    return matchingPostsWithIndex || [];
+    // const matchingPostsWithIndex = matchingPosts.map((matchingPost) => {
+    //   return { post: matchingPost, index };
+    // });
+
+    // return matchingPostsWithIndex || [];
   }
 
   return (
@@ -43,7 +32,7 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
 
       <div className="w-full h-full grid grid-cols-7 items-center justify-center">
         {dates.map((date, index) => {
-          const matchingPosts = getMatchingPosts(date, index);
+          const matchingPosts = getMatchingPosts(date);
   
           return (
             <Date

@@ -10,51 +10,77 @@ export default function Calendar() {
     
 
     let today = {
-      year: new Date().getFullYear(),
-      month: new Date().getMonth() + 1,
-      date: new Date().getDate()
+      y: new Date().getFullYear(),
+      m: new Date().getMonth() + 1,
+      d: new Date().getDate()
     }
 
-    let [selectedYear, setSelectedYear] = useState(today.year);
-    let [selectedMonth, setSelectedMonth] = useState(today.month);
+    let [selectedYear, setSelectedYear] = useState(today.y);
+    let [selectedMonth, setSelectedMonth] = useState(today.m);
     let [modal, setModal] = useState(false);
     let [posts, setPosts] = useState([]);
 
+    // 연도와 달을 입력 받아 날짜 Array를 반환하는 함수
     function getDates(year, month) {
       // 입력받은 연도 달에서 이전 달의 요일과 날짜를 저장
-      let prevLastDay = new Date(year, month - 1, 0).getDay();
-      let prevLastDate = new Date(year, month - 1, 0).getDate();
-
+      const prevYear = month === 1 ? year - 1 : year;
+      const prevMonth = month === 1 ? 12 : month - 1;
+      const prevLastDay = new Date(year, month - 1, 0).getDay();
+      const prevLastDate = new Date(year, month - 1, 0).getDate();
+      
       // 입력받은 연도 달의 요일과 날짜를 저장
-      let thisLastDay = new Date(year, month, 0).getDay();
-      let thisLastDate = new Date(year, month, 0).getDate();
+      const thisLastDay = new Date(year, month, 0).getDay();
+      const thisLastDate = new Date(year, month, 0).getDate();
+      
+      const nextYear = month === 12 ? year + 1 : year;
+      const nextMonth = month === 12 ? 1 : month + 1;
 
       // 지난달 마지막 요일이 토요일이 아니라면 마지막 주의 날짜들을 삽입
       // 이번달 첫째 주 날짜들과 같은 줄에 보여주기 위한 작업
-      let prevDates = [];
+      const prevDates = [];
       if (prevLastDay !== 6) {
         for (let i = 0; i <= prevLastDay; i++) {
-          prevDates.unshift(prevLastDate - i);
+          prevDates.unshift(
+            {
+            y: prevYear,
+            m: prevMonth,
+            d: prevLastDate - i,
+            currentMonth: false
+            }
+          );
         }
       }
 
       // 이번달 날짜들을 1부터 마지막 날짜까지 삽입
-      let thisDates = [];
+      const thisDates = [];
       for (let i = 1; i <= thisLastDate; i++) {
-        thisDates.push(i);
+        thisDates.push(
+          {
+            y: year,
+            m: month,
+            d: i,
+            currentMonth: true
+          }
+        );
       }
 
       // 다음달의 날짜를 추가하여 총 6주가 되도록 함
-      let nextDates = [];
-      let remainingDays = 42 - (prevDates.length + thisDates.length); // 남은 일수 계산
+      const nextDates = [];
+      const remainingDays = 42 - (prevDates.length + thisDates.length); // 남은 일수 계산
 
       for (let i = 1; i <= remainingDays; i++) {
-        nextDates.push(i);
+        nextDates.push(
+          {
+            y: nextYear,
+            m: nextMonth,
+            d: i,
+            currentMonth: false
+          });
       }
 
-      let dates = prevDates.concat(thisDates, nextDates)
-      let firstIndex = prevDates.length
-      let lastIndex = prevDates.length + thisDates.length - 1
+      const dates = prevDates.concat(thisDates, nextDates)
+      const firstIndex = prevDates.length
+      const lastIndex = prevDates.length + thisDates.length - 1
       // prevDates.concat(thisDates, nextDates);
       return {dates, firstIndex, lastIndex}
     }
@@ -62,9 +88,22 @@ export default function Calendar() {
 
     return (
       <div className="max-w-4xl h-600 bg-zinc-100 p-6 rounded-lg shadow-inner mx-auto">
-        <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
+        <CalendarHeader
+          months={months}
+          today={today}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedYear={setSelectedYear}
+          setSelectedMonth={setSelectedMonth} />
 
-        <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} getDates={getDates(selectedYear, selectedMonth)} posts={posts} setPosts={setPosts} />
+        <CalendarBody
+          weekdays={weekdays}
+          today={today}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          getDates={getDates(selectedYear, selectedMonth)}
+          posts={posts}
+          setPosts={setPosts} />
 
         <div className="flex h-10 justify-end items-center">
           <button
@@ -78,7 +117,11 @@ export default function Calendar() {
         </div>
         
         {
-          modal && <Modal setModal={setModal} posts={posts} setPosts={setPosts} />
+          modal &&
+          <Modal
+            setModal={setModal}
+            posts={posts}
+            setPosts={setPosts} />
         }
       </div>
     );
