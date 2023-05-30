@@ -79,10 +79,8 @@ export default function Calendar() {
       }
 
       const dates = prevDates.concat(thisDates, nextDates)
-      const firstIndex = prevDates.length
-      const lastIndex = prevDates.length + thisDates.length - 1
-      // prevDates.concat(thisDates, nextDates);
-      return {dates, firstIndex, lastIndex}
+      
+      return dates
     }
     
     return (
@@ -100,7 +98,7 @@ export default function Calendar() {
           today={today}
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
-          getDates={getDates(selectedYear, selectedMonth)}
+          dates={getDates(selectedYear, selectedMonth)}
           posts={posts} />
 
         <div className="flex h-10 justify-end items-center">

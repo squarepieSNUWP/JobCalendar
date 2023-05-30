@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 
-export default function Date({ date, index, today, selectedYear, selectedMonth, posts, matchingPosts, indexRange, setIndexRange,highlight }) {
+export default function Date({ date, index, today, selectedYear, selectedMonth, posts, matchingPosts, postRange, indexRange, setIndexRange,highlight }) {
   let [content, setContent] = useState([]);
 
   useEffect(() => {
@@ -37,11 +37,16 @@ export default function Date({ date, index, today, selectedYear, selectedMonth, 
 
       {content.length > 0 && content.length <= 3 && (
         <>
-          {content.slice(0, 3).map((item) => (
+          {content.slice(0, 3).map((item, index) => (
             <div
               className={`bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline ${date.currentMonth ? "z-30" : null}`}
               key={item.id}
-              onMouseOver={() => { setIndexRange([10, 20]) }}
+              onMouseOver={() => {
+                setIndexRange(
+                  [postRange[index].startIndex, postRange[index].endIndex]
+                )
+                console.log(indexRange)
+              }}
               onMouseLeave={() => { setIndexRange([])}}
               
             >
