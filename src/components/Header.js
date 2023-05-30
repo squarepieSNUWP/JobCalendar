@@ -7,20 +7,21 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className="flex items-center justify-between h-24 px-12 py-5 bg-white shadow-sm">
-      <div className="flex items-center">
-        <div className="mr-6">
-          <Link href="/" className="text-2xl font-bold text-primary">
+    <header className="fixed left-0 top-0 flex flex-col bg-gray-300 items-center justify-between h-screen w-[10vw] py-10 shadow-sm">
+      <div className="flex flex-col items-center">
+        {/* <span className="mb-5 self-end cursor-pointer">fold</span> */}
+        <div className="mb-8">
+          <Link href="/" className="text-lg font-bold text-primary">
             🔥 취뽀달력 🔥
           </Link>
         </div>
-        <nav className="text-lg">
+        <nav className="text-lg flex flex-col">
           <Link
             href="/jobs"
             className={
               route.pathname === "/jobs"
-                ? "mr-4 text-gray-700 hover:text-gray-900 font-black underline underline-offset-4"
-                : "mr-4 text-gray-700 hover:text-gray-900"
+                ? "mb-3 text-gray-700 hover:text-gray-900 font-black underline underline-offset-4"
+                : "mb-3 text-gray-700 hover:text-gray-900"
             }
           >
             Jobs
@@ -29,8 +30,8 @@ export default function Header() {
             href="/"
             className={
               route.pathname === "/"
-                ? "mr-4 text-gray-700 hover:text-gray-900 font-black underline underline-offset-4"
-                : "mr-4 text-gray-700 hover:text-gray-900"
+                ? "text-gray-700 hover:text-gray-900 font-black underline underline-offset-4"
+                : "text-gray-700 hover:text-gray-900"
             }
           >
             Calendar
@@ -48,7 +49,11 @@ export default function Header() {
         ) : (
           <Link
             href="/login"
-            className="mr-4 text-gray-700 hover:text-gray-900"
+            className={
+              route.pathname === "/login"
+                ? "text-gray-700 hover:text-gray-900 font-black underline underline-offset-4"
+                : "text-gray-700 hover:text-gray-900"
+            }
           >
             Login
           </Link>
