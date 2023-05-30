@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Date from "./Date";
 import Day from "./Day";
 
-export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, getDates, posts, setPosts }) {
+export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, getDates, posts }) {
   const { dates, firstIndex, lastIndex } = getDates;
+  const [indexRange, setIndexRange] = useState([])
 
   function getMatchingPosts(date) {
     const matchingPosts = posts.filter((post) => {
@@ -18,13 +19,8 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
     })
 
     return matchingPosts
-
-    // const matchingPostsWithIndex = matchingPosts.map((matchingPost) => {
-    //   return { post: matchingPost, index };
-    // });
-
-    // return matchingPostsWithIndex || [];
   }
+
 
   return (
     <div className="w-full p-4 text-base flex flex-col border border-black rounded">
@@ -39,14 +35,14 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
               key={index}
               date={date}
               index={index}
-              firstIndex={firstIndex}
-              lastIndex={lastIndex}
               today={today}
               selectedYear={selectedYear}
               selectedMonth={selectedMonth}
               posts={posts}
-              setPosts={setPosts}
               matchingPosts={matchingPosts}
+              indexRange={indexRange}
+              setIndexRange={setIndexRange}
+              highlight={index >= indexRange[0] && index <= indexRange[1]}
             />
           );
         })}

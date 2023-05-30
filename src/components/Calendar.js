@@ -85,7 +85,6 @@ export default function Calendar() {
       return {dates, firstIndex, lastIndex}
     }
     
-
     return (
       <div className="max-w-4xl h-600 bg-zinc-100 p-6 rounded-lg shadow-inner mx-auto">
         <CalendarHeader
@@ -102,8 +101,7 @@ export default function Calendar() {
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
           getDates={getDates(selectedYear, selectedMonth)}
-          posts={posts}
-          setPosts={setPosts} />
+          posts={posts} />
 
         <div className="flex h-10 justify-end items-center">
           <button
