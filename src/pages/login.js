@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import SnsSignInForm from "@/components/SnsSignInForm";
 import SignInForm from "@/components/SignInForm";
+import Layout from "@/components/Layout";
 
 export default function Login() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <Layout>
       <Link
         href="/"
         className="text-5xl flex flex-col items-center text-center font-bold text-primary mt-10"
@@ -85,6 +86,6 @@ export default function Login() {
           회원가입
         </Link>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SignUpForm from "@/components/SignUpForm";
+import Layout from "@/components/Layout";
 
 export default function SignUp() {
   const [registerEmail, setRegisterEmail] = useState("");
@@ -61,7 +62,7 @@ export default function SignUp() {
   }, [isComplete]);
 
   return (
-    <div>
+    <Layout>
       <Link
         href="/"
         className="flex flex-col items-center text-5xl font-bold text-primary mt-14"
@@ -99,6 +100,6 @@ export default function SignUp() {
       ) : (
         <></>
       )}
-    </div>
+    </Layout>
   );
 }
