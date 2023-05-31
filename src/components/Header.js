@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
-import Calendarimage from '../images/calendarSWP.png';
 
 export default function Header() {
   const route = useRouter();
@@ -43,7 +42,10 @@ export default function Header() {
             }
           }}
         >
-          <img src={Calendarimage} alt="Jobs Icon" style={{ marginRight: '8px' }} />
+          <img
+           src="./src/images/calendarSWP.png"
+           alt="Icon"
+           style={{ marginRight: '8px' }} />
           Calendar
         </Link>
 
