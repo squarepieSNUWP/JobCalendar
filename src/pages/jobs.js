@@ -14,7 +14,7 @@ const PopUp = ({handleClose, job}) => {
                     </button>
                 </div>
                 <div className="mb-12">
-                    <div className="mb-2 text-xl font-bold text-primary">{job.company}</div>
+                    <div className="mb-2 text-xl font-bold text-secondary">{job.company}</div>
                     <div className="text-lg text-gray-600 dark:text-gray-400">{job.summary}</div>
                 </div>
                 <div className="flex justify-end">
@@ -47,11 +47,11 @@ export default function Jobs() {
 
     return (
         <Layout>
-            <h1 className="text-6xl font-bold text-center text-tertiary">Jobs</h1>
+            <h1 className="text-6xl font-extrabold text-center text-primary">Jobs</h1>
             {jobs.map((j, index) => (
                 <div onClick={() => handleClick(j)} key={index} className="border-b border-gray-300 dark:border-gray-700 my-4 py-4 cursor-pointer">
                     <h2 className="text-2xl font-bold text-primary mb-3">{j.title}</h2>
-                    <h3 className="text-xl font-bold text-tertiary">{j.company}</h3>
+                    <h3 className="text-xl font-bold text-[#ABA19C]">{j.company}</h3>
                     {/* <p className="text-lg text-gray-700 dark:text-gray-400 mb-2">{j.summary}</p> */}
                     <p>
                         <span className="text-gray-400">{(new Date(j.startDate)).toLocaleDateString()} </span> 
