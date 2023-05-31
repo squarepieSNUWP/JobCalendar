@@ -20,8 +20,8 @@ export default function CalendarHeader({ months, today, selectedYear, selectedMo
   }
 
   function goToday() {
-    setSelectedYear(today.year);
-    setSelectedMonth(today.month);
+    setSelectedYear(today.y);
+    setSelectedMonth(today.m);
   }
 
 
