@@ -7,7 +7,7 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className="fixed left-0 top-0 flex flex-col bg-tertiary items-center justify-between h-screen w-[18vw] py-10 px-0 shadow-sm">
+    <header className="fixed left-0 top-0 flex flex-col bg-tertiary items-center justify-between h-screen w-60 py-10 px-0">
       <div className="flex flex-col items-center">
         {/* <span className="mb-5 self-end cursor-pointer">fold</span> */}
         <div className="mb-20">
@@ -18,9 +18,9 @@ export default function Header() {
         <nav className="space-y-3 text-lg font-semibold flex flex-col">
         <Link
           href="/"
-          className={`text-primary ${
+          className={`text-primary tracking-wide ${
             route.pathname === "/" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
-          } w-[200px] `}
+          } w-[200px]`}
           style={{
             backgroundColor: route.pathname === "/" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
@@ -46,9 +46,9 @@ export default function Header() {
 
         <Link
           href="/jobs"
-          className={`text-primary ${
+          className={`text-primary tracking-wide ${
             route.pathname === "/jobs" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
-          } w-[200px] `}
+          } w-[200px]`}
           style={{
             backgroundColor: route.pathname === "/jobs" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
