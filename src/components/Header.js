@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
+import Calendarimage from '../images/calendarSWP.png';
 
 export default function Header() {
   const route = useRouter();
@@ -15,32 +16,34 @@ export default function Header() {
             🔥 취뽀달력 🔥
           </Link>
         </div>
-        <nav className="space-y-3 text-lg font-semibold flex flex-col">
+        <nav className="space-y-3 text-base font-semibold flex flex-col items-center">
         <Link
           href="/"
           className={`text-primary tracking-wide ${
             route.pathname === "/" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
-          } w-[200px]`}
+          } w-[180px]`}
           style={{
             backgroundColor: route.pathname === "/" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
-            borderRadius: "25px",
-            display: "inline-block",
+            borderRadius: "20px",
+            display: "inline-flex",
+            alignItems: "center",
             transition: "background-color 0.1s",
           }}
           onMouseOver={(e) => {
             if (route.pathname !== "/") {
-              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
+              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
             }
           }}
           onMouseOut={(e) => {
             if (route.pathname === "/") {
-              e.target.style.backgroundColor = "#DED4CF";
+              e.target.style.backgroundColor = "#DBCEC7";
             } else {
               e.target.style.backgroundColor = "transparent";
             }
           }}
         >
+          <img src={Calendarimage} alt="Jobs Icon" style={{ marginRight: '8px' }} />
           Calendar
         </Link>
 
@@ -48,22 +51,22 @@ export default function Header() {
           href="/jobs"
           className={`text-primary tracking-wide ${
             route.pathname === "/jobs" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
-          } w-[200px]`}
+          } w-[180px]`}
           style={{
             backgroundColor: route.pathname === "/jobs" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
-            borderRadius: "25px",
+            borderRadius: "20px",
             display: "inline-block",
             transition: "background-color 0.1s",
           }}
           onMouseOver={(e) => {
             if (route.pathname !== "/jobs") {
-              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
+              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
             }
           }}
           onMouseOut={(e) => {
             if (route.pathname === "/jobs") {
-              e.target.style.backgroundColor = "#DED4CF";
+              e.target.style.backgroundColor = "#DBCEC7";
             } else {
               e.target.style.backgroundColor = "transparent";
             }
