@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
-import CalIcon from '/public/calendarSWP.png'
-import JobIcon from '/public/jobsSWP.png'
+import CalIcon from "public/calendarSWP.png";
+import JobIcon from "public/jobsSWP.png";
 
 export default function Header() {
   const route = useRouter();
@@ -45,10 +45,11 @@ export default function Header() {
             }
           }}
         >
-          <img
+          <Image
            src={CalIcon}
            alt="Icon"
-           style={{ marginRight: '8px' }} />
+           className="h-4 w-4 mr-4 ml-2"
+           ></Image>
           Calendar
         </Link>
 
@@ -61,7 +62,8 @@ export default function Header() {
             backgroundColor: route.pathname === "/jobs" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
             borderRadius: "20px",
-            display: "inline-block",
+            display: "inline-flex",
+            alignItems: "center",
             transition: "background-color 0.1s",
           }}
           onMouseOver={(e) => {
@@ -77,10 +79,11 @@ export default function Header() {
             }
           }}
         >
-          <img
-            src={JobIcon}
-            alt="Icon"
-            style={{ marginRight: '8px' }} />
+          <Image
+           src={JobIcon}
+           alt="Icon"
+           className="h-4 w-4 mr-4 ml-2"
+           ></Image>
           Jobs
         </Link>
 
