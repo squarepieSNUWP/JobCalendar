@@ -30,10 +30,10 @@ export default function Date({ date, index, today, selectedYear, selectedMonth, 
         date.y === today.y &&
         date.m === today.m &&
         date.d == today.d &&
-        <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-teal-400 z-0">
+        <div className={`absolute top-2 ${date.d.toString().length==2 ? 'right-1.5' : 'right-0.5'} w-6 h-6 rounded-full bg-teal-400 z-0`}>
         </div>
       }
-      <div className="flex justify-end relative pt-2 pr-2 pb-1 z-10">{date.d}</div>
+      <div className="flex justify-end relative pt-2.5 pr-2.5 pb-1 z-10">{date.d}</div>
 
       {content.length > 0 && content.length <= 3 && (
         <>
