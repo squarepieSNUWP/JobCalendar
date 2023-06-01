@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export default function Modal({ setModal, posts, setPosts }) {
+  const [selectedOption, setSelectedOption] = useState("paper");
   const [startDateValue, setStartDateValue] = useState("");
   const [endDateValue, setEndDateValue] = useState("");
   const [companyValue, setCompanyValue] = useState("");
@@ -21,7 +22,6 @@ export default function Modal({ setModal, posts, setPosts }) {
       return;
     }
 
-    // Check if company, job, and description values are empty
     if (startDate > endDate) {
       alert("시작 날짜는 마감 날짜 이전으로 선택해주세요");
       return;
@@ -73,6 +73,42 @@ export default function Modal({ setModal, posts, setPosts }) {
 
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 bg-gray-200 p-8 rounded-lg shadow-md z-40 flex flex-col items-center">
         <div className="w-full h-full flex flex-col">
+          <div class="flex mb-3">
+            <div class="flex items-center mr-4">
+              <input
+                id="radio-paper"
+                type="radio"
+                className="appearance-none bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer"
+                value="paper"
+                name="type"
+                checked={selectedOption === "paper"}
+                onChange={(e) => {
+                  setSelectedOption(e.target.value);
+                }}
+              />
+              <label for="radio-paper" className="ml-2 text-sm">
+                서류
+              </label>
+            </div>
+
+            <div class="flex items-center mr-3">
+              <input
+                id="radio-interview"
+                type="radio"
+                className="appearance-none bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer"
+                value="interview"
+                name="type"
+                checked={selectedOption === "interview"}
+                onChange={(e) => {
+                  setSelectedOption(e.target.value);
+                }}
+              />
+              <label for="radio-interview" className="ml-2 text-sm">
+                면접
+              </label>
+            </div>
+          </div>
+
           <div className="flex flex-col mb-3">
             <label htmlFor="start-date" className="mb-1">
               시작 날짜
