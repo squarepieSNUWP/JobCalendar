@@ -35,24 +35,25 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
 
 
   function getPostRange(post) {
-    const postId = post.id
     const postIndex = getPostIndex(post)
-
-    if (post.type == 'start') {
-      const endPost = posts.find((p) => p.id == post.id && p.type == 'end')
-      const endPostIndex =
-        getPostIndex(endPost) === -1 ? 41 : getPostIndex(endPost) 
-      return { startIndex: postIndex, endIndex: endPostIndex }
-      
-    } else if (post.type == 'end') {
-      const startPost = posts.find((p) => p.id == post.id && p.type == "start")
-      const startPostIndex =
-        getPostIndex(startPost) === -1 ? 0 : getPostIndex(startPost)
-      return { startIndex: startPostIndex, endIndex: postIndex }
-
-    } else {
-      return { startIndex: postIndex, endIndex: postIndex }
-
+    const todayIndex = dates.findIndex((date) => {
+      return (
+        today.y === date.y &&
+        today.m === date.m &&
+        today.d === date.d
+      )
+    })
+    if (todayIndex === -1) {
+      return []
+    } 
+    
+    if (postIndex < todayIndex) {
+      return []
+    
+    }
+    
+    if (todayIndex <= postIndex) {
+      return [todayIndex, postIndex]
     }
   }
 
@@ -64,7 +65,9 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
       <div className="w-full h-full grid grid-cols-7 items-center justify-center">
         {dates.map((date, index) => {
           const matchingPosts = getMatchingPosts(date);
-          const postRange = matchingPosts.map((post) => getPostRange(post))
+          const postRange = matchingPosts.length > 0
+            ? getPostRange(matchingPosts[0]) : []
+          // const postRange = matchingPosts.map((post) => getPostRange(post));
   
           return (
             <Date

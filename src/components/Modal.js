@@ -2,70 +2,33 @@ import { useState } from "react";
 
 export default function Modal({ setModal, posts, setPosts }) {
   const [selectedOption, setSelectedOption] = useState("paper");
-  const [startDateValue, setStartDateValue] = useState("");
-  const [endDateValue, setEndDateValue] = useState("");
+  const [dateValue, setDateValue] = useState("")
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
 
   function handleFormSubmit() {
-    const startDate = startDateValue;
-    const endDate = endDateValue;
     const postId = Math.random();
 
-    if (!startDate ||
-      !endDate ||
+    if (!date ||
       !companyValue ||
       !jobValue ||
       !descriptionValue) {
       alert("빈 칸을 채워주세요");
       return;
     }
+    const newPost = {
+      id: postId,
+      date: dateValue,
+      type: selectedOption,
+      company: companyValue,
+      job: jobValue,
+      description: descriptionValue,
+    };
 
-    if (startDate > endDate) {
-      alert("시작 날짜는 마감 날짜 이전으로 선택해주세요");
-      return;
+    setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+    setModal(false);
     }
-
-
-    if (startDate !== endDate) {
-      const startDatePost = {
-        id: postId,
-        date: startDate,
-        type: "start",
-        company: companyValue,
-        job: jobValue,
-        description: descriptionValue,
-      };
-      const endDatePost = {
-        id: postId,
-        date: endDate,
-        type: "end",
-        company: companyValue,
-        job: jobValue,
-        description: descriptionValue,
-      };
-
-      setPosts((prevJobPosts) =>
-        [...prevJobPosts, startDatePost, endDatePost]);
-      setModal(false);
-    
-    } else if (startDate === endDate) {
-      const sameDatePost = {
-        id: postId,
-        date: startDate,
-        type: "same",
-        company: companyValue,
-        job: jobValue,
-        description: descriptionValue,
-      };
-
-      setPosts((prevJobPosts) => [...prevJobPosts, sameDatePost]);
-      setModal(false);
-    }
-
-    
-  };
 
   return (
     <>
@@ -110,29 +73,15 @@ export default function Modal({ setModal, posts, setPosts }) {
           </div>
 
           <div className="flex flex-col mb-3">
-            <label htmlFor="start-date" className="mb-1">
-              시작 날짜
+            <label htmlFor="date" className="mb-1">
+              {selectedOption == 'paper' ? '서류 제출일' : '면접일'}
             </label>
             <input
               type="date"
-              id="start-date"
+              id="date"
               className="text-sm bg-white px-1 w-1/3 h-8 rounded"
               onChange={(e) => {
-                setStartDateValue(e.target.value);
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col mb-3">
-            <label htmlFor="end-date" className="mb-1">
-              마감 날짜
-            </label>
-            <input
-              type="date"
-              id="end-date"
-              className="text-sm bg-white px-1 w-1/3 h-8 rounded"
-              onChange={(e) => {
-                setEndDateValue(e.target.value);
+                setDateValue(e.target.value);
               }}
             />
           </div>
