@@ -1,55 +1,80 @@
 'use client'
-import { useState, useEffect } from "react";
 
-export default function Date({ date, index, today, selectedYear, selectedMonth, posts, matchingPosts, postRange, indexRange, setIndexRange, highlight }) {
-  const [content, setContent] = useState([]);
-  const [isHovered, setIsHovered] = useState(false);
+export default function Date(
+  { date,
+    index,
+    today,
+    selectedYear,
+    selectedMonth,
+    posts,
+    matchingPosts,
+    postRange,
+    indexRange,
+    setIndexRange,
+    highlight,
+    isHovered,
+    setIsHovered,
+    diff,
+    setDiff }) {
+  
+  const date_box =
+    `h-24 border-2 text-gray-700 font-semibold text-sm transition duration-1000 ease-in-out cursor-pointer flex flex-col relative`;
+  
+  // 다른달인지 파악해 date_box의 투명도를 조절하는 css
+  const date_box_opacity = `w-full h-full absolute bg-zinc-100 z-20`;
+  
+  const date_today =
+    `absolute top-2 
+    ${date.d.toString().length == 2 ? "right-1.5" : "right-0.5"} 
+    w-6 h-6 rounded-full bg-teal-400 z-0`;
+  
+  const date_num = `flex justify-end relative pt-2.5 pr-2.5 pb-1 z-10`;
 
-  useEffect(() => {
-
-    if (matchingPosts.length > 0) {
-      const contents = matchingPosts;
-      setContent(contents);
-    } else {
-      setContent([]);
-    }
-
-    return () => {
-    };
-  }, [selectedYear, selectedMonth, posts]);
+  const post_box =
+    `bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline 
+    ${date.currentMonth ? "z-30" : "z-10"}`
+  
+  const post_type = `bg-white my-0.5 mr-0.5 rounded-5`;
 
   return (
-    <div className="h-24 border-2 text-gray-700 font-semibold text-sm transition duration-1000 ease-in-out cursor-pointer flex flex-col relative" style={{ background: highlight ? "teal" : null }}>
+    <div
+      className={date_box}
+      style={{ background: highlight ? "teal" : null }}>
+
       <div
-        className="w-full h-full absolute bg-zinc-100 z-20"
+        className={date_box_opacity}
         style={{
           opacity: date.currentMonth ? 0 : 0.5,
         }}
       ></div>
 
       {date.y === today.y && date.m === today.m && date.d == today.d && (
-        <div className={`absolute top-2 ${date.d.toString().length == 2 ? "right-1.5" : "right-0.5"} w-6 h-6 rounded-full bg-teal-400 z-0`}></div>
+        <div className={date_today}></div>
       )}
-      <div className="flex justify-end relative pt-2.5 pr-2.5 pb-1 z-10">{date.d}</div>
+      <div className={date_num}>
+        {date.d}
+      </div>
 
-      {content.length > 0 && content.length <= 3 && (
+      {matchingPosts.length > 0 && matchingPosts.length <= 3 && (
         <>
-          {content.slice(0, 3).map((item, index) => (
+          {matchingPosts.slice(0, 3).map((item, index) => (
             <div
-              className={`bg-teal-400 rounded-5 px-1 text-xs mx-1 my-0.5 flex items-baseline ${date.currentMonth ? "z-30" : "z-10"}`}
+              className={post_box}
               key={item.id}
               onMouseEnter={() => {
                 setIndexRange(
-                  postRange
-                  //postRange[index]
+                  postRange.range
                 );
-                console.log(postRange);
+                setIsHovered(true);
+                setDiff(postRange.diff)
               }}
               onMouseLeave={() => {
                 setIndexRange([]);
+                setIsHovered(false);
+                setDiff(0)
               }}
             >
-              <span className="bg-white my-0.5 mr-0.5 rounded-5">{item.type}</span>
+              <span className={post_type}>{item.type}</span>
               <span>{item.company}</span>
             </div>
           ))}

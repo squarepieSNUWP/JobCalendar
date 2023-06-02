@@ -4,8 +4,22 @@ import { useEffect, useState } from "react";
 import Date from "./Date";
 import Day from "./Day";
 
-export default function CalendarBody({ weekdays, today, selectedYear, selectedMonth, dates, posts }) {
+export default function CalendarBody(
+  { weekdays,
+    today,
+    selectedYear,
+    selectedMonth,
+    dates,
+    posts }) {
+  
+  const body_container =
+    `w-full p-4 text-base flex flex-col border border-black rounded`;
+  const dates_container =
+    `w-full h-full grid grid-cols-7 items-center justify-center`;
+  
   const [indexRange, setIndexRange] = useState([])
+  const [isHovered, setIsHovered] = useState(false)
+  const [diff, setDiff] = useState(0)
 
   function getMatchingPosts(date) {
     const matchingPosts = posts.filter((post) => {
@@ -36,6 +50,7 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
 
   function getPostRange(post) {
     const postIndex = getPostIndex(post)
+    const diff = dates[postIndex].diff
     const todayIndex = dates.findIndex((date) => {
       return (
         today.y === date.y &&
@@ -43,30 +58,30 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
         today.d === date.d
       )
     })
+
     if (todayIndex === -1) {
-      return []
+      return {range: [], diff}
     } 
-    
+
     if (postIndex < todayIndex) {
-      return []
-    
+      return {range: [], diff}
     }
     
     if (todayIndex <= postIndex) {
-      return [todayIndex, postIndex]
+      return {range: [todayIndex, postIndex], diff}
     }
   }
 
 
   return (
-    <div className="w-full p-4 text-base flex flex-col border border-black rounded">
+    <div className={body_container}>
       <Day weekdays={weekdays} />
 
-      <div className="w-full h-full grid grid-cols-7 items-center justify-center">
+      <div className={dates_container}>
         {dates.map((date, index) => {
           const matchingPosts = getMatchingPosts(date);
           const postRange = matchingPosts.length > 0
-            ? getPostRange(matchingPosts[0]) : []
+            ? getPostRange(matchingPosts[0]) : {}
           // const postRange = matchingPosts.map((post) => getPostRange(post));
   
           return (
@@ -83,6 +98,10 @@ export default function CalendarBody({ weekdays, today, selectedYear, selectedMo
               indexRange={indexRange}
               setIndexRange={setIndexRange}
               highlight={index >= indexRange[0] && index <= indexRange[1]}
+              isHovered={isHovered}
+              setIsHovered={setIsHovered}
+              diff={diff}
+              setDiff={setDiff}
             />
           );
         })}
