@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
 import CalIcon from "public/calendarSWP.png";
 import JobIcon from "public/jobsSWP.png";
+import FireIcon from "public/fireSWP.png";
+import LogOutIcon from "public/logoutSWP.png";
 
 export default function Header() {
   const route = useRouter();
@@ -13,9 +15,14 @@ export default function Header() {
     <header className="fixed left-0 top-0 flex flex-col bg-tertiary items-center justify-between h-screen w-60 py-10 px-0">
       <div className="flex flex-col items-center">
         {/* <span className="mb-5 self-end cursor-pointer">fold</span> */}
-        <div className="mb-20">
+        <div className="mb-20 flex flex-col items-center">
+          <Image
+            src={FireIcon}
+            alt="fire"
+            className="h-6 w-6 mb-1"
+            ></Image>
           <Link href="/" className="text-lg font-extrabold text-primary">
-            🔥 취뽀달력 🔥
+            취뽀달력
           </Link>
         </div>
         <nav className="space-y-3 text-base font-semibold flex flex-col items-center">
@@ -92,12 +99,22 @@ export default function Header() {
       </div>
       <div>
         {session ? (
-          <div className="flex">
-            <div className="mr-6">{session.user.name}님 환영합니다 !</div>
-            <div className="cursor-pointer" onClick={signOut}>
-              Log out
+          <div className="flex flex-col items-center">
+            <div className="mb-2 justify-center">
+              <div className="self-center mb-2">{session.user.name}님 환영합니다!</div>
+              <div className="flex items-center justify-center">
+                <Image
+                  src={LogOutIcon}
+                  alt="logout"
+                  className="h-4 w-4 mr-2 cursor-pointer"
+                  onClick={signOut}
+                />
+                <div className="cursor-pointer" onClick={signOut}>
+                Log out
+              </div>
             </div>
           </div>
+        </div>
         ) : (
           <Link
             href="/login"
