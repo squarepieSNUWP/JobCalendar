@@ -102,7 +102,7 @@ export default function Detail() {
   return (
     <Layout>
       <div>
-        <div class="inset-0 flex flex-col justify-end">
+        <div className="inset-0 flex flex-col justify-end">
           <Link
             href="/"
             className="bg-primary rounded-full w-8 h-8 pt-0.5 text-center ml-auto hover:bg-secondary"
@@ -112,7 +112,7 @@ export default function Detail() {
             </Link>
           </Link>
 
-          <div class="place-self-center bg-white p-4 rounded-2xl shadow drop-shadow-md mt-4 mb-6 w-full h-52">
+          <div className="place-self-center bg-white p-4 rounded-2xl shadow drop-shadow-md mt-4 mb-6 w-full h-52">
             <p>공고 내용 삽입 구간</p>
           </div>
         </div>
