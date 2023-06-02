@@ -12,8 +12,10 @@ export default function CalendarBody(
     dates,
     posts }) {
   
+  
   const body_container =
-    `w-full p-4 text-base flex flex-col border border-black rounded`;
+    `w-full p-4 flex flex-col border border-black rounded`;
+  
   const dates_container = `w-full h-full grid grid-cols-7 grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] items-center justify-center`;
   
   
