@@ -44,7 +44,7 @@ export default function Detail() {
     };
 
     if (userId) getPdfAPI();
-  }, [userId]);
+  }, [userId, session]);
 
   const handleFileUpload = async (e, fileType) => {
     //클릭한 곳의 파일이 발견되면
