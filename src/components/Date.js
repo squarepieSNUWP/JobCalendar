@@ -17,7 +17,8 @@ export default function Date(
     diff,
     setDiff,
     hoveredPost,
-    setHoveredPost
+    setHoveredPost,
+    todayIndex
   }) {
   
   const date_box =
@@ -38,10 +39,16 @@ export default function Date(
     ${date.currentMonth ? "z-30" : "z-10"}`
   
   const post_type = `bg-white my-0.5 mr-0.5 rounded-5`;
-  console.log(hoveredPost)
+
+  const d_day_box =
+    `w-full h-full absolute flex items-center justify-center text-lg text-white`
 
   return (
     <div className={date_box} style={{ background: highlight ? "teal" : null }}>
+      {isHovered && index == todayIndex&& 
+        <div className={d_day_box}>
+          D - {diff}
+        </div>}
       <div
         className={date_box_opacity}
         style={{
@@ -49,7 +56,8 @@ export default function Date(
         }}
       ></div>
 
-      {date.y === today.y && date.m === today.m && date.d == today.d && <div className={date_today}></div>}
+      {date.y === today.y && date.m === today.m && date.d == today.d &&
+        <div className={date_today}></div>}
       <div className={date_num}>{date.d}</div>
 
       {matchingPosts?.length > 0 && (
@@ -61,13 +69,13 @@ export default function Date(
               onMouseEnter={() => {
                 setIndexRange(postRange.range);
                 setIsHovered(true);
-                // setDiff(postRange.diff)
+                setDiff(postRange.diff)
                 setHoveredPost({ ...item });
               }}
               onMouseLeave={() => {
                 setIndexRange([]);
                 setIsHovered(false);
-                // setDiff(0)
+                setDiff(0)
                 setHoveredPost(null);
               }}
               style={{

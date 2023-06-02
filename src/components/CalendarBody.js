@@ -22,6 +22,10 @@ export default function CalendarBody(
   const [diff, setDiff] = useState(0)
   const [hoveredPost, setHoveredPost] = useState(null)
 
+  const todayIndex = dates.findIndex((date) => {
+    return today.y === date.y && today.m === date.m && today.d === date.d;
+  });
+
   function getMatchingPosts(date) {
     const matchingPosts = posts.filter((post) => {
       const [postYear, postMonth, postDate] = post.date.split('-')
@@ -52,13 +56,6 @@ export default function CalendarBody(
   function getPostRange(post) {
     const postIndex = getPostIndex(post)
     const diff = dates[postIndex].diff
-    const todayIndex = dates.findIndex((date) => {
-      return (
-        today.y === date.y &&
-        today.m === date.m &&
-        today.d === date.d
-      )
-    })
 
     if (todayIndex === -1 && todayIndex <= postIndex) {
       return { range: [todayIndex, postIndex], diff };
@@ -110,6 +107,7 @@ export default function CalendarBody(
               setDiff={setDiff}
               hoveredPost={hoveredPost}
               setHoveredPost={setHoveredPost}
+              todayIndex={todayIndex == -1 ? 0 : todayIndex}
 
             />
           );
