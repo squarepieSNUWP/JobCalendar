@@ -68,7 +68,7 @@ async function handler(req, res) {
   }
 
   const newUserRef = {
-    id: numUsers,
+    id: numUsers + 1,
     name: name,
     email: email,
     password: password,
