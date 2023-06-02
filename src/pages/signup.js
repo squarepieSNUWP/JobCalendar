@@ -63,12 +63,14 @@ export default function SignUp() {
 
   return (
     <Layout>
-      <Link
-        href="/"
-        className="flex flex-col items-center text-5xl font-bold text-primary mt-14"
-      >
-        🔥취뽀달력🔥
-      </Link>
+      <div className="flex flex-col items-center mt-16">
+        <Link
+          href="/"
+          className="text-3xl font-bold tracking-wide text-primary/90"
+        >
+          Sign up
+        </Link>
+      </div>
       <SignUpForm
         registerEmail={registerEmail}
         setRegisterEmail={setRegisterEmail}
@@ -88,14 +90,16 @@ export default function SignUp() {
         <></>
       )}
       {isComplete ? (
-        <div className="flex flex-col items-center text-gray-500 mt-10 font-bold">
-          회원가입이 완료되었습니다!{" "}
-          <div
-            className="ml-2 underline underline-offset-1 cursor-pointer"
-            onClick={handleNavigation}
-          >
-            로그인하러 가기
-          </div>
+          <div className="fixed bg-white rounded-3xl top-[40%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 
+          w-1/3 h-96 flex flex-col items-center justify-center text-[#605B58] mt-24 mb- font-bold animate-pop-in">
+          회원가입이 완료되었습니다!
+            <div
+              className="text-white rounded-3xl bg-[#C0B0A8] w-2/3 h-12 
+              flex justify-center items-center cursor-pointer text-center mt-16"
+              onClick={handleNavigation}
+            >
+              로그인하러 가기
+            </div>
         </div>
       ) : (
         <></>

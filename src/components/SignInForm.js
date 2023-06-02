@@ -8,9 +8,10 @@ export default function SignInForm({
   return (
     <div>
       <form className="w-full pt-10 flex flex-col justify-between items-center">
-        <div className="bg-gray-100 inline-flex h-16 items-center px-4 py-2 font-bold border-solid border-2 w-5/12 mb-4">
+        <div className="bg-tertiary rounded-3xl inline-flex h-14 items-center w-1/3 font-bold mb-4">
           <input
-            className="bg-gray-100"
+            className="block bg-[#F5F2F0] w-full h-full rounded-3xl py-2 pl-7 pr-3 focus:outline-none 
+            focus:border-secondary focus:ring-secondary focus:ring-2"
             id="email"
             value={typingEmail}
             placeholder="이메일"
@@ -20,9 +21,10 @@ export default function SignInForm({
             }}
           />
         </div>
-        <div className="bg-gray-100 inline-flex h-16 border-solid border-2 items-center px-4 py-2 font-bold w-5/12 mb-4">
+        <div className="bg-tertiary rounded-3xl inline-flex h-14 items-center w-1/3 font-bold mb-4">
           <input
-            className="bg-gray-100"
+            className="block bg-[#F5F2F0] w-full h-full rounded-3xl py-2 pl-7 pr-3 focus:outline-none 
+            focus:border-secondary focus:ring-secondary focus:ring-2"
             id="password"
             value={typingPassword}
             type="password"
@@ -34,7 +36,8 @@ export default function SignInForm({
           />
         </div>
         <div
-          className="bg-primary flex h-16 items-center px-4 py-2 font-bold w-5/12 mb-5 text-white cursor-pointer"
+          className="bg-[#C0B0A8] flex h-14 rounded-3xl items-center justify-center px-4 py-2 font-bold w-1/3 mt-4 mb-3 
+          text-white text-center cursor-pointer hover:bg-[#B4A8A1]"
           onClick={handleCredentialsLogin}
         >
           로그인하기
