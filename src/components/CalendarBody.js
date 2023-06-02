@@ -14,12 +14,13 @@ export default function CalendarBody(
   
   const body_container =
     `w-full p-4 text-base flex flex-col border border-black rounded`;
-  const dates_container =
-    `w-full h-full grid grid-cols-7 items-center justify-center`;
+  const dates_container = `w-full h-full grid grid-cols-7 grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] items-center justify-center`;
+  
   
   const [indexRange, setIndexRange] = useState([])
   const [isHovered, setIsHovered] = useState(false)
   const [diff, setDiff] = useState(0)
+  const [hoveredPost, setHoveredPost] = useState(null)
 
   function getMatchingPosts(date) {
     const matchingPosts = posts.filter((post) => {
@@ -59,9 +60,14 @@ export default function CalendarBody(
       )
     })
 
+    if (todayIndex === -1 && todayIndex <= postIndex) {
+      return { range: [todayIndex, postIndex], diff };
+    } 
+
     if (todayIndex === -1) {
       return {range: [], diff}
     } 
+    
 
     if (postIndex < todayIndex) {
       return {range: [], diff}
@@ -102,6 +108,9 @@ export default function CalendarBody(
               setIsHovered={setIsHovered}
               diff={diff}
               setDiff={setDiff}
+              hoveredPost={hoveredPost}
+              setHoveredPost={setHoveredPost}
+
             />
           );
         })}

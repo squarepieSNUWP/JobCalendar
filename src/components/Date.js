@@ -15,10 +15,13 @@ export default function Date(
     isHovered,
     setIsHovered,
     diff,
-    setDiff }) {
+    setDiff,
+    hoveredPost,
+    setHoveredPost
+  }) {
   
   const date_box =
-    `h-24 border-2 text-gray-700 font-semibold text-sm transition duration-1000 ease-in-out cursor-pointer flex flex-col relative`;
+    `min-h-full overflow-hidden border-2 text-gray-700 font-semibold text-sm transition duration-1000 ease-in-out cursor-pointer flex flex-col relative`;
   
   // 다른달인지 파악해 date_box의 투명도를 조절하는 css
   const date_box_opacity = `w-full h-full absolute bg-zinc-100 z-20`;
@@ -35,12 +38,10 @@ export default function Date(
     ${date.currentMonth ? "z-30" : "z-10"}`
   
   const post_type = `bg-white my-0.5 mr-0.5 rounded-5`;
+  console.log(hoveredPost)
 
   return (
-    <div
-      className={date_box}
-      style={{ background: highlight ? "teal" : null }}>
-
+    <div className={date_box} style={{ background: highlight ? "teal" : null }}>
       <div
         className={date_box_opacity}
         style={{
@@ -48,30 +49,29 @@ export default function Date(
         }}
       ></div>
 
-      {date.y === today.y && date.m === today.m && date.d == today.d && (
-        <div className={date_today}></div>
-      )}
-      <div className={date_num}>
-        {date.d}
-      </div>
+      {date.y === today.y && date.m === today.m && date.d == today.d && <div className={date_today}></div>}
+      <div className={date_num}>{date.d}</div>
 
-      {matchingPosts.length > 0 && matchingPosts.length <= 3 && (
+      {matchingPosts?.length > 0 && (
         <>
-          {matchingPosts.slice(0, 3).map((item, index) => (
+          {matchingPosts.map((item, index) => (
             <div
               className={post_box}
               key={item.id}
               onMouseEnter={() => {
-                setIndexRange(
-                  postRange.range
-                );
+                setIndexRange(postRange.range);
                 setIsHovered(true);
-                setDiff(postRange.diff)
+                // setDiff(postRange.diff)
+                setHoveredPost({ ...item });
               }}
               onMouseLeave={() => {
                 setIndexRange([]);
                 setIsHovered(false);
-                setDiff(0)
+                // setDiff(0)
+                setHoveredPost(null);
+              }}
+              style={{
+                opacity: hoveredPost === null || item.id == hoveredPost.id ? 1 : 0,
               }}
             >
               <span className={post_type}>{item.type}</span>

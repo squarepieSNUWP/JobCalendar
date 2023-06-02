@@ -5,8 +5,11 @@ import CalendarHeader from "./CalendarHeader"
 import Modal from "./Modal";
 
 export default function Calendar() {
-  const calendar_container = `max-w-4xl h-600 bg-zinc-100 p-6 rounded-lg shadow-inner mx-auto`;
+  const calendar_container = 
+    `max-w-4xl h-600 mx-auto p-6 bg-zinc-100 rounded-lg shadow-inner`
   
+
+
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "Feburary", "March",
