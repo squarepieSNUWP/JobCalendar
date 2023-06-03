@@ -5,6 +5,9 @@ import CalendarHeader from "./CalendarHeader"
 import Modal from "./Modal";
 
 export default function Calendar() {
+  // 전체 달력의 크기 및 위치를 결정하는 css
+  // 현재는 너비는 max만 설정하고 높이는 직접 설정함
+  // 배경색은 zinc로 함
   const calendar_container = 
     `max-w-4xl h-600 mx-auto p-6 bg-zinc-100 rounded-lg shadow-inner`
   
