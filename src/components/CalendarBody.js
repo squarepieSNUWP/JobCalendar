@@ -22,7 +22,7 @@ export default function CalendarBody(
       // 행(높이)는 https://tailwindcss.com/docs/grid-template-rows 참고함
       // 6개 행이 모두 최소 112px 최대는 1fr로 설정했는데,
       // 달력의 높이와 함께 조정할 필요 있음
-      const dates_container = `w-full h-full grid grid-cols-7 grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] items-center justify-center`;
+      const dates_container = `w-full h-full grid grid-cols-7 grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] items-center justify-center border-b border-l border-2`;
 
       const [indexRange, setIndexRange] = useState([]);
       const [isHovered, setIsHovered] = useState(false);
