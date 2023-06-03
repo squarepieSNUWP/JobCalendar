@@ -83,7 +83,7 @@ export default function SignUp() {
         handleRegister={handleRegister}
       />
       {errorMsg ? (
-        <div className="text-sm flex flex-col items-center mt-10 font-bold text-gray-500">
+        <div className="text-sm flex flex-col items-center font-normal text-red-600">
           {errorMsg}
         </div>
       ) : (

@@ -10,8 +10,8 @@ export default function SignUpForm({
   handleRegister,
 }) {
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-4">
-      <div className="flex flex-col h-96 mt-10 w-1/3 justify-between">
+    <div className="w-full flex flex-col items-center justify-center mt-4 ">
+      <div className="flex flex-col h-84 mt-12 w-1/3 m-4">
         <form>
         <div className="bg-tertiary rounded-3xl inline-flex h-14 items-center w-full font-bold mb-3">
           <input
@@ -68,7 +68,7 @@ export default function SignUpForm({
             />
           </div>
           <div
-            className="bg-[#C0B0A8] flex h-14 rounded-3xl items-center justify-center px-4 py-2 font-bold w-full mt-4 mb-3 
+            className="bg-[#C0B0A8] flex h-14 rounded-3xl items-center justify-center px-4 py-2 font-bold w-full mt-4 
             text-white text-center cursor-pointer hover:bg-[#B4A8A1]"
             onClick={handleRegister}
           >
