@@ -54,6 +54,7 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
     // 각 input의 값을 객체로 만들고 posts에 업데이트
     const newPost = {
       id: postId,
+      jobId: 1,
       date: dateValue,
       type: selectedOption,
       company: companyValue,
