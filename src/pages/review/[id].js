@@ -2,6 +2,7 @@ import { useRouter } from "next/router"
 import { jobs, ratings } from "@/data";
 import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
+import Link from 'next/link';
 
 export default function Review() {
     const router = useRouter();
@@ -60,9 +61,21 @@ export default function Review() {
 
     return job && job.reviews && (
         <Layout>
-            <h1 className="text-4xl font-extrabold text-center text-primary mb-10">{job.title}</h1>
-            <p className="text-xl font-bold text-[#ABA19C] mb-10 text-right">{job.company} - {job.occupation}</p>
+            <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#e1d6d1] px-5 py-8 mb-6 rounded-3xl relative">
+                <Link href="/review">
+                    <svg class="h-8 w-8 mr-9 text-gray-800/90 absolute
+                        top-1/2 right-0 transform -translate-y-1/2 cursor-pointer"  
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </Link>
+    
+                <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">{job.title}</h1>
+                <p className="text-xl font-base text-gray-600/90 pl-4 tracking-tight text-left">{job.company} - {job.occupation}</p>
 
+            </div>
             <div className="border-2 border-primary px-6 py-8 mb-6 rounded-2xl">
                 <p className="text-xl font-bold text-primary mb-4">총평</p>
                 {job.generalReview.length > 0 && job.generalRating ? (
