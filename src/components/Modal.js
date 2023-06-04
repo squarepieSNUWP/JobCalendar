@@ -42,7 +42,7 @@ export default function Modal({ setModal, posts, setPosts }) {
   const [dateValue, setDateValue] = useState("")
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
-  const [descriptionValue, setDescriptionValue] = useState("");
+  const [postLinkValue, setPostLinkValue] = useState("");
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
@@ -52,7 +52,7 @@ export default function Modal({ setModal, posts, setPosts }) {
     if (!date ||
       !companyValue ||
       !jobValue ||
-      !descriptionValue) {
+      !postLinkValue) {
       alert("빈 칸을 채워주세요");
       return;
     }
@@ -64,7 +64,7 @@ export default function Modal({ setModal, posts, setPosts }) {
       type: selectedOption,
       company: companyValue,
       job: jobValue,
-      description: descriptionValue,
+      postLink: postLinkValue.trim(),
     };
 
     setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
@@ -156,16 +156,17 @@ export default function Modal({ setModal, posts, setPosts }) {
           </div>
 
           <div className="flex flex-col mb-3">
-            <label htmlFor="description" className="mb-1">
+            <label htmlFor="postLink" className="mb-1">
               공고 내용
             </label>
-            <textarea
-              id="description"
-              className={`${input_box} h-40`}
+            <input
+              type="text"
+              id="postLink"
+              className={`${input_box} h-8`}
               onChange={(e) => {
-                setDescriptionValue(e.target.value);
+                setPostLinkValue(e.target.value);
               }}
-            ></textarea>
+            ></input>
           </div>
         </div>
 
