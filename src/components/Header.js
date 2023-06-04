@@ -72,6 +72,34 @@ export default function Header() {
           Jobs
         </Link>
 
+        <Link
+          href="/review"
+          className={`text-primary ${
+            route.pathname === "/review" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
+          } w-[200px] `}
+          style={{
+            backgroundColor: route.pathname === "/review" ? "rgba(0, 0, 0, 0.1)" : "transparent",
+            padding: "10px 20px",
+            borderRadius: "25px",
+            display: "inline-block",
+            transition: "background-color 0.1s",
+          }}
+          onMouseOver={(e) => {
+            if (route.pathname !== "/review") {
+              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
+            }
+          }}
+          onMouseOut={(e) => {
+            if (route.pathname === "/review") {
+              e.target.style.backgroundColor = "#DED4CF";
+            } else {
+              e.target.style.backgroundColor = "transparent";
+            }
+          }}
+        >
+          Review
+        </Link>
+
           
         </nav>
       </div>
