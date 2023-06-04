@@ -3,7 +3,6 @@ import { useState } from "react";
 export default function Modal({ setModal, posts, setPosts, fromDetail }) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
-  console.log(fromDetail);
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
 
   // 모달창의 가장 바깥 부분으로 검은 배경보다 위에 오도록 z-index는 40으로 설정
@@ -40,6 +39,14 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
+  const newPost = {
+    jobId: Math.random(),
+    date: dateValue,
+    type: selectedOption,
+    company: companyValue,
+    job: jobValue,
+    postLink: postLinkValue.trim(),
+  };
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
@@ -71,113 +78,127 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
       <div className={background}></div>
 
       <div className={modal_container}>
-        <div className={input_container}>
-          <div class={input_wrapper}>
-            <div class={type_radio_wrapper}>
-              <input
-                id="radio-paper"
-                type="radio"
-                className={type_radio}
-                value="paper"
-                name="type"
-                checked={selectedOption === "paper"}
-                onChange={(e) => {
-                  setSelectedOption(e.target.value);
-                }}
-              />
-              <label for="radio-paper" className="ml-2 text-sm">
-                서류
-              </label>
+          <div className={input_container}>
+            <div class={input_wrapper}>
+              <div class={type_radio_wrapper}>
+                <input
+                  id="radio-paper"
+                  type="radio"
+                  className={type_radio}
+                  value="paper"
+                  name="type"
+                  checked={selectedOption === "paper"}
+                  onChange={(e) => {
+                    setSelectedOption(e.target.value);
+                  }}
+                />
+                <label for="radio-paper" className="ml-2 text-sm">
+                  서류
+                </label>
+              </div>
+
+              <div class={type_radio_wrapper}>
+                <input
+                  id="radio-interview"
+                  type="radio"
+                  className={type_radio}
+                  value="interview"
+                  name="type"
+                  checked={selectedOption === "interview"}
+                  onChange={(e) => {
+                    setSelectedOption(e.target.value);
+                  }}
+                />
+                <label for="radio-interview" className="ml-2 text-sm">
+                  면접
+                </label>
+              </div>
             </div>
 
-            <div class={type_radio_wrapper}>
+            <div className={`${input_wrapper} flex-col`}>
+              <label htmlFor="date" className="mb-1">
+                {selectedOption == "paper" ? "서류 제출일" : "면접일"}
+              </label>
               <input
-                id="radio-interview"
-                type="radio"
-                className={type_radio}
-                value="interview"
-                name="type"
-                checked={selectedOption === "interview"}
+                type="date"
+                id="date"
+                className={`${input_box} w-1/3 h-8`}
                 onChange={(e) => {
-                  setSelectedOption(e.target.value);
+                  setDateValue(e.target.value);
                 }}
               />
-              <label for="radio-interview" className="ml-2 text-sm">
-                면접
+            </div>
+
+            <div className={`${input_wrapper} flex-col`}>
+              <label htmlFor="company" className="mb-1">
+                회사 이름
               </label>
+              <input
+                type="text"
+                id="company"
+                className={`${input_box} h-8`}
+                onChange={(e) => {
+                  setCompanyValue(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className={`${input_wrapper} flex-col`}>
+              <label htmlFor="job-title" className="mb-1">
+                직무 이름
+              </label>
+              <input
+                type="text"
+                id="job-title"
+                className={`${input_box} h-8`}
+                onChange={(e) => {
+                  setJobValue(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col mb-3">
+              <label htmlFor="postLink" className="mb-1">
+                공고 링크
+              </label>
+              <input
+                type="text"
+                id="postLink"
+                className={`${input_box} h-8`}
+                onChange={(e) => {
+                  setPostLinkValue(e.target.value);
+                }}
+              ></input>
             </div>
           </div>
 
-          <div className={`${input_wrapper} flex-col`}>
-            <label htmlFor="date" className="mb-1">
-              {selectedOption == "paper" ? "서류 제출일" : "면접일"}
-            </label>
-            <input
-              type="date"
-              id="date"
-              className={`${input_box} w-1/3 h-8`}
-              onChange={(e) => {
-                setDateValue(e.target.value);
-              }}
-            />
-          </div>
+          <div className="flex">
+            <button className={btn} onClick={() => {
+            fetch("api/post/new", {
+              method: "POST",
+              body: JSON.stringify(newPost)
+            }).then(() => {
+              console.log('완료')
+            })
 
-          <div className={`${input_wrapper} flex-col`}>
-            <label htmlFor="company" className="mb-1">
-              회사 이름
-            </label>
-            <input
-              type="text"
-              id="company"
-              className={`${input_box} h-8`}
-              onChange={(e) => {
-                setCompanyValue(e.target.value);
-              }}
-            />
-          </div>
+            setModal(false)
 
-          <div className={`${input_wrapper} flex-col`}>
-            <label htmlFor="job-title" className="mb-1">
-              직무 이름
-            </label>
-            <input
-              type="text"
-              id="job-title"
-              className={`${input_box} h-8`}
-              onChange={(e) => {
-                setJobValue(e.target.value);
+            }
+            
+              // handleFormSubmit
+              
+            }>
+              등록
+            </button>
+            <button
+              className={btn}
+              onClick={() => {
+                setModal(false);
               }}
-            />
+            >
+              닫기
+            </button>
           </div>
-
-          <div className="flex flex-col mb-3">
-            <label htmlFor="postLink" className="mb-1">
-              공고 내용
-            </label>
-            <input
-              type="text"
-              id="postLink"
-              className={`${input_box} h-8`}
-              onChange={(e) => {
-                setPostLinkValue(e.target.value);
-              }}
-            ></input>
-          </div>
-        </div>
-
-        <div className="flex">
-          <button className={btn} onClick={handleFormSubmit}>
-            등록
-          </button>
-          <button
-            className={btn}
-            onClick={() => {
-              setModal(false);
-            }}
-          >
-            닫기
-          </button>
-        </div>
       </div>
     </>
   );
