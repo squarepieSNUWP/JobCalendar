@@ -1,4 +1,3 @@
-'use client'
 export default function CalendarHeader({ months, today, selectedYear, selectedMonth, setSelectedYear, setSelectedMonth }) {
 
   // 전체 head를 감싸는 컨테이너로, justify-between을 주어

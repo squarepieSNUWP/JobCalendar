@@ -1,4 +1,3 @@
-'use client'
 import { useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"

@@ -1,4 +1,3 @@
-'use client'
 export default function Day({ weekdays }) {
   return (
     // 요일 칸 전체를 감싸는 영역으로 flex로 내부 요소 배치

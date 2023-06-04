@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from "react";
 import Date from "./Date";
 import Day from "./Day";
