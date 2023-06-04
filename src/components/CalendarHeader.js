@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import NextIcon from "public/nextSWP.png";
 import PrevIcon from "public/previousSWP.png";
