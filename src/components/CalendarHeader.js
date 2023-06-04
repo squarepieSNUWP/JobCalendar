@@ -6,7 +6,7 @@ export default function CalendarHeader({ months, today, selectedYear, selectedMo
 
   // 전체 head를 감싸는 컨테이너로, justify-between을 주어
   // year_month_wrapper와 btn_wrapper가 양끝에 위치하도록 함
-  const head_container = `w-full flex items-center justify-cenet mb-4`;
+  const head_container = `flex w-full justify-between mr-[415px] mb-4`;
 
   // 2023과 June을 감싸는 wrapper
   const year_month_wrapper = `flex`;
@@ -51,10 +51,6 @@ export default function CalendarHeader({ months, today, selectedYear, selectedMo
 
   return (
     <div className={head_container}>
-      <div className={year_month_wrapper}>
-        <span className={month}>{months[selectedMonth - 1]}</span>
-        <span className={year}>{selectedYear}</span> 
-      </div>
 
       <div className={btn_wrapper}>
         {/* 이전달과 다음달 버튼은 현재 아이콘이 아닌 텍스트로 제작한 상태*/}
@@ -77,6 +73,12 @@ export default function CalendarHeader({ months, today, selectedYear, selectedMo
             ></Image>
         </button>
       </div>
+
+      <div className={year_month_wrapper}>
+        <span className={month}>{months[selectedMonth - 1]}</span>
+        <span className={year}>{selectedYear}</span> 
+      </div>
+
     </div>
   );
 }
