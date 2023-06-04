@@ -30,8 +30,8 @@ export default function Date(
     // position은 relative로 두어서 밑에 date_today의 위치를 조절할 수 있게 함
     const date_box = `min-h-full overflow-hidden border-t border-r border-1 text-gray-700 font-semibold 
     text-sm transition duration-300 ease-in-out cursor-pointer flex flex-col relative hover:bg-[#EEE1DC]/40
-    ${highlight ? " bg-[#EEE1DC]" : ""}
-    ${date.currentMonth ? "bg-white" : "bg-gray-100/40"}`;
+    ${highlight ? " bg-[#EEE1DC]" : ""} `;
+  
 
     // 다른달인지 파악해 date_box의 투명도를 조절하는 css
     // date_box의 바로 밑 자식 div로 만들어 기존 css의 :before과 비슷한 역할로 만듦
@@ -149,3 +149,5 @@ export default function Date(
       </div>
     );
   }
+
+  
