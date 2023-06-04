@@ -14,7 +14,7 @@ export default function CalendarBody(
       // 요일 칸을 출력하는 Day 컴포넌트와 날짜 칸을 출력하는 Date 컴포넌트를 감싸는 body 컨테이너
       // flex-col로 배치하고 경계선은 black으로 함
       // cf. 요일 css는 Day 컴포넌트에서 구현
-      const body_container = `w-full p-4 flex flex-col border border-black rounded`;
+      const body_container = `w-full px-1 flex flex-col rounded`;
 
       // 날짜 칸을 출력하는 Date를 감싸는 영역으로 grid로 배치
       // 7열 6행으로 구현하는데,
@@ -22,7 +22,9 @@ export default function CalendarBody(
       // 행(높이)는 https://tailwindcss.com/docs/grid-template-rows 참고함
       // 6개 행이 모두 최소 112px 최대는 1fr로 설정했는데,
       // 달력의 높이와 함께 조정할 필요 있음
-      const dates_container = `w-full h-full grid grid-cols-7 grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] items-center justify-center border-b border-l border-2`;
+      const dates_container = `w-full h-full grid grid-cols-7 
+      grid-rows-[minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)_minmax(112px,_1fr)] 
+      items-center justify-center border-b border-l border-1`;
 
       const [indexRange, setIndexRange] = useState([]);
       const [isHovered, setIsHovered] = useState(false);

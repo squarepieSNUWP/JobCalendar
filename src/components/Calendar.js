@@ -2,6 +2,8 @@
 import { useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
+import Image from "next/image";
+import NextIcon from "public/nextSWP.png";
 import Modal from "./Modal";
 
 export default function Calendar() {
@@ -9,7 +11,7 @@ export default function Calendar() {
   // 현재는 너비는 max만 설정하고 높이는 직접 설정함
   // 배경색은 zinc로 함
   const calendar_container = 
-    `max-w-4xl h-600 mx-auto p-6 bg-zinc-100 rounded-lg shadow-inner`
+    `w-full h-full p-3 pt-0 bg-white `
   
 
 
@@ -110,6 +112,9 @@ export default function Calendar() {
     
   return (
     <div className={calendar_container}>
+      {/* 일정 추가 버튼 */}
+      <div className="flex justify-between"> 
+      
       {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
       <CalendarHeader
         months={months}
@@ -118,6 +123,14 @@ export default function Calendar() {
         selectedMonth={selectedMonth}
         setSelectedYear={setSelectedYear}
         setSelectedMonth={setSelectedMonth} />
+        
+        <a onClick={() => {
+            setModal(true);
+          }} class="button cursor-pointer mt-2">
+        <span class="icon font-normal">+</span>
+          <span class="text">Add Event</span>
+        </a>
+      </div>
 
       {/* 요일과 날짜를 달력 형태로 표시하는 컴포넌트 */}
       <CalendarBody
@@ -128,17 +141,7 @@ export default function Calendar() {
         dates={getDates(selectedYear, selectedMonth)}
         posts={posts} />
 
-      {/* 일정 추가 버튼 */}
-      <div className="flex h-10 justify-end items-center"> 
-        <button
-          className="py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mt-4"
-          onClick={() => {
-            setModal(true);
-          }}
-        >
-          Add Job Posting
-        </button>
-      </div>
+      
       
       {/* 일정 추가 모달 컴포넌트 */}
       {
