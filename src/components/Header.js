@@ -8,6 +8,7 @@ import FireIcon from "public/fireSWP.png";
 import LogOutIcon from "public/logoutSWP.png";
 import UserIcon from "public/user2SWP.png";
 import LogInIcon from "public/loginSWP.png";
+import RevIcon from "public/review2SWP.png";
 
 export default function Header() {
   const route = useRouter();
@@ -127,29 +128,35 @@ export default function Header() {
 
         <Link
           href="/review"
-          className={`text-primary ${
+          className={`text-primary tracking-wide ${
             route.pathname === "/review" ? "hover:text-gray-900 bg-gray-200" : "hover:text-gray-900"
-          } w-[200px] `}
+          } w-[180px]`}
           style={{
             backgroundColor: route.pathname === "/review" ? "rgba(0, 0, 0, 0.1)" : "transparent",
             padding: "10px 20px",
-            borderRadius: "25px",
-            display: "inline-block",
+            borderRadius: "20px",
+            display: "inline-flex",
+            alignItems: "center",
             transition: "background-color 0.1s",
           }}
           onMouseOver={(e) => {
             if (route.pathname !== "/review") {
-              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
+              e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
             }
           }}
           onMouseOut={(e) => {
             if (route.pathname === "/review") {
-              e.target.style.backgroundColor = "#DED4CF";
+              e.target.style.backgroundColor = "#DBCEC7";
             } else {
               e.target.style.backgroundColor = "transparent";
             }
           }}
         >
+          <Image
+           src={RevIcon}
+           alt="Icon"
+           className="h-4 w-4 mr-4 ml-2"
+           ></Image>
           Review
         </Link>
 
@@ -164,7 +171,7 @@ export default function Header() {
                 <Image
                   src={LogOutIcon}
                   alt="logout"
-                  className="h-4 w-4 mr-2 cursor-pointer"
+                  className="h-6 w-6 mr-3 cursor-pointer opacity-90"
                   onClick={signOut}
                 />
                 <div className="cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5" onClick={signOut}>
@@ -180,7 +187,7 @@ export default function Header() {
                 <Image
                   src={LogInIcon}
                   alt="Log in"
-                  className="h-4 w-4 mr-2"
+                  className="h-6 w-6 mr-3 opacity-90"
                 ></Image>
                 <Link
                     href="/login"
