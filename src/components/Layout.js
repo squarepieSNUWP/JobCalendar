@@ -6,7 +6,7 @@ export default function Layout({children}) {
 
         <Header />        
 
-        <main className="w-full h-full px-8 py-5">
+        <main className="w-full h-full px-8 py-3">
             {children}
         </main>
     </div>
