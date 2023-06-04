@@ -30,9 +30,9 @@ export default function Header() {
             취뽀달력
           </Link>
         </div>
-        <Link href="/login" className="flex flex-col items-center justify-center">  
+        <Link href={session ? "/mypage" : "/login"} className="flex flex-col items-center justify-center">  
             <Image
-                href="/login"
+                href={session ? "/mypage" : "/login"}
                 src={UserIcon}
                 alt="user"
                 className="h-20 w-20 mb-1.5"
@@ -40,7 +40,9 @@ export default function Header() {
         </Link>
         <div>
           {session ? (            
-            <div className="self-center mb-2">{session.user.name}님 환영합니다!</div>      
+            <Link href="/mypage">
+              <div className="self-center mb-2">{session.user.name}님 환영합니다!</div>      
+            </Link>
           ) : (
             <Link
               href="/login"

@@ -174,6 +174,8 @@ export default function Detail() {
         <h1 className="text-4xl font-extrabold text-center text-primary mb-10">공고 제목</h1>
 
         {/* <Link
+        <div className="inset-0 flex flex-col justify-end">
+          {/* <Link
             href="/"
             className="bg-primary rounded-full w-8 h-8 pt-0.5 text-center ml-auto hover:bg-secondary"
           >
