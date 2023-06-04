@@ -6,7 +6,7 @@ export default function CalendarHeader({ months, today, selectedYear, selectedMo
 
   // 전체 head를 감싸는 컨테이너로, justify-between을 주어
   // year_month_wrapper와 btn_wrapper가 양끝에 위치하도록 함
-  const head_container = `flex w-full justify-between mr-[415px] mb-4`;
+  const head_container = `flex w-3/5 mb-4 justify-between`;
 
   // 2023과 June을 감싸는 wrapper
   const year_month_wrapper = `flex`;

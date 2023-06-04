@@ -113,7 +113,7 @@ export default function Calendar() {
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
-      <div className="flex"> 
+      <div className="flex justify-between"> 
       
       {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
       <CalendarHeader
