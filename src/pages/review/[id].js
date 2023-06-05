@@ -3,6 +3,9 @@ import { jobs, ratings } from "@/data";
 import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import Link from 'next/link';
+import Image from "next/image";
+import Quo1Icon from "public/quote1SWP.png";
+import Quo2Icon from "public/quote2SWP.png";
 
 export default function Review() {
     const router = useRouter();
@@ -61,6 +64,8 @@ export default function Review() {
 
     return job && job.reviews && (
         <Layout>
+
+        
             <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#e1d6d1] px-5 py-8 mb-6 rounded-3xl relative">
                 <Link href="/review">
                     <svg class="h-8 w-8 mr-9 text-gray-800/90 absolute
@@ -76,31 +81,120 @@ export default function Review() {
                 <p className="text-xl font-base text-gray-600/90 pl-4 tracking-tight text-left">{job.company} - {job.occupation}</p>
 
             </div>
-            <div className="border-2 border-primary px-6 py-8 mb-6 rounded-2xl">
-                <p className="text-xl font-bold text-primary mb-4">총평</p>
-                {job.generalReview.length > 0 && job.generalRating ? (
-                    <>
-                        <p className="text-xl font-bold text-[#ABA19C] mb-4">{job.generalReview}</p>
-                        <span 
-                            className="px-4 py-3 text-sm rounded-2xl text-white font-bold mx-2"
-                            style={{
-                                backgroundColor: job.generalRating.color,
-                            }}
-                        >#{job.generalRating.title}</span>
-                    </>
-                ) : (
-                    <p className="text-xl font-bold text-[#ABA19C] mb-4">총평을 작성해주세요</p>
-                )}
+
+            {/* 총평 부분*/}
+            <div className="flex ml-2 pr-2 justify-between">
+                    <p className="text-xl font-semibold mt-3 text-primary">Evaluation</p>
+                    <a onClick={() => setShowCreateGeneralReview(!showCreateGeneralReview)}
+                    class="button cursor-pointer pr-4 mt-3">
+                    <span class="icon font-normal ">+</span>
+                        {showCreateGeneralReview ? "취소" : "총평 작성"}
+                       
+                    </a>
             </div>
 
+            <div className="p-1 ml-1 mr-1 rounded-2xl flex flex-col">
+            
+                {showCreateGeneralReview && (
+                    <div className="my-1">
+                        <textarea rows={8} cols={35} 
+                        className="w-full border-2 border-gray-300 px-6 py-4 rounded-3xl mb-3
+                        focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="총평을 입력하세요" 
+                        value={generalData.generalReview} 
+                        onChange={(e) => setGeneralData({...generalData, generalReview: e.target.value})}
+                        />
+
+                        <div className="flex">
+                            {ratings.map((rating, _) => (
+                                <div key={rating.id} 
+                                className={`px-3 py-2 text-sm rounded-3xl text-white font-base ${appliedRating && appliedRating.title === rating.title ? "opacity-100 scale-[1.2]" : "opacity-40 scale-100"} mx-2  cursor-pointer hover:opacity-100`} 
+                                style={{
+                                    backgroundColor: rating.color,
+                                }}
+                                onClick={() => setAppliedRating(rating)}
+                                >#{rating.title}</div>
+                            ))}
+                        </div>
+                        <div className="flex mt-3 mb-4 justify-end">
+
+                            <button 
+                            className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
+                            hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
+                            onClick={() => {
+                                setJob({
+                                    ...job,
+                                    generalReview: generalData.generalReview,
+                                    generalRating: appliedRating,
+                                });
+                                setGeneralData({
+                                    generalReview: "",
+                                    generalRating: null,
+                                });
+                                setAppliedRating(null);
+                                setShowCreateGeneralReview(false);
+                            }}
+                            >
+                                Add
+                            </button>
+
+                            <button class="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
+                            hover:bg-primary px-4 py-1.5 mb-4 rounded-3xl hover:scale-95 float-right"
+                            onClick={() => setShowCreateGeneralReview(!showCreateGeneralReview)}
+                            >   
+                                {showCreateGeneralReview ? "Cancel" : ""}
+                            </button>
+                        </div>
+                    </div>   
+                )}
+            
+            </div>
+
+            <div className="flex ml-20 mr-24 px-3 py-3 rounded-2xl justify-center">
+            
+                <Image
+                
+                src={Quo1Icon}
+                alt="Icon"
+                className="h-7 w-7 mb-1 mr-8"
+                ></Image>
+               
+               <div className="flex flex-col">
+                    {job.generalReview.length > 0 && job.generalRating ? (
+                        <>
+                        
+                            <p className="text-xl font-bold text-[#CEB5A8] text-center">{job.generalReview}</p>
+                            
+                        </>
+                    ) : (
+                        <p className="text-xl font-bold text-[#ABA19C] mb-4">총평을 작성해주세요</p>
+                    )}
+                </div>
+                
+                <Image
+               
+                src={Quo2Icon}
+                alt="icon"
+                className="h-7 w-7 mb-1 ml-8"
+                ></Image>
+            </div>
+            <div className="flex justify-center">
+                <span 
+                    className="px-3 py-1.5 text-sm rounded-3xl 
+                    text-white font-base mx-2"
+                    style={{
+                    backgroundColor: job.generalRating.color,
+                    }}
+                >#{job.generalRating.title}</span>
+            </div>
+          
 
             {/* 면접 부분*/}
             
 
-            <div className="flex ml-2 justify-between">
+            <div className="flex ml-2 pr-2 justify-between">
                     <p className="text-xl font-semibold mt-3 text-primary">Interview</p>
                     <a onClick={() => setShowCreateReview(!showCreateReview)}
-                    class="button cursor-pointer pr-4 mt-2">
+                    class="button cursor-pointer pr-4 mt-3">
                         <span class="icon font-normal ">+</span>
                         {showCreateReview ? "취소" : "추가하기"}
                     </a>
@@ -109,15 +203,15 @@ export default function Review() {
             <div className="p-1 ml-1 mr-1 rounded-2xl flex flex-col">
             
                 {showCreateReview && (
-                    <div className="my-4 px-6 bg-[#D6BCB0]/80 rounded-3xl">
+                    <div className="px-6 rounded-3xl">
                         <input type="text" 
-                        className="w-full border-2 border-tertiary px-6 py-3 rounded-3xl mt-6
+                        className="w-full border-2 border-gray-300 px-6 py-3 rounded-3xl mt-2
                         focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="질문을 입력하세요"
                         value={formData.question}
                         onChange={(e) => setFormData({...formData, question: e.target.value})} />
 
                         <textarea rows={8} cols={35} 
-                        className="w-full border-2 border-tertiary px-6 py-4 rounded-3xl mt-3 mb-4
+                        className="w-full border-2 border-gray-300 px-6 py-4 rounded-3xl mt-3 mb-4
                         focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="답변을 입력하세요" 
                         value={formData.answer} 
                         onChange={(e) => setFormData({...formData, answer: e.target.value})}
@@ -125,7 +219,7 @@ export default function Review() {
 
                         <div className="flex items-center">
                             <input type="text"
-                            className="w-1/2 border-2 mr-5 border-tertiary px-6 py-2 rounded-3xl mt-3 mb-4
+                            className="w-1/2 border-2 mr-5 border-gray-300 px-6 py-2 rounded-3xl mt-3 mb-4
                             focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="새로 생성하고 싶은 태그 이름을 입력하세요"
                             value={newTag}
                             onChange={(e) => setNewTag(e.target.value)}
@@ -334,54 +428,6 @@ export default function Review() {
 
             </div>
 
-
-            <div className="border-2 border-primary p-4 rounded-2xl flex flex-col">
-                <button
-                className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 self-end"
-                onClick={() => setShowCreateGeneralReview(!showCreateGeneralReview)}
-                >
-                    {showCreateGeneralReview ? "취소" : "총평 작성하기"}
-                </button>
-                {showCreateGeneralReview && (
-                    <div className="my-10">
-                        <textarea rows={8} cols={35} 
-                        className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4" placeholder="총평을 입력하세요" 
-                        value={generalData.generalReview} 
-                        onChange={(e) => setGeneralData({...generalData, generalReview: e.target.value})}
-                        />
-
-                        <div className="flex">
-                            {ratings.map((rating, _) => (
-                                <div key={rating.id} 
-                                className={`px-4 py-2 text-sm rounded-2xl text-white font-bold ${appliedRating && appliedRating.title === rating.title ? "opacity-100 scale-[1.2]" : "opacity-40 scale-100"} mx-2  cursor-pointer hover:opacity-100`} 
-                                style={{
-                                    backgroundColor: rating.color,
-                                }}
-                                onClick={() => setAppliedRating(rating)}
-                                >#{rating.title}</div>
-                            ))}
-                        </div>
-                        <button 
-                        className="text-lg font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 float-right"
-                        onClick={() => {
-                            setJob({
-                                ...job,
-                                generalReview: generalData.generalReview,
-                                generalRating: appliedRating,
-                            });
-                            setGeneralData({
-                                generalReview: "",
-                                generalRating: null,
-                            });
-                            setAppliedRating(null);
-                            setShowCreateGeneralReview(false);
-                        }}
-                        >
-                            Add
-                        </button>
-                    </div>   
-                )}
-            </div>
         </Layout>
     )
 }
