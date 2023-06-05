@@ -47,15 +47,6 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
 
-  const newPost = {
-    jobId: selectedPaperPost ? Number(selectedJobId) : Math.random(),
-    date: dateValue,
-    type: "interview",
-    company: selectedPaperPost ? selectedPaperPost.company : companyValue,
-    job: selectedPaperPost ? selectedPaperPost.job : jobValue,
-    postLink: selectedPaperPost ? selectedPaperPost.postLink : postLinkValue?.trim(),
-  };
-
   function findPostByJobId(selectedJobId) {
     return paperPosts.find((p) => p.jobId === selectedJobId);
   }
@@ -70,35 +61,41 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
       return;
     }
 
-    // 각 input의 값을 객체로 만들고 posts에 업데이트
     const newPost = {
-      id: postId,
-      jobId: 1,
+      jobId: selectedPaperPost ? Number(selectedJobId) : Math.random(),
       date: dateValue,
       type: "interview",
-      company: companyValue,
-      job: jobValue,
-      postLink: postLinkValue.trim(),
+      company: selectedPaperPost ? selectedPaperPost.company : companyValue,
+      job: selectedPaperPost ? selectedPaperPost.job : jobValue,
+      postLink: selectedPaperPost ? selectedPaperPost.postLink : postLinkValue?.trim(),
     };
 
-    setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-    setModalInterview(false);
+    fetch("api/post/new", {
+      method: "POST",
+      body: JSON.stringify(newPost),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        newPost.id = data
+        setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+        setModalInterview(false);
+      })
   }
 
-  useEffect(() => {
-    async function getPaperPosts() {
-      const paperCollection = collection(db, "paper_collection");
-      const q = query(paperCollection);
-      const results = await getDocs(q);
-      const posts = [];
-      results.docs.forEach((doc) => {
-        posts.push({ id: doc.id, ...doc.data() });
-      });
+  // useEffect(() => {
+  //   async function getPaperPosts() {
+  //     const paperCollection = collection(db, "paper_collection");
+  //     const q = query(paperCollection);
+  //     const results = await getDocs(q);
+  //     const posts = [];
+  //     results.docs.forEach((doc) => {
+  //       posts.push({ id: doc.id, ...doc.data() });
+  //     });
 
-      setPaperPosts(posts);
-    }
-    getPaperPosts();
-  }, []);
+  //     setPaperPosts(posts);
+  //   }
+  //   getPaperPosts();
+  // }, []);
 
   
 
@@ -240,21 +237,7 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
         <div className="flex">
           <button
             className={btn}
-            onClick={
-              () => {
-                fetch("api/post/new", {
-                  method: "POST",
-                  body: JSON.stringify(newPost),
-                }).then(() => {
-                  console.log("완료");
-                });
-
-                setModalInterview(false);
-              }
-
-              // handleFormSubmit
-            }
-          >
+            onClick={handleFormSubmit}>
             등록
           </button>
           <button

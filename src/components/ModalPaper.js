@@ -39,15 +39,6 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
-  const jobId = Math.random();
-  const newPost = {
-    jobId: jobId,
-    date: dateValue,
-    type: "paper",
-    company: companyValue,
-    job: jobValue,
-    postLink: postLinkValue.trim(),
-  };
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
@@ -59,7 +50,7 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
 
     // 각 input의 값을 객체로 만들고 posts에 업데이트
     const newPost = {
-      jobId: jobId,
+      jobId: Math.random(),
       date: dateValue,
       type: "paper",
       company: companyValue,
@@ -67,8 +58,19 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
       postLink: postLinkValue.trim(),
     };
 
-    setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-    setModalPaper(false);
+    fetch("api/post/new", {
+      method: "POST",
+      body: JSON.stringify(newPost),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        newPost.id = data
+        setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+        setModalPaper(false);
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -173,21 +175,10 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
           </div>
 
           <div className="flex">
-            <button className={btn} onClick={() => {
-            fetch("api/post/new", {
-              method: "POST",
-              body: JSON.stringify(newPost)
-            }).then(() => {
-              console.log('완료')
-            })
-
-            setModalPaper(false)
-
-            }
-            
-              // handleFormSubmit
-              
-            }>
+          <button
+            className={btn}
+            onClick={ handleFormSubmit }
+          >
               등록
             </button>
             <button

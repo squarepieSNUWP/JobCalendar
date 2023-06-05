@@ -17,7 +17,7 @@ export default function Calendar() {
     `w-full h-full p-3 pt-0 bg-white `
   
 
-
+  const { data: session } = useSession();
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "Feburary", "March",
@@ -110,31 +110,31 @@ export default function Calendar() {
     return dates;
   }
 
-  useEffect(() => {
-    async function getPosts() {
-      const newPosts = [];
-      const paperCollection = collection(db, "paper_collection")
-      const qP = query(paperCollection);
-      const resultsP = await getDocs(qP);
-      resultsP.docs.forEach((doc) => {
-        newPosts.push({ id: doc.id, ...doc.data() });
-      });
+  // useEffect(() => {
+  //   async function getPosts() {
+  //     const newPosts = [];
+  //     const paperCollection = collection(db, "paper_collection")
+  //     const qP = query(paperCollection);
+  //     const resultsP = await getDocs(qP);
+  //     resultsP.docs.forEach((doc) => {
+  //       newPosts.push({ id: doc.id, ...doc.data() });
+  //     });
 
-      const interviewCollection = collection(db, "interview_collection")
-      const qI = query(interviewCollection)
-      const resultsI = await getDocs(qI)
-      resultsI.docs.forEach((doc) => {
-        newPosts.push({ id: doc.id, ...doc.data() });
-      });
+  //     const interviewCollection = collection(db, "interview_collection")
+  //     const qI = query(interviewCollection)
+  //     const resultsI = await getDocs(qI)
+  //     resultsI.docs.forEach((doc) => {
+  //       newPosts.push({ id: doc.id, ...doc.data() });
+  //     });
 
-      setPosts(newPosts)
-    }
+  //     setPosts(newPosts)
+  //   }
 
-    getPosts()
+  //   getPosts()
 
-  }, [])
+  // }, [session])
 
-  const { data: session } = useSession();
+  
   
 
   
