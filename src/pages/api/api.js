@@ -98,3 +98,34 @@ export async function uploadPdf(file, filetype, user_id) {
     }
   );
 }
+
+//userId에 대응되는 모든 pdf 파일을 불러오는 함수
+//file에 대한 정보 {name: 문서명, type: 문서 타입 url: 파일로 이어지는 url} 객체가 배열에 담겨서 반환됨
+export const getUserPdf = async (userId) => {
+  try {
+    const filesCollectionRef = collection(db, "files_collection");
+    const userCollectionRef = collection(db, "users_collection");
+
+    const userQ = query(userCollectionRef, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQ);
+    const userDoc = userSnapshot.docs[0];
+
+    const userFilesId = userDoc.data().files;
+    // console.log("userFiles", userFilesId);
+
+    // const fileQ = query(filesCollectionRef, where("id", "==", "files"));
+    const fileQ = query(filesCollectionRef, where("id", "in", userFilesId));
+    const fileSnapshot = await getDocs(fileQ);
+
+    const userFiles = [];
+
+    fileSnapshot.forEach((fileDoc) => {
+      userFiles.push(fileDoc.data());
+    });
+
+    // console.log("userFileArray", userFiles);
+    return userFiles;
+  } catch (error) {
+    console.error("error while getting pdf files", error.message);
+  }
+};
