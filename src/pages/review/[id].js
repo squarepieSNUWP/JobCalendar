@@ -93,14 +93,121 @@ export default function Review() {
                 )}
             </div>
 
-            <div className="flex flex-col bg-white px-2 pt-6">
-                <p className="text-xl font-semibold text-primary mb-4 border-0 border-b-2 pb-1.5">Interview</p>
+
+            {/* 면접 부분*/}
+            
+
+            <div className="flex ml-2 justify-between">
+                    <p className="text-xl font-semibold mt-3 text-primary">Interview</p>
+                    <a onClick={() => setShowCreateReview(!showCreateReview)}
+                    class="button cursor-pointer pr-4 mt-2">
+                        <span class="icon font-normal ">+</span>
+                        {showCreateReview ? "취소" : "추가하기"}
+                    </a>
+            </div>
+
+            <div className="p-1 ml-1 mr-1 rounded-2xl flex flex-col">
+            
+                {showCreateReview && (
+                    <div className="my-4 px-6 bg-[#D6BCB0]/80 rounded-3xl">
+                        <input type="text" 
+                        className="w-full border-2 border-tertiary px-6 py-3 rounded-3xl mt-6
+                        focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="질문을 입력하세요"
+                        value={formData.question}
+                        onChange={(e) => setFormData({...formData, question: e.target.value})} />
+
+                        <textarea rows={8} cols={35} 
+                        className="w-full border-2 border-tertiary px-6 py-4 rounded-3xl mt-3 mb-4
+                        focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="답변을 입력하세요" 
+                        value={formData.answer} 
+                        onChange={(e) => setFormData({...formData, answer: e.target.value})}
+                        />
+
+                        <div className="flex items-center">
+                            <input type="text"
+                            className="w-1/2 border-2 mr-5 border-tertiary px-6 py-2 rounded-3xl mt-3 mb-4
+                            focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="새로 생성하고 싶은 태그 이름을 입력하세요"
+                            value={newTag}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            />
+                            <button
+                            className="text-sm font-bold text-gray-800/80 bg-tertiary hover:bg-primary px-4 py-2 mt-3 mb-4 rounded-3xl hover:scale-95"
+                            onClick={() => {
+                                setTagTotal([
+                                    ...tagTotal,
+                                    {
+                                        id: tagTotal.length + 1,
+                                        title: newTag,
+                                        color: `rgba(${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256},0.7)`,
+                                    }
+                                ]);
+                                setNewTag("");
+                            }}
+                            >
+                            태그 생성 </button>
+                        </div>
+
+                        <div className="flex">
+                            {tagTotal.map((tag, _) => (
+                                <div key={tag.id} 
+                                className={`px-3 py-1 text-sm rounded-3xl text-white font-base ${appliedTags.includes(tag) ? "opacity-100 scale-[1.2]" : "opacity-40 scale-100"} mx-1  cursor-pointer hover:opacity-100`} 
+                                style={{
+                                    backgroundColor: tag.color,
+                                }}
+                                onClick={() => applyTag(tag)}
+                                >#{tag.title}</div>
+                            ))}
+                        </div>
+                        <div className="flex mt-3 mb-1 justify-end">
+                            
+                            <button 
+                            className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
+                            hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
+                            onClick={() => {
+                                setJob({
+                                    ...job,
+                                    reviews: [
+                                        ...job.reviews,
+                                        {
+                                            ...formData,
+                                            tags: appliedTags,
+                                        },
+                                    ],
+                                });
+                                setFormData({
+                                    question: "",
+                                    answer: "",
+                                    tags: [],
+                                });
+                                setAppliedTags([]);
+                                setShowCreateReview(false);
+                            }
+                            }
+                            >
+                                Add
+                            </button>
+
+                            <button class="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
+                            hover:bg-primary px-4 py-1.5 mb-4 rounded-3xl hover:scale-95 float-right"
+                            onClick={() => setShowCreateReview(!showCreateReview)}
+                            >   
+                                {showCreateReview ? "Cancel" : ""}
+                            </button>
+
+                        </div>
+                    </div>
+                      
+                )} 
+            </div>
+
+            <div className="flex flex-col bg-white pr-2 pl-1">
+                
                 {job.reviews.length > 0 ? (
                         <>
                             {job.reviews.map((review, index) => (
                                 <div 
                                 key={index} 
-                                className="w-full px-4 py-4 rounded-3xl mb-4 cursor-pointer hover:shadow"
+                                className="w-full px-4 py-4 rounded-3xl mb-4 cursor-pointer shadow hover:shadow-lg"
                                 onClick={() => setOpen(prevArr => {
                                     const newArr = [...prevArr];
                                     newArr[index] = !newArr[index];
@@ -111,18 +218,17 @@ export default function Review() {
                                         
                                         {edit[index] ? (
                                             <input type="text" 
-                                            className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4" placeholder="질문을 입력하세요"
+                                            className="w-full bg-tertiary px-5 py-3 rounded-3xl mb-4 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="질문을 입력하세요"
                                             value={editData.question}
                                             onChange={(e) => setEditData({...editData, question: e.target.value})} />    
                                         ) : (
-                                            <p className="text-lg font-bold text-primary">Q. {review.question}</p>
+                                            <p className="text-lg font-bold text-primary mb-2">Q. {review.question}</p>
                                         )}
                                         
                                         <div className="flex">
                                             {edit[index] ? (
-                                                <div className="flex ml-6">
-                                                    <button 
-                                                    className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 mr-4"
+                                                <div className="flex ml-4">
+                                                    <svg class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-3"
                                                     onClick={() => {
                                                         setJob({
                                                             ...job,
@@ -140,11 +246,12 @@ export default function Review() {
                                                             return newArr;
                                                         });
                                                     }}
-                                                    >
-                                                        Save
-                                                    </button>
-                                                    <button 
-                                                    className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95"
+                                                    width="24" height="24" 
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  
+                                                    <path stroke="none" d="M0 0h24v24H0z"/>  
+                                                    <path d="M5 12l5 5l10 -10" />
+                                                    </svg>
+                                                    <svg class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%]"  
                                                     onClick={() => {
                                                         setEdit(prevArr => {
                                                             const newArr = [...prevArr];
@@ -152,13 +259,14 @@ export default function Review() {
                                                             return newArr;
                                                         });
                                                     }}
-                                                    >
-                                                        Cancel
-                                                    </button>
+                                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> 
+                                                    <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" />
+                                                    </svg>
+                                                    
                                                 </div>
                                             ) : (
                                                 <>
-                                                    <svg class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"  
+                                                    <svg class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%] mt-1.5"  
                                                      onClick={() => {
                                                         setEditData({
                                                             question: review.question,
@@ -175,7 +283,7 @@ export default function Review() {
                                                     </svg>
                                                 
                                                     
-                                                    <svg class="h-6 w-6 text-gray-700 hover:scale-[80%]"  
+                                                    <svg class="h-6 w-6 text-gray-700 hover:scale-[80%] mt-1.5 mr-1"  
                                                      onClick={() => {
                                                         const ok = confirm("정말로 삭제하시겠습니까?");
                                                         if(ok) {
@@ -194,20 +302,21 @@ export default function Review() {
 
                                     
                                     {(open[index] || edit[index]) && (
-                                        <div>
+                                        <div className="pr-5">
                                             {edit[index] ? (
-                                                <textarea rows={8} cols={35} 
-                                                className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4" placeholder="답변을 입력하세요" 
+                                                <textarea rows={7} cols={30} 
+                                                className="w-full border-2 border-primary px-5 py-4 mx-3 
+                                                rounded-2xl mb-2 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary" placeholder="답변을 입력하세요" 
                                                 value={editData.answer} 
                                                 onChange={(e) => setEditData({...editData, answer: e.target.value})}
                                                 />
                                             ) : (
-                                                <p className="text-base font-bold text-[#ABA19C] pl-5 my-2">A. {review.answer}</p>
+                                                <p className="bg-tertiary rounded-2xl px-3 mr-3 ml-3 py-2 mb-4 text-base font-bold text-gray-500 pl-5 my-2">A. {review.answer}</p>
                                             )}
                                         </div>
                                     )}
 
-                                    <div className="flex mt-1 mb-2 items-center">
+                                    <div className="flex mb-2 items-center ml-1.5">
                                         <div>
                                             {review.tags.map((tag, _) => (
                                                 <button key={tag.id} className="ml-3 px-3 py-1 text-sm rounded-3xl text-white font-base" style={{
@@ -225,88 +334,6 @@ export default function Review() {
 
             </div>
 
-            <div className="border-2 border-primary p-4 mb-6 mt-24 rounded-2xl flex flex-col">
-                <button 
-                className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 self-end"
-                onClick={() => setShowCreateReview(!showCreateReview)}
-                >
-                    {showCreateReview ? "취소" : "회고 작성하기"}
-                </button>
-                {showCreateReview && (
-                    <div className="my-10">
-                        <input type="text" 
-                        className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4" placeholder="질문을 입력하세요"
-                        value={formData.question}
-                        onChange={(e) => setFormData({...formData, question: e.target.value})} />
-
-                        <textarea rows={8} cols={35} 
-                        className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4" placeholder="답변을 입력하세요" 
-                        value={formData.answer} 
-                        onChange={(e) => setFormData({...formData, answer: e.target.value})}
-                        />
-
-                        <div className="flex items-center mb-4">
-                            <input type="text"
-                            className="w-1/2 border-2 border-primary px-8 py-4 rounded-xl mr-12" placeholder="새로 생성하고 싶은 태그 이름을 입력하세요"
-                            value={newTag}
-                            onChange={(e) => setNewTag(e.target.value)}
-                            />
-                            <button
-                            className="text-sm font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-4 rounded-xl hover:scale-95"
-                            onClick={() => {
-                                setTagTotal([
-                                    ...tagTotal,
-                                    {
-                                        id: tagTotal.length + 1,
-                                        title: newTag,
-                                        color: `rgba(${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256},0.7)`,
-                                    }
-                                ]);
-                                setNewTag("");
-                            }}
-                            >
-                            태그 생성하기 </button>
-                        </div>
-
-                        <div className="flex">
-                            {tagTotal.map((tag, _) => (
-                                <div key={tag.id} 
-                                className={`px-4 py-2 text-sm rounded-2xl text-white font-bold ${appliedTags.includes(tag) ? "opacity-100 scale-[1.2]" : "opacity-40 scale-100"} mx-2  cursor-pointer hover:opacity-100`} 
-                                style={{
-                                    backgroundColor: tag.color,
-                                }}
-                                onClick={() => applyTag(tag)}
-                                >#{tag.title}</div>
-                            ))}
-                        </div>
-                        <button 
-                        className="text-lg font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 float-right"
-                        onClick={() => {
-                            setJob({
-                                ...job,
-                                reviews: [
-                                    ...job.reviews,
-                                    {
-                                        ...formData,
-                                        tags: appliedTags,
-                                    },
-                                ],
-                            });
-                            setFormData({
-                                question: "",
-                                answer: "",
-                                tags: [],
-                            });
-                            setAppliedTags([]);
-                            setShowCreateReview(false);
-                        }
-                        }
-                        >
-                            Add
-                        </button>
-                    </div>   
-                )} 
-            </div>
 
             <div className="border-2 border-primary p-4 rounded-2xl flex flex-col">
                 <button
