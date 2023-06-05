@@ -4,7 +4,14 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NaverProvider from "next-auth/providers/naver";
 import { db } from "@/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 async function getUserByEmail(email) {
   const collectionRef = collection(db, "users_collection");
@@ -17,6 +24,28 @@ async function getUserByEmail(email) {
   const userData = querySnapshot.docs[0].data();
   return userData;
 }
+
+async function saveUserToFirebase(user) {
+  // console.log("save user");
+  const collectionRef = collection(db, "users_collection");
+
+  const querySnapshot = await getDocs(collectionRef);
+  const numUsers = querySnapshot.size;
+
+  const q = query(collectionRef, where("id", "==", user.id));
+  const querySnap = await getDocs(q);
+
+  if (!querySnap.empty) {
+    return;
+  }
+
+  const newDocRef = doc(collectionRef, `${numUsers + 1}`);
+  await setDoc(newDocRef, {
+    id: user.id,
+    name: user.name,
+  });
+}
+
 export default NextAuth({
   providers: [
     CredentialsProvider({
@@ -59,6 +88,12 @@ export default NextAuth({
   ],
   secret: process.env.SECRET,
   callbacks: {
+    async signIn(user) {
+      const { id, name, email } = user.user;
+      // console.log(user.user);
+      await saveUserToFirebase({ id, email, name });
+      return true;
+    },
     async session({ session, token, user }) {
       session.user.id = token.sub;
       session.user.name = token.name;
