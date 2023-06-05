@@ -39,7 +39,7 @@ async function saveUserToFirebase(user) {
   });
 }
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -94,4 +94,6 @@ export default NextAuth({
       return session;
     },
   },
-});
+}
+
+export default NextAuth(authOptions)

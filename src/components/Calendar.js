@@ -132,7 +132,7 @@ export default function Calendar() {
 
     getPosts()
 
-  }, [posts])
+  }, [])
 
   const { data: session } = useSession();
   
