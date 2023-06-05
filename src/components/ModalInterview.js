@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { db } from "@/firebase";
+import { collection, getDocs, query } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 export default function Modal({ setModalInterview, posts, setPosts}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
@@ -34,19 +36,29 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
   // 등록과 닫기 버튼에 대한 css로 이는 Calendar 컴포넌트의 공고 등록 버튼과 동일
   const btn = `py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mx-1`;
 
-  const [selectedOption, setSelectedOption] = useState("paper");
+  // const [selectedOption, setSelectedOption] = useState("paper");
+  const [paperPosts, setPaperPosts] = useState("");
+  const [selectedJobId, setSelectedJobId] = useState("new");
+  const selectedPaperPost =
+    selectedJobId !== "new" ? findPostByJobId(Number(selectedJobId)) : ""
+
   const [dateValue, setDateValue] = useState("");
-  const [companyValue, setCompanyValue] = useState("");
+  const [companyValue, setCompanyValue] = useState("")
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
+
   const newPost = {
-    jobId: Math.random(),
+    jobId: selectedPaperPost ? Number(selectedJobId) : Math.random(),
     date: dateValue,
-    type: selectedOption,
-    company: companyValue,
-    job: jobValue,
-    postLink: postLinkValue.trim(),
+    type: "interview",
+    company: selectedPaperPost ? selectedPaperPost.company : companyValue,
+    job: selectedPaperPost ? selectedPaperPost.job : jobValue,
+    postLink: selectedPaperPost ? selectedPaperPost.postLink : postLinkValue?.trim(),
   };
+
+  function findPostByJobId(selectedJobId) {
+    return paperPosts.find((p) => p.jobId === selectedJobId);
+  }
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
@@ -63,7 +75,7 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
       id: postId,
       jobId: 1,
       date: dateValue,
-      type: selectedOption,
+      type: "interview",
       company: companyValue,
       job: jobValue,
       postLink: postLinkValue.trim(),
@@ -73,14 +85,56 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
     setModalInterview(false);
   }
 
+  useEffect(() => {
+    async function getPaperPosts() {
+      const paperCollection = collection(db, "paper_collection");
+      const q = query(paperCollection);
+      const results = await getDocs(q);
+      const posts = [];
+      results.docs.forEach((doc) => {
+        posts.push({ id: doc.id, ...doc.data() });
+      });
+
+      setPaperPosts(posts);
+    }
+    getPaperPosts();
+  }, []);
+
+  
+
   return (
     <>
       <div className={background}></div>
 
       <div className={modal_container}>
         <h1>면접일 설정</h1>
-          <div className={input_container}>
-            <div class={input_wrapper}>
+        <div className={input_container}>
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="paper-post" className="mb-1">
+              서류 일정 불러오기
+            </label>
+            <select
+              id="paper-post"
+              className={`${input_box}  w-1/3 h-8`}
+              value={selectedJobId}
+              onChange={(e) => {
+                setSelectedJobId(e.target.value);
+              }}
+            >
+              <option value="new" selected>
+                직접 입력하기
+              </option>
+              {paperPosts &&
+                paperPosts.map((post, i) => {
+                  return (
+                    <option key={i} value={post.jobId} selected={selectedJobId === post.jobId}>
+                      {post.company}
+                    </option>
+                  );
+                })}
+            </select>
+          </div>
+          {/* <div class={input_wrapper}>
               <div class={type_radio_wrapper}>
                 <input
                   id="radio-paper"
@@ -114,92 +168,104 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
                   면접
                 </label>
               </div>
-            </div>
+            </div> */}
 
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="date" className="mb-1">
-                {selectedOption == "paper" ? "서류 제출일" : "면접일"}
-              </label>
-              <input
-                type="date"
-                id="date"
-                className={`${input_box} w-1/3 h-8`}
-                onChange={(e) => {
-                  setDateValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="company" className="mb-1">
-                회사 이름
-              </label>
-              <input
-                type="text"
-                id="company"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setCompanyValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="job-title" className="mb-1">
-                직무 이름
-              </label>
-              <input
-                type="text"
-                id="job-title"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setJobValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col mb-3">
-              <label htmlFor="postLink" className="mb-1">
-                공고 링크
-              </label>
-              <input
-                type="text"
-                id="postLink"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setPostLinkValue(e.target.value);
-                }}
-              ></input>
-            </div>
-          </div>
-
-          <div className="flex">
-            <button className={btn} onClick={() => {
-            fetch("api/post/new", {
-              method: "POST",
-              body: JSON.stringify(newPost)
-            }).then(() => {
-              console.log('완료')
-            })
-
-            setModalInterview(false)
-
-            }
-            
-              // handleFormSubmit
-              
-            }>
-              등록
-            </button>
-            <button
-              className={btn}
-              onClick={() => {
-                setModalInterview(false);
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="date" className="mb-1">
+              {/* {selectedOption == "paper" ? "서류 제출일" : "면접일"} */}
+              면접 예정일
+            </label>
+            <input
+              type="date"
+              id="date"
+              className={`${input_box} w-1/3 h-8`}
+              onChange={(e) => {
+                setDateValue(e.target.value);
               }}
-            >
-              닫기
-            </button>
+            />
           </div>
+
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="company" className="mb-1">
+              회사 이름
+            </label>
+            <input
+              type="text"
+              id="company"
+              className={`${input_box} h-8 
+              disabled:bg-gray-100 disabled:text-gray-700/50`}
+              defaultValue={selectedPaperPost ? selectedPaperPost.company : ""}
+              disabled={!!selectedPaperPost}
+              onChange={(e) => {
+                setCompanyValue(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="job-title" className="mb-1">
+              직무 이름
+            </label>
+            <input
+              type="text"
+              id="job-title"
+              className={`${input_box} h-8
+              disabled:bg-gray-100 disabled:text-gray-700/50`}
+              defaultValue={selectedPaperPost ? selectedPaperPost.job : ""}
+              disabled={!!selectedPaperPost}
+              onChange={(e) => {
+                setJobValue(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col mb-3">
+            <label htmlFor="postLink" className="mb-1">
+              공고 링크
+            </label>
+            <input
+              type="text"
+              id="postLink"
+              className={`${input_box} h-8 
+              disabled:bg-gray-100 disabled:text-gray-700/50`}
+              defaultValue={selectedPaperPost ? selectedPaperPost.postLink : ""}
+              disabled={!!selectedPaperPost}
+              onChange={(e) => {
+                setPostLinkValue(e.target.value);
+              }}
+            ></input>
+          </div>
+        </div>
+
+        <div className="flex">
+          <button
+            className={btn}
+            onClick={
+              () => {
+                fetch("api/post/new", {
+                  method: "POST",
+                  body: JSON.stringify(newPost),
+                }).then(() => {
+                  console.log("완료");
+                });
+
+                setModalInterview(false);
+              }
+
+              // handleFormSubmit
+            }
+          >
+            등록
+          </button>
+          <button
+            className={btn}
+            onClick={() => {
+              setModalInterview(false);
+            }}
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </>
   );

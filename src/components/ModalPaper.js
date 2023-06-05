@@ -34,15 +34,16 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
   // 등록과 닫기 버튼에 대한 css로 이는 Calendar 컴포넌트의 공고 등록 버튼과 동일
   const btn = `py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mx-1`;
 
-  const [selectedOption, setSelectedOption] = useState("paper");
+  // const [selectedOption, setSelectedOption] = useState("paper");
   const [dateValue, setDateValue] = useState("");
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
+  const jobId = Math.random();
   const newPost = {
-    jobId: Math.random(),
+    jobId: jobId,
     date: dateValue,
-    type: selectedOption,
+    type: "paper",
     company: companyValue,
     job: jobValue,
     postLink: postLinkValue.trim(),
@@ -50,8 +51,6 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
-    const postId = Math.random();
-
     // 빈 칸이 존재한다면 alert 창 띄움
     if (!date || !companyValue || !jobValue || !postLinkValue) {
       alert("빈 칸을 채워주세요");
@@ -60,10 +59,9 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
 
     // 각 input의 값을 객체로 만들고 posts에 업데이트
     const newPost = {
-      id: postId,
-      jobId: 1,
+      jobId: jobId,
       date: dateValue,
-      type: selectedOption,
+      type: "paper",
       company: companyValue,
       job: jobValue,
       postLink: postLinkValue.trim(),
@@ -80,7 +78,7 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
       <div className={modal_container}>
         <h1>서류 마감일 설정</h1>
           <div className={input_container}>
-            <div class={input_wrapper}>
+            {/* <div class={input_wrapper}>
               <div class={type_radio_wrapper}>
                 <input
                   id="radio-paper"
@@ -114,11 +112,12 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
                   면접
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div className={`${input_wrapper} flex-col`}>
               <label htmlFor="date" className="mb-1">
-                {selectedOption == "paper" ? "서류 제출일" : "면접일"}
+              {/* {selectedOption == "paper" ? "서류 제출일" : "면접일"} */}
+              서류 제출 예정일
               </label>
               <input
                 type="date"
