@@ -7,6 +7,7 @@ import ModalPaper from "./ModalPaper";
 import ModalInterview from "./ModalInterview"
 import { db } from "@/firebase";
 import { collection, getDocs, query } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 
 export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
@@ -132,6 +133,9 @@ export default function Calendar() {
     getPosts()
 
   }, [posts])
+
+  const { data: session } = useSession();
+  
 
   
   

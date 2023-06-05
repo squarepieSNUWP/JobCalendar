@@ -17,7 +17,7 @@ async function getUserByEmail(email) {
   const userData = querySnapshot.docs[0].data();
   return userData;
 }
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -66,4 +66,5 @@ export default NextAuth({
       return session;
     },
   },
-});
+};
+export default NextAuth(authOptions)
