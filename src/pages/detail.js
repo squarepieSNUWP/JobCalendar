@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { uploadPdf, deletePdf, getPdf } from "../pages/api/api";
 import { useSession } from "next-auth/react";
-import Modal from "@/components/Modal";
 
 export default function Detail() {
   const { data: session } = useSession();
@@ -79,7 +78,6 @@ export default function Detail() {
   });
 
   // 달력 모달 관련 변수
-  const [modal, setModal] = useState(false)
 
   useEffect(() => {
     //세션 있는지 검사해서 있으면 userId에 저장함(api call에 사용됨)
@@ -177,13 +175,6 @@ export default function Detail() {
             <Link href="/review">회고 하기</Link>
           </button>
         </div>
-        {
-        modal &&
-        <Modal
-            setModal={setModal}
-            fromDetail={true}
-          />
-        }
 
         <h1 className="text-4xl font-extrabold text-center text-primary mb-10">공고 제목</h1>
 

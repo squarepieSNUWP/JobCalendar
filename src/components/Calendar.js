@@ -3,7 +3,8 @@ import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
 import Image from "next/image";
 import NextIcon from "public/nextSWP.png";
-import Modal from "./Modal";
+import ModalPaper from "./ModalPaper";
+import ModalInterview from "./ModalInterview"
 
 export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
@@ -30,7 +31,8 @@ export default function Calendar() {
 
   const [selectedYear, setSelectedYear] = useState(today.y);
   const [selectedMonth, setSelectedMonth] = useState(today.m);
-  const [modal, setModal] = useState(false);
+  const [modalPaper, setModalPaper] = useState(false);
+  const [modalInterview, setModalInterview] = useState(false);
   const [posts, setPosts] = useState([]);
 
   // 연도와 달을 입력 받아 해당하는 날짜들 정보를 객체로 반환하는 함수
@@ -112,44 +114,38 @@ export default function Calendar() {
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
-      <div className="flex justify-between"> 
-      
-      {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
-      <CalendarHeader
-        months={months}
-        today={today}
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        setSelectedYear={setSelectedYear}
-        setSelectedMonth={setSelectedMonth} />
-        
-        <a onClick={() => {
-            setModal(true);
-          }} class="button cursor-pointer mt-2">
-        <span class="icon font-normal">+</span>
-          <span class="text">Add Event</span>
+      <div className="flex justify-between">
+        {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
+        <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
+
+        <a class="button mt-2">
+          <span class="icon font-normal">+</span>
+          <span
+            class="text cursor-pointer"
+            onClick={() => {
+              setModalPaper(true);
+            }}
+          >
+            Add Paper
+          </span>
+          <span
+            class="text cursor-pointer"
+            onClick={() => {
+              setModalInterview(true);
+            }}
+          >
+            Add Interview
+          </span>
         </a>
       </div>
 
       {/* 요일과 날짜를 달력 형태로 표시하는 컴포넌트 */}
-      <CalendarBody
-        weekdays={weekdays}
-        today={today}
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        dates={getDates(selectedYear, selectedMonth)}
-        posts={posts} />
+      <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} posts={posts} />
 
-      
-      
       {/* 일정 추가 모달 컴포넌트 */}
-      {
-        modal &&
-        <Modal
-          setModal={setModal}
-          posts={posts}
-          setPosts={setPosts} />
-      }
+      {modalPaper && <ModalPaper setModalPaper={setModalPaper} posts={posts} setPosts={setPosts} />}
+
+      {modalInterview && <ModalInterview setModalInterview={setModalInterview} posts={posts} setPosts={setPosts} />}
     </div>
   );
 }

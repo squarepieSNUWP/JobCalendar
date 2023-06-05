@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Modal({ setModal, posts, setPosts, fromDetail }) {
+export default function Modal({ setModalInterview, posts, setPosts}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
@@ -70,7 +70,7 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
     };
 
     setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-    setModal(false);
+    setModalInterview(false);
   }
 
   return (
@@ -78,6 +78,7 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
       <div className={background}></div>
 
       <div className={modal_container}>
+        <h1>면접일 설정</h1>
           <div className={input_container}>
             <div class={input_wrapper}>
               <div class={type_radio_wrapper}>
@@ -181,7 +182,7 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
               console.log('완료')
             })
 
-            setModal(false)
+            setModalInterview(false)
 
             }
             
@@ -193,7 +194,7 @@ export default function Modal({ setModal, posts, setPosts, fromDetail }) {
             <button
               className={btn}
               onClick={() => {
-                setModal(false);
+                setModalInterview(false);
               }}
             >
               닫기
