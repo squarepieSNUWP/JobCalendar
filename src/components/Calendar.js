@@ -111,10 +111,27 @@ export default function Calendar() {
 
   useEffect(() => {
     async function getPosts() {
-      console.log(1)
+      const newPosts = [];
+      const paperCollection = collection(db, "paper_collection")
+      const qP = query(paperCollection);
+      const resultsP = await getDocs(qP);
+      resultsP.docs.forEach((doc) => {
+        newPosts.push({ id: doc.id, ...doc.data() });
+      });
+
+      const interviewCollection = collection(db, "interview_collection")
+      const qI = query(interviewCollection)
+      const resultsI = await getDocs(qI)
+      resultsI.docs.forEach((doc) => {
+        newPosts.push({ id: doc.id, ...doc.data() });
+      });
+
+      setPosts(newPosts)
     }
 
-  }, [])
+    getPosts()
+
+  }, [posts])
 
   
   
