@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
 import Image from "next/image";
 import NextIcon from "public/nextSWP.png";
 import ModalPaper from "./ModalPaper";
 import ModalInterview from "./ModalInterview"
+import { db } from "@/firebase";
+import { collection, getDocs, query } from "firebase/firestore";
 
 export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
@@ -107,6 +109,13 @@ export default function Calendar() {
     return dates;
   }
 
+  useEffect(() => {
+    async function getPosts() {
+      console.log(1)
+    }
+
+  }, [])
+
   
   
   
@@ -119,9 +128,9 @@ export default function Calendar() {
         <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
 
         <a class="button mt-2">
-          <span class="icon font-normal">+</span>
+          <span className="icon font-normal">+</span>
           <span
-            class="text cursor-pointer"
+            className="text cursor-pointer"
             onClick={() => {
               setModalPaper(true);
             }}
@@ -129,7 +138,7 @@ export default function Calendar() {
             Add Paper
           </span>
           <span
-            class="text cursor-pointer"
+            className="text cursor-pointer"
             onClick={() => {
               setModalInterview(true);
             }}
