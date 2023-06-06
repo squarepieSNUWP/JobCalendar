@@ -1,8 +1,8 @@
-import { db } from "@/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function Modal({ setModalInterview, posts, setPosts, paperPosts, setPaperPosts}) {
+export default function Modal({
+  setModalInterview, posts, setPosts, paperPosts, setPaperPosts
+}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
@@ -40,7 +40,7 @@ export default function Modal({ setModalInterview, posts, setPosts, paperPosts, 
   // const [paperPosts, setPaperPosts] = useState("");
   const [selectedJobId, setSelectedJobId] = useState("new");
   const selectedPaperPost =
-    selectedJobId !== "new" ? findPostByJobId(Number(selectedJobId)) : ""
+    selectedJobId !== "new" ? findPostByJobId(selectedJobId) : ""
 
   const [dateValue, setDateValue] = useState("");
   const [companyValue, setCompanyValue] = useState("")
@@ -54,19 +54,34 @@ export default function Modal({ setModalInterview, posts, setPosts, paperPosts, 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
     // 빈 칸이 존재한다면 alert 창 띄움
-    if (!selectedPaperPost && (!dateValue || !companyValue || !jobValue || !postLinkValue)) {
+    if (!selectedPaperPost
+      && (!dateValue || !companyValue || !jobValue || !postLinkValue)) {
       alert("빈 칸을 채워주세요");
       return;
     }
 
     const newPost = {
-      jobId: selectedPaperPost ? Number(selectedJobId) : Math.random(),
+      jobId: selectedPaperPost ? selectedJobId : Math.random().toString(36).substring(2, 11),
       date: dateValue,
       type: "interview",
       company: selectedPaperPost ? selectedPaperPost.company : companyValue,
       job: selectedPaperPost ? selectedPaperPost.job : jobValue,
       postLink: selectedPaperPost ? selectedPaperPost.postLink : postLinkValue?.trim(),
     };
+
+    const isAlreadyRegistered = posts.some((post) => {
+      return (
+        post.type === newPost.type &&
+        post.company === newPost.company &&
+        post.job === newPost.job &&
+        post.postLink === newPost.postLink
+      )
+    });
+
+    if (isAlreadyRegistered) {
+      alert("이미 등록된 면접입니다.");
+      return;
+    }
 
     fetch("api/post/new", {
       method: "POST",

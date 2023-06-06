@@ -166,15 +166,19 @@ export default function Calendar() {
   useEffect(() => {
     getPosts()
   }, [session])
-  
-  console.log(paperPosts)
-    
+
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
       <div className="flex justify-between">
         {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
-        <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
+        <CalendarHeader
+          months={months}
+          today={today}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedYear={setSelectedYear}
+          setSelectedMonth={setSelectedMonth} />
 
         <a class="button mt-2">
           <span className="icon font-normal">+</span>
