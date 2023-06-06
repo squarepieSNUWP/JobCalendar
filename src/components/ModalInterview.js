@@ -2,7 +2,7 @@ import { db } from "@/firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export default function Modal({ setModalInterview, posts, setPosts}) {
+export default function Modal({ setModalInterview, posts, setPosts, paperPosts, setPaperPosts}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
@@ -37,7 +37,7 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
   const btn = `py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mx-1`;
 
   // const [selectedOption, setSelectedOption] = useState("paper");
-  const [paperPosts, setPaperPosts] = useState("");
+  // const [paperPosts, setPaperPosts] = useState("");
   const [selectedJobId, setSelectedJobId] = useState("new");
   const selectedPaperPost =
     selectedJobId !== "new" ? findPostByJobId(Number(selectedJobId)) : ""
@@ -53,10 +53,8 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   function handleFormSubmit() {
-    const postId = Math.random();
-
     // 빈 칸이 존재한다면 alert 창 띄움
-    if (!date || !companyValue || !jobValue || !postLinkValue) {
+    if (!selectedPaperPost && (!dateValue || !companyValue || !jobValue || !postLinkValue)) {
       alert("빈 칸을 채워주세요");
       return;
     }
@@ -76,28 +74,14 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
     })
       .then((res) => res.json())
       .then((data) => {
-        newPost.id = data
+        newPost.id = data;
         setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
         setModalInterview(false);
       })
+      .catch((error) => {
+        console.error(error);
+      });
   }
-
-  // useEffect(() => {
-  //   async function getPaperPosts() {
-  //     const paperCollection = collection(db, "paper_collection");
-  //     const q = query(paperCollection);
-  //     const results = await getDocs(q);
-  //     const posts = [];
-  //     results.docs.forEach((doc) => {
-  //       posts.push({ id: doc.id, ...doc.data() });
-  //     });
-
-  //     setPaperPosts(posts);
-  //   }
-  //   getPaperPosts();
-  // }, []);
-
-  
 
   return (
     <>
@@ -176,6 +160,7 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
               type="date"
               id="date"
               className={`${input_box} w-1/3 h-8`}
+              min={selectedPaperPost ? selectedPaperPost.date : undefined}
               onChange={(e) => {
                 setDateValue(e.target.value);
               }}
@@ -235,9 +220,7 @@ export default function Modal({ setModalInterview, posts, setPosts}) {
         </div>
 
         <div className="flex">
-          <button
-            className={btn}
-            onClick={handleFormSubmit}>
+          <button className={btn} onClick={handleFormSubmit}>
             등록
           </button>
           <button

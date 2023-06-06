@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ModalPaper({ setModalPaper, posts, setPosts}) {
+export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts, setPaperPosts}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
@@ -66,6 +66,7 @@ export default function ModalPaper({ setModalPaper, posts, setPosts}) {
       .then((data) => {
         newPost.id = data
         setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+        setPaperPosts((prevJobPosts) => [...prevJobPosts, newPost]);
         setModalPaper(false);
       })
       .catch((error) => {
