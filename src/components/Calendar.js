@@ -6,7 +6,7 @@ import NextIcon from "public/nextSWP.png";
 import ModalPaper from "./ModalPaper";
 import ModalInterview from "./ModalInterview"
 import { db } from "@/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 
 export default function Calendar() {
@@ -17,7 +17,7 @@ export default function Calendar() {
     `w-full h-full p-3 pt-0 bg-white `
   
 
-
+  const { data: session } = useSession();
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "Feburary", "March",
@@ -37,6 +37,7 @@ export default function Calendar() {
   const [modalPaper, setModalPaper] = useState(false);
   const [modalInterview, setModalInterview] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [paperPosts, setPaperPosts] = useState([])
 
   // 연도와 달을 입력 받아 해당하는 날짜들 정보를 객체로 반환하는 함수
   // ex. {y: 2023, m: 6, d: 3, currentMonth: true, diff: 0}
@@ -110,43 +111,74 @@ export default function Calendar() {
     return dates;
   }
 
-  useEffect(() => {
-    async function getPosts() {
+  async function getPosts() {
+    console.log("일정 가져오기 함수 실행")
+    if (!session?.user?.id) return;
+
+    const userId = session.user.id
+    const usersCollection = collection(db, "users_collection");
+    const userQuery = query(usersCollection, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQuery);
+
+
+    if (!userSnapshot.empty) {
+      const userDoc = userSnapshot.docs[0];
+      const userDocData = userDoc.data();
+
+      const paperIds = userDocData.papers || [];
+      const interviewIds = userDocData.interviews || [];
+
       const newPosts = [];
-      const paperCollection = collection(db, "paper_collection")
-      const qP = query(paperCollection);
-      const resultsP = await getDocs(qP);
-      resultsP.docs.forEach((doc) => {
-        newPosts.push({ id: doc.id, ...doc.data() });
-      });
+      const newPaperPosts = []
 
-      const interviewCollection = collection(db, "interview_collection")
-      const qI = query(interviewCollection)
-      const resultsI = await getDocs(qI)
-      resultsI.docs.forEach((doc) => {
-        newPosts.push({ id: doc.id, ...doc.data() });
-      });
+      if (paperIds.length > 0) {
+        const paperCollection = collection(db, "paper_collection");
+        const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
+        const paperSnapshot = await getDocs(paperQuery);
 
-      setPosts(newPosts)
+        paperSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        paperSnapshot.docs.forEach((doc) => {
+          newPaperPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        setPaperPosts(newPaperPosts)
+      }
+
+      if (interviewIds.length > 0) {
+        const interviewCollection = collection(db, "interview_collection");
+        const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
+        const interviewSnapshot = await getDocs(interviewQuery);
+
+        interviewSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+      }
+
+      setPosts(newPosts);
+    } else {
+      console.log("존재X");
     }
+  }
 
+  useEffect(() => {
     getPosts()
+  }, [session])
 
-  }, [])
-
-  const { data: session } = useSession();
-  
-
-  
-  
-  
-    
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
       <div className="flex justify-between">
         {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
-        <CalendarHeader months={months} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} />
+        <CalendarHeader
+          months={months}
+          today={today}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedYear={setSelectedYear}
+          setSelectedMonth={setSelectedMonth} />
 
         <a class="button mt-2">
           <span className="icon font-normal">+</span>
@@ -170,12 +202,30 @@ export default function Calendar() {
       </div>
 
       {/* 요일과 날짜를 달력 형태로 표시하는 컴포넌트 */}
-      <CalendarBody weekdays={weekdays} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} dates={getDates(selectedYear, selectedMonth)} posts={posts} />
+      <CalendarBody
+        weekdays={weekdays}
+        today={today}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        dates={getDates(selectedYear, selectedMonth)}
+        posts={posts} />
 
       {/* 일정 추가 모달 컴포넌트 */}
-      {modalPaper && <ModalPaper setModalPaper={setModalPaper} posts={posts} setPosts={setPosts} />}
+      {modalPaper &&
+        <ModalPaper
+        setModalPaper={setModalPaper}
+        posts={posts}
+        setPosts={setPosts}
+        paperPosts={paperPosts}
+        setPaperPosts={setPaperPosts} />}
 
-      {modalInterview && <ModalInterview setModalInterview={setModalInterview} posts={posts} setPosts={setPosts} />}
+      {modalInterview &&
+        <ModalInterview
+        setModalInterview={setModalInterview}
+        posts={posts}
+        setPosts={setPosts}
+        paperPosts={paperPosts}
+        setPaperPosts={setPaperPosts}/>}
     </div>
   );
 }

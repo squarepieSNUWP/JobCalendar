@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         });
       }
 
-      res.status(200).json("서류 마감 일정 등록 완료");
+      res.status(200).json(docRef.id);
 
 
     } else if (JSON.parse(req.body).type == "interview") {
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       }
 
 
-      res.status(200).json("면접 일정 등록 완료");
+      res.status(200).json(docRef.id);
     }
 
     
