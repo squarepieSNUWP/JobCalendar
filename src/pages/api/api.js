@@ -4,8 +4,6 @@ import {
   getStorage,
   ref,
   uploadBytesResumable,
-  deleteObject,
-  listAll,
   getDownloadURL,
 } from "firebase/storage";
 
@@ -17,9 +15,10 @@ import {
   setDoc,
   getDocs,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
-// pdf 관련 api들
+// 마이페이지 pdf 관련 api들
 
 //pdf 업로드
 export async function uploadPdf(file, filetype, user_id) {
@@ -44,7 +43,7 @@ export async function uploadPdf(file, filetype, user_id) {
 
   const uploadTask = uploadBytesResumable(storageRef, file);
 
-  // pdf의 업로드 상태를 확인하는 부분
+  // pdf의 업로드 상태를 확인하는 부분 (나중에 삭제될 테스트 코드)
   uploadTask.on(
     "state_changed",
     (snapshot) => {
@@ -129,3 +128,37 @@ export const getUserPdf = async (userId) => {
     console.error("error while getting pdf files", error.message);
   }
 };
+
+//pdf 삭제 담당 함수
+//삭제는 db에서만 이루어지고 storage의 것들은 그대로 있음
+export async function deletePdf(fileId, userId) {
+  try {
+    const filesCollectionRef = collection(db, "files_collection");
+    const userCollectionRef = collection(db, "users_collection");
+
+    const userQ = query(userCollectionRef, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQ);
+    const userDoc = userSnapshot.docs[0];
+
+    //유저가 올렸던 파일 정보들
+    const userFilesId = userDoc.data().files;
+
+    const fileQ = query(filesCollectionRef, where("id", "==", fileId));
+    const fileSnapshot = await getDocs(fileQ);
+    const targetFile = fileSnapshot.docs[0];
+
+    //지울 파일의 id
+    const targetFileId = targetFile.id;
+    const updatedUserFilesId = userFilesId.filter((id) => id !== targetFileId);
+
+    //users_collection에서 해당 문서의 files 필드를 업데이트
+    const userDocRef = doc(userCollectionRef, userDoc.id);
+    await updateDoc(userDocRef, {
+      files: updatedUserFilesId,
+    });
+
+    await deleteDoc(doc(filesCollectionRef, targetFileId));
+  } catch (error) {
+    console.log("error while deleting file", error.message);
+  }
+}
