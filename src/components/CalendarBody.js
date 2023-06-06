@@ -33,14 +33,14 @@ export default function CalendarBody(
         return today.y === date.y && today.m === date.m && today.d === date.d;
       });
 
-      function getMatchingPosts(date) {
+  function getMatchingPosts(date) {
         const matchingPosts = posts.filter((post) => {
-          const [postYear, postMonth, postDate] = post.date.split("-");
+          const [postYear, postMonth, postDate] = post.date.split("-")
           return Number(postYear) === date.y && Number(postMonth) === date.m && Number(postDate) === date.d;
         });
 
         return matchingPosts;
-      }
+      };
 
       function getPostIndex(post) {
         const [postYear, postMonth, postDate] = post.date.split("-");

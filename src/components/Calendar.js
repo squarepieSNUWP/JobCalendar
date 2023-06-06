@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarBody from "./CalendarBody"
 import CalendarHeader from "./CalendarHeader"
 import Image from "next/image";
 import NextIcon from "public/nextSWP.png";
-import Modal from "./Modal";
+import ModalPaper from "./ModalPaper";
+import ModalInterview from "./ModalInterview"
+import { db } from "@/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 
 export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
@@ -13,7 +17,7 @@ export default function Calendar() {
     `w-full h-full p-3 pt-0 bg-white `
   
 
-
+  const { data: session } = useSession();
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "Feburary", "March",
@@ -30,8 +34,10 @@ export default function Calendar() {
 
   const [selectedYear, setSelectedYear] = useState(today.y);
   const [selectedMonth, setSelectedMonth] = useState(today.m);
-  const [modal, setModal] = useState(false);
+  const [modalPaper, setModalPaper] = useState(false);
+  const [modalInterview, setModalInterview] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [paperPosts, setPaperPosts] = useState([])
 
   // 연도와 달을 입력 받아 해당하는 날짜들 정보를 객체로 반환하는 함수
   // ex. {y: 2023, m: 6, d: 3, currentMonth: true, diff: 0}
@@ -105,29 +111,93 @@ export default function Calendar() {
     return dates;
   }
 
-  
-  
-  
-    
+  async function getPosts() {
+    console.log("일정 가져오기 함수 실행")
+    if (!session?.user?.id) return;
+
+    const userId = session.user.id
+    const usersCollection = collection(db, "users_collection");
+    const userQuery = query(usersCollection, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQuery);
+
+
+    if (!userSnapshot.empty) {
+      const userDoc = userSnapshot.docs[0];
+      const userDocData = userDoc.data();
+
+      const paperIds = userDocData.papers || [];
+      const interviewIds = userDocData.interviews || [];
+
+      const newPosts = [];
+      const newPaperPosts = []
+
+      if (paperIds.length > 0) {
+        const paperCollection = collection(db, "paper_collection");
+        const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
+        const paperSnapshot = await getDocs(paperQuery);
+
+        paperSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        paperSnapshot.docs.forEach((doc) => {
+          newPaperPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        setPaperPosts(newPaperPosts)
+      }
+
+      if (interviewIds.length > 0) {
+        const interviewCollection = collection(db, "interview_collection");
+        const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
+        const interviewSnapshot = await getDocs(interviewQuery);
+
+        interviewSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+      }
+
+      setPosts(newPosts);
+    } else {
+      console.log("존재X");
+    }
+  }
+
+  useEffect(() => {
+    getPosts()
+  }, [session])
+
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
-      <div className="flex justify-between"> 
-      
-      {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
-      <CalendarHeader
-        months={months}
-        today={today}
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        setSelectedYear={setSelectedYear}
-        setSelectedMonth={setSelectedMonth} />
-        
-        <a onClick={() => {
-            setModal(true);
-          }} class="button cursor-pointer mt-2">
-        <span class="icon font-normal">+</span>
-          <span class="text">Add Event</span>
+      <div className="flex justify-between">
+        {/* 선택된 연도 및 월 표시 + 이전달 오늘 다음달 버튼 기능 담당하는 컴포넌트 */}
+        <CalendarHeader
+          months={months}
+          today={today}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedYear={setSelectedYear}
+          setSelectedMonth={setSelectedMonth} />
+
+        <a class="button mt-2">
+          <span className="icon font-normal">+</span>
+          <span
+            className="text cursor-pointer"
+            onClick={() => {
+              setModalPaper(true);
+            }}
+          >
+            Add Paper
+          </span>
+          <span
+            className="text cursor-pointer"
+            onClick={() => {
+              setModalInterview(true);
+            }}
+          >
+            Add Interview
+          </span>
         </a>
       </div>
 
@@ -140,16 +210,22 @@ export default function Calendar() {
         dates={getDates(selectedYear, selectedMonth)}
         posts={posts} />
 
-      
-      
       {/* 일정 추가 모달 컴포넌트 */}
-      {
-        modal &&
-        <Modal
-          setModal={setModal}
-          posts={posts}
-          setPosts={setPosts} />
-      }
+      {modalPaper &&
+        <ModalPaper
+        setModalPaper={setModalPaper}
+        posts={posts}
+        setPosts={setPosts}
+        paperPosts={paperPosts}
+        setPaperPosts={setPaperPosts} />}
+
+      {modalInterview &&
+        <ModalInterview
+        setModalInterview={setModalInterview}
+        posts={posts}
+        setPosts={setPosts}
+        paperPosts={paperPosts}
+        setPaperPosts={setPaperPosts}/>}
     </div>
   );
 }

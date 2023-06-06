@@ -78,6 +78,8 @@ export default function Detail() {
     answer: "",
   });
 
+  // 달력 모달 관련 변수
+
   useEffect(() => {
     //세션 있는지 검사해서 있으면 userId에 저장함(api call에 사용됨)
     if (session) {
@@ -156,11 +158,9 @@ export default function Detail() {
               공고 링크
             </a>
           </button>
-
           <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
             일정 추가
           </button>
-
           <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
             <Link href="/review">회고 하기</Link>
           </button>
