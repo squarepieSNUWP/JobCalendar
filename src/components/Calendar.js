@@ -166,7 +166,7 @@ export default function Calendar() {
   useEffect(() => {
     getPosts()
   }, [session])
-
+  console.log(posts)
   return (
     <div className={calendar_container}>
       {/* 일정 추가 버튼 */}
