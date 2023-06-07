@@ -11,7 +11,18 @@ export default async function handler(req, res) {
   if (req.method == "POST") {
     if (JSON.parse(req.body).type == "paper") {
       const jobCollection = collection(db, "job_collection");
-      const jobDocRef = await addDoc(jobCollection, {});
+      const jobDocRef = await addDoc(jobCollection, {
+        paperDate: JSON.parse(req.body).date,
+        interviewDate: "",
+        company: JSON.parse(req.body).company,
+        job: JSON.parse(req.body).job,
+        postLink: JSON.parse(req.body).postLink,
+        files: { resume: [], portfolio: [] },
+        coverLetters: [],
+        reviews: [],
+        overall: "",
+        rating: "",
+      });
 
       const paperData = {
         ...JSON.parse(req.body),
@@ -43,10 +54,25 @@ export default async function handler(req, res) {
       let jobDocRef;
 
       if (JSON.parse(req.body).jobId) {
+        jobDocRef = doc(jobCollection, JSON.parse(req.body).jobId);
+        await updateDoc(jobDocRef, {
+          interviewDate: JSON.parse(req.body).date
+        });
         
       } else {
         // jobId가 존재하지 않는 경우, 새로운 jobCollection 문서 생성
-        jobDocRef = await addDoc(jobCollection, {});
+        jobDocRef = await addDoc(jobCollection, {
+          paperDate: "",
+          interviewDate: JSON.parse(req.body).date,
+          company: JSON.parse(req.body).company,
+          job: JSON.parse(req.body).job,
+          postLink: JSON.parse(req.body).postLink,
+          files: { resume: [], portfolio: [] },
+          coverLetters: [],
+          reviews: [],
+          overall: "",
+          rating: "",
+        });
       }
 
       const interviewData = {
