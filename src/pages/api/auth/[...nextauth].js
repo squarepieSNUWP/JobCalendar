@@ -29,9 +29,6 @@ async function saveUserToFirebase(user) {
   // console.log("save user");
   const collectionRef = collection(db, "users_collection");
 
-  const querySnapshot = await getDocs(collectionRef);
-  const numUsers = querySnapshot.size;
-
   const q = query(collectionRef, where("id", "==", user.id));
   const querySnap = await getDocs(q);
 
@@ -39,7 +36,7 @@ async function saveUserToFirebase(user) {
     return;
   }
 
-  const newDocRef = doc(collectionRef, `${numUsers + 1}`);
+  const newDocRef = doc(collectionRef, `${user.id}`);
   await setDoc(newDocRef, {
     id: user.id,
     name: user.name,
