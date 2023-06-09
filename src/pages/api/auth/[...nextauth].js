@@ -4,7 +4,14 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NaverProvider from "next-auth/providers/naver";
 import { db } from "@/firebase";
-import { collection, getDocs, query, where, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 async function getUserByEmail(email) {
   const collectionRef = collection(db, "users_collection");
@@ -91,9 +98,10 @@ export const authOptions = {
       session.user.id = token.sub;
       session.user.name = token.name;
       session.user.email = token.email;
+      session.user.image = token.picture;
       return session;
     },
   },
-}
+};
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
