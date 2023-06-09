@@ -10,11 +10,12 @@ export default function Modal({
   // 모달창의 가장 바깥 부분으로 검은 배경보다 위에 오도록 z-index는 40으로 설정
   // 일단은 전체 스크린 너비와 높이의 절반으로 설정
   // input 컨테이너와 button 컨테이너를 flex-col로 정렬
-  const modal_container = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 bg-gray-200 p-8 rounded-lg shadow-md z-40 flex flex-col items-center`;
+  const modal_container = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 
+  bg-[#F3F0EE] pb-6 pt-8 pr-7 pl-7 rounded-3xl shadow-md z-40 flex flex-col`;
 
   // input 컨테이너로 서류/면접, 날짜, 회사 이름, 직무 이름, 공고 내용이 모두 들어간 공간
   // cf. button 컨테이너는 flex만 주었기에 inline으로 className에 기입함
-  const input_container = `w-full h-full flex flex-col`;
+  const input_container = `w-full h-full flex flex-col mt-5`;
 
   // 각각의 input-label을 감싸는 wrapper로 밑 여백만 주었음
   const input_wrapper = `flex mb-3`;
@@ -22,8 +23,9 @@ export default function Modal({
   // 날짜, 회사 이름, 직무 이름, 공고 내용의 input 란의 크기 및 내부 텍스트를 조절
   // 너비와 크기는 inline으로 className에 추가했기에 여기는 공통된 부분만 설정함
   // cf. 라벨에 대한 css는 단순해서 일단 inline으로 className에 추가함
-  const input_box = `text-sm bg-white px-1 rounded`;
-
+  const input_box = `text-sm bg-white focus:outline-none 
+  focus:ring focus:ring-[#D6BCB0]/30 px-1 rounded-xl px-3`;
+{/*
   // 서류 라디오 버튼과 면접 라디오 버튼을 각각 감싸는 wrapper로 오른쪽 여백을 줌
   const type_radio_wrapper = `flex items-center mr-4`;
 
@@ -31,10 +33,11 @@ export default function Modal({
   // 반드시 appearance-none을 해준 후에 bg, border, text를 설정해야 변경됨
   // 체크 된 이후엔 checked: 후에 원하는 스타일 적으면 됨
   const type_radio = `appearance-none 
-    bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`;
+bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
 
   // 등록과 닫기 버튼에 대한 css로 이는 Calendar 컴포넌트의 공고 등록 버튼과 동일
-  const btn = `py-2 px-4 text-sm font-semibold rounded-lg bg-teal-400 text-white cursor-pointer mx-1`;
+  const btn = `py-2 px-4 text-sm font-semibold rounded-3xl bg-[#D6BCB0] 
+  text-white cursor-pointer mx-1 place-self-end mt-4 hover:bg-[#B9A49A]`;
 
   // const [selectedOption, setSelectedOption] = useState("paper");
   // const [paperPosts, setPaperPosts] = useState("");
@@ -103,7 +106,7 @@ export default function Modal({
       <div className={background}></div>
 
       <div className={modal_container}>
-        <h1>면접일 설정</h1>
+        <h1 className="font-bold text-lg text-gray-800">면접 일정 등록</h1>
         <div className={input_container}>
           <div className={`${input_wrapper} flex-col`}>
             <label htmlFor="paper-post" className="mb-1">
@@ -111,13 +114,14 @@ export default function Modal({
             </label>
             <select
               id="paper-post"
-              className={`${input_box}  w-1/3 h-8`}
+              className={`${input_box} w-1/3 h-8`}
               value={selectedJobId}
               onChange={(e) => {
                 setSelectedJobId(e.target.value);
               }}
             >
-              <option value="new" selected>
+              <option value="new" selected
+              className="pl-4">
                 직접 입력하기
               </option>
               {paperPosts &&
@@ -234,7 +238,7 @@ export default function Modal({
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex place-self-end">
           <button className={btn} onClick={handleFormSubmit}>
             등록
           </button>
