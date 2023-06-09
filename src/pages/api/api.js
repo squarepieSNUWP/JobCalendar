@@ -1,55 +1,49 @@
-import { auth, db, storage } from "../../firebase/index";
+import { auth, storage } from "../../firebase/index";
+import { db } from "@/firebase";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
-  deleteObject,
-  listAll,
   getDownloadURL,
 } from "firebase/storage";
 
-// pdf 관련 api들
-// 파일이 업로드된 게 이미 있으면 못 올리게 하는 것도 서버에서 구현을 해야 함ㅠㅠ
+import {
+  collection,
+  doc,
+  query,
+  where,
+  setDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
-/*
-pdf가 저장되는 파일구조
-
-user_id
-  ㄴ company1
-      ㄴ resume
-          ㄴ resume.pdf
-      ㄴ coverLetter
-          ㄴ coverLetter.pdf
-      ㄴ portfolio
-          ㄴ portfolio.pdf
-  ㄴ company2
-      ㄴ resume
-          ㄴ resume.pdf
-      ㄴ coverLetter
-          ㄴ coverLetter.pdf
-      ㄴ portfolio
-          ㄴ portfolio.pdf
-...
-
-*/
+// 마이페이지 pdf 관련 api들
 
 //pdf 업로드
 export async function uploadPdf(file, filetype, user_id) {
   // 업로드를 시도하는 파일의 확장자가 pdf가 아니면 에러를 반환하고 함수 종료
   if (file.type !== "application/pdf") {
-    console.error(
-      "Invalid file type. Only PDF files are allowed. Error code: 406"
-    );
+    console.error("Invalid file type. Only PDF files are allowed.");
     throw new Error("Invalid file type");
   }
 
-  //참조 만들기 - 파일이 저장되는 곳 (ex. 1번 user가 이력서를 올릴 경우 -> user_1/resume/resume.pdf)
+  //file collection, user collection에 대한 참조 설정
+  const filesCollectionRef = collection(db, "files_collection");
+  const userCollectionRef = collection(db, "users_collection");
+
+  const querySnapshot = await getDocs(filesCollectionRef);
+  const numFiles = querySnapshot.size;
+
+  //입력 받은 user_id를 바탕으로 user_collection에서 쿼리해 옴
+  const userQ = query(userCollectionRef, where("id", "==", user_id));
+
   const storage = getStorage();
-  const storageRef = ref(storage, `user_${user_id}/${filetype}/${file.name}`);
+  const storageRef = ref(storage, `user_${user_id}/${file.name}`);
 
   const uploadTask = uploadBytesResumable(storageRef, file);
 
-  // pdf의 업로드 상태를 확인하는 부분
+  // pdf의 업로드 상태를 확인하는 부분 (나중에 삭제될 테스트 코드)
   uploadTask.on(
     "state_changed",
     (snapshot) => {
@@ -73,88 +67,98 @@ export async function uploadPdf(file, filetype, user_id) {
           console.error("Unknown storage error.");
           break;
       }
+    },
+    async () => {
+      try {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("File download URL:", downloadURL);
+
+        const newFileRef = {
+          id: numFiles + 1,
+          url: downloadURL,
+          type: filetype,
+        };
+
+        const newDocRef = doc(filesCollectionRef, `${numFiles + 1}`);
+        await setDoc(newDocRef, newFileRef);
+        const userSnapshot = await getDocs(userQ);
+        const userDoc = userSnapshot.docs[0];
+        const userData = userDoc.data();
+
+        if (!userData.files) {
+          userData.files = [];
+        }
+
+        userData.files.push(newFileRef.id);
+        await updateDoc(userDoc.ref, userData);
+      } catch (error) {
+        console.error("Error while uploading file to db: ", error);
+      }
     }
   );
 }
 
+//userId에 대응되는 모든 pdf 파일을 불러오는 함수
+//file에 대한 정보 {name: 문서명, type: 문서 타입 url: 파일로 이어지는 url} 객체가 배열에 담겨서 반환됨
+export const getUserPdf = async (userId) => {
+  try {
+    const filesCollectionRef = collection(db, "files_collection");
+    const userCollectionRef = collection(db, "users_collection");
+
+    const userQ = query(userCollectionRef, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQ);
+    const userDoc = userSnapshot.docs[0];
+
+    const userFilesId = userDoc.data().files;
+    // console.log("userFiles", userFilesId);
+
+    // const fileQ = query(filesCollectionRef, where("id", "==", "files"));
+    const fileQ = query(filesCollectionRef, where("id", "in", userFilesId));
+    const fileSnapshot = await getDocs(fileQ);
+
+    const userFiles = [];
+
+    fileSnapshot.forEach((fileDoc) => {
+      userFiles.push(fileDoc.data());
+    });
+
+    // console.log("userFileArray", userFiles);
+    return userFiles;
+  } catch (error) {
+    console.error("error while getting pdf files", error.message);
+  }
+};
+
 //pdf 삭제 담당 함수
-export async function deletePdf(deleteObj, fileType, userId) {
+//삭제는 db에서만 이루어지고 storage의 것들은 그대로 있음
+export async function deletePdf(fileId, userId) {
   try {
-    const storage = getStorage();
-    const deleteRef = ref(
-      storage,
-      `user_${userId}/${fileType}/${deleteObj.name}`
-    );
+    const filesCollectionRef = collection(db, "files_collection");
+    const userCollectionRef = collection(db, "users_collection");
 
-    await deleteObject(deleteRef);
+    const userQ = query(userCollectionRef, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQ);
+    const userDoc = userSnapshot.docs[0];
 
-    console.log("file delete success");
+    //유저가 올렸던 파일 정보들
+    const userFilesId = userDoc.data().files;
+
+    const fileQ = query(filesCollectionRef, where("id", "==", fileId));
+    const fileSnapshot = await getDocs(fileQ);
+    const targetFile = fileSnapshot.docs[0];
+
+    //지울 파일의 id
+    const targetFileId = targetFile.id;
+    const updatedUserFilesId = userFilesId.filter((id) => id !== targetFileId);
+
+    //users_collection에서 해당 문서의 files 필드를 업데이트
+    const userDocRef = doc(userCollectionRef, userDoc.id);
+    await updateDoc(userDocRef, {
+      files: updatedUserFilesId,
+    });
+
+    await deleteDoc(doc(filesCollectionRef, targetFileId));
   } catch (error) {
-    switch (error.code) {
-      case "storage/object-not-found":
-        console.error("No file to delete.");
-        break;
-      case "storage/unauthorized":
-        console.error("Unauthorized access to storage.");
-        break;
-      default:
-        console.error("Unknown error.");
-        break;
-    }
+    console.log("error while deleting file", error.message);
   }
 }
-
-//userId에 대응되는 모든 pdf 파일을 재귀적으로 불러오는 함수
-//file에 대한 정보 {name: 문서명, url: 파일로 이어지는 url} 객체가 배열에 담겨서 반환됨
-export async function getPdf(userId) {
-  const storage = getStorage();
-  const userStorageRef = ref(storage, `user_${userId}`);
-
-  const files = await getAllPdfFiles(userStorageRef);
-  return files;
-}
-
-//재귀호출 함수
-const getAllPdfFiles = async (folderRef, parentFolder = "") => {
-  try {
-    const result = await listAll(folderRef);
-    const files = [];
-
-    for (const itemRef of result.items) {
-      const itemName = itemRef.name;
-      const itemUrl = await getDownloadURL(itemRef);
-
-      if (itemName.toLowerCase().endsWith(".pdf")) {
-        const fileType = parentFolder;
-
-        files.push({
-          name: itemName,
-          url: itemUrl,
-          fileType: fileType,
-        });
-      }
-    }
-
-    for (const prefixRef of result.prefixes) {
-      const subFolderName = getFolderName(prefixRef);
-      const subFiles = await getAllPdfFiles(prefixRef, subFolderName);
-      files.push(...subFiles);
-    }
-
-    console.log(files);
-
-    return files;
-  } catch (error) {
-    console.error(
-      "An error occurred while retrieving PDF files",
-      error.message
-    );
-    return [];
-  }
-};
-
-// 도우미함수 - 경로에서 폴더명만 추출하는 함수
-const getFolderName = (folderRef) => {
-  const parts = folderRef.fullPath.split("/");
-  return parts[parts.length - 1];
-};
