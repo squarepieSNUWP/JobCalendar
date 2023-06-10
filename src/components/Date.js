@@ -55,11 +55,13 @@ export default function Date(
 
     // 일정 하나씩 담는 box로, type(서류/면접)과 내용(회사 이름)을 감싸는 역할
     // 마진과 패딩은 일정을 구분할 수 있게 상하좌우로 살짝씩 줌
-    const post_box = `mx-1 px-0 pb-1 text-xs my-0.5 flex items-baseline rounded-2xl text-[#444444]
-    ${date.currentMonth ? "bg-[#EEE1DC]" : highlight ? "bg-[#EEE1DC]" : "bg-[#EEE1DC]/50"}`;
+    {/*const post_box = `mx-1 px-0 pb-1 text-xs my-0.5 flex items-baseline rounded-2xl text-[#444444]
+  ${date.currentMonth ? "bg-[#EEE1DC]" : highlight ? "bg-[#EEE1DC]" : "bg-[#EEE1DC]/50"}`;*/}
+
+    const post_box = `post-box` ;
 
     // 일정의 상태(서류/면접)을 나타내는 부분의 css
-    const post_type = `mt-1 mr-2 ml-1 px-1.5 text-[#91807B] rounded-2xl
+    const post_type = `mt-0.5 mr-1.5 ml-1 px-1.5 text-[#91807B] rounded-2xl
      ${date.currentMonth ? "bg-white" : highlight ? "bg-white" : "bg-white"}`;
 
     const post_text = `${date.currentMonth ? "" : highlight ? "" : "text-gray-700/20"}`;
@@ -125,7 +127,12 @@ export default function Date(
                 }}
               >
                 <span className={post_type}>{item.type}</span>
-                <span className={post_text}>{item.company}</span>
+                <span className="post-box-text">{item.company.length > 7 ? item.company.slice(0, 7) + '...' : item.company}</span>
+{item.company.length > 7 && (
+  <span className={`post-box-after ${item.company.length > 7 && 'hidden'}`}>
+    {item.company.slice(7)}
+  </span>
+)}
               </div>
             ))}
           </>
