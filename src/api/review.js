@@ -44,8 +44,6 @@ export const updateReview = async (data) => {
         question: data.question,
         answer: data.answer,
     });
-
-    console.log(res);
 }
 
 export const deleteReview = async (data) => {
