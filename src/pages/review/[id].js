@@ -7,7 +7,7 @@ import Image from "next/image";
 import Quo1Icon from "public/quote1SWP.png";
 import Quo2Icon from "public/quote2SWP.png";
 // import { addTag, getTags } from "../api/api";
-import { createTag, getMyTags, deleteTag } from "@/api/tag";
+import { createTag, getMyTags, deleteTag, getTags } from "@/api/tag";
 import { useSession } from "next-auth/react";
 import { createReview, getReviews, updateReview } from "@/api/review";
 import { getJob } from "@/api/job";
@@ -21,6 +21,7 @@ export default function Review() {
 
   const [job, setJob] = useState(null);
   const [reviews, setReviews] = useState([]);
+  console.log(reviews);
   const [open, setOpen] = useState([]);
   const [edit, setEdit] = useState([]);
   const [newTag, setNewTag] = useState(""); // 새로 생성하고 싶은 태그 이름
@@ -52,7 +53,12 @@ export default function Review() {
     }
 
     const getReviewAPI = async (jobId) => {
-      const reviews = await getReviews(jobId);
+      const reviewData = await getReviews(jobId);
+      let reviews = [];
+      for(const r of reviewData) {
+        const tags = await getTags(r.id);
+        reviews.push({...r, tags: tags});
+      }
       setReviews(reviews);
     }
     if(id) {
@@ -99,14 +105,6 @@ export default function Review() {
 
   useEffect(() => {
     if (reviews.length <= 0) return;
-
-    // const tags = reviews.reduce((acc, review) => {
-    //   for (let tag of review.tags) {
-    //     acc.add(tag);
-    //   }
-    //   return acc;
-    // }, new Set());
-    // setTagTotal(Array.from(tags));
 
     // open, edit 배열 초기화 (질문 답변을 보여줄지 말지, 수정할지 말지 - 각 job별로 배열을 만들어서 관리)
     setOpen(reviews.map(() => false));
@@ -376,16 +374,17 @@ export default function Review() {
                   className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
                             hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
                   onClick={async () => {
-                    setJob({
-                      ...job,
-                      reviews: [
-                        ...job.reviews,
+                    setReviews([
+                        ...reviews,
                         {
                           ...formData,
-                          tags: appliedTags,
+                          tags: appliedTags.map((tag) => tag.id),
                         },
-                      ],
-                    });
+                      ]
+                    );
+
+                    await createReview( {...formData, jobId: id, tags: appliedTags.map((tag) => tag.id) });
+
                     setFormData({
                       question: "",
                       answer: "",
@@ -394,7 +393,6 @@ export default function Review() {
                     setAppliedTags([]);
                     setShowCreateReview(false);
 
-                    await createReview( {...formData, jobId: job.id });
                   }}
                 >
                   Add
@@ -576,7 +574,7 @@ export default function Review() {
                   )}
 
                   <div className="flex mb-2 items-center ml-1.5">
-                    {/* <div>
+                    <div>
                       {review.tags.map((tag, _) => (
                         <button
                           key={tag.id}
@@ -588,8 +586,10 @@ export default function Review() {
                           #{tag.title}
                         </button>
                       ))}
-                    </div> */}
+                    </div>
                   </div>
+
+                  
                 </div>
               ))}
             </>

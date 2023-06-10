@@ -9,6 +9,8 @@ import {
   addDoc,
   doc,
   deleteDoc,
+  arrayUnion,
+  updateDoc,
 } from "firebase/firestore";
 
 //개별 review에 달린 태그 정보 가져오기
@@ -33,7 +35,7 @@ export async function getTags(reviewId) {
     const tagModel = {
       id: doc.id,
       color: tagData.color,
-      title: tagData.color,
+      title: tagData.title,
     };
     reviewTags.push(tagModel);
   });
@@ -72,7 +74,7 @@ export async function getMyTags(userId) {
 //새로운 태그 생성하기
 export async function createTag(req) {
   const tagCollectionRef = collection(db, "tags");
-  const { title, color, userId } = req;
+  const { title, color, userId } = req
 
   if (!title) {
     throw new Error("내용을 입력하세요");
@@ -82,6 +84,7 @@ export async function createTag(req) {
     title: title,
     color: color,
     userId: userId,
+    reviewId: [],
   };
 
   const docRef = await addDoc(tagCollectionRef, newTag);
@@ -99,4 +102,15 @@ export async function deleteTag(req) {
     console.log("Tag deleted:", id);
   }
   console.log("target id", req);
+}
+
+//태그에 reviewId 추가하기
+export async function addReviewIdToTag(tags, reviewId) {
+  const tagCollectionRef = collection(db, "tags");
+  for(const id of tags){
+    const tagDocRef = doc(tagCollectionRef, id);
+    await updateDoc(tagDocRef, {
+      reviewId: arrayUnion(reviewId),
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import { db } from "@/firebase"
-import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore"
+import { addReviewIdToTag } from "./tag";
 
 const reviewCollection = collection(db, "reviews");
 
@@ -21,7 +22,7 @@ export const getReviews = async ( jobId ) => {
 }
 
 export const createReview = async ( data ) => {
-    const { question, answer, jobId } = data;
+    const { question, answer, jobId, tags } = data;
 
     const createdAt = new Date().toLocaleDateString();
 
@@ -31,6 +32,8 @@ export const createReview = async ( data ) => {
         jobId,
         createdAt
       });
+
+      addReviewIdToTag(tags, docRef.id)
 
     return docRef;
 }
@@ -45,6 +48,7 @@ export const updateReview = async (data) => {
     console.log(res);
 }
 
-export const deleteReview = () => {
-
+export const deleteReview = async (data) => {
+    const reviewDoc = doc(reviewCollection, data.id);
+    await deleteDoc(reviewDoc);
 }

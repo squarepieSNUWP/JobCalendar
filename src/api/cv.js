@@ -32,8 +32,8 @@ export const createCV = async ( data ) => {
 }
 
 export const updateCV = async (data) => {
-    const reviewDoc = doc(cvCollection, data.id);
-    const res = await updateDoc(reviewDoc, {
+    const cvDoc = doc(cvCollection, data.id);
+    const res = await updateDoc(cvDoc, {
         question: data.question,
         answer: data.answer,
     });
@@ -41,6 +41,7 @@ export const updateCV = async (data) => {
     console.log(res);
 }
 
-export const deleteCV = () => {
-
+export const deleteCV = async (data) => {
+    const cvDoc = doc(cvCollection, data.id);
+    await deleteDoc(cvDoc);
 }
