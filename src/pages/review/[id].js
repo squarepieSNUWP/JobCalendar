@@ -350,7 +350,7 @@ export default function Review() {
                   태그 생성{" "}
                 </button>
                 <button
-                  className="text-sm font-bold text-gray-800/80 bg-tertiary hover:bg-primary px-4 py-2 mt-3 mb-4 rounded-3xl hover:scale-95"
+                  className="text-sm font-bold text-gray-800/80 bg-tertiary hover:bg-primary px-4 py-2 mt-3 mb-4 ml-2 rounded-3xl hover:scale-95"
                   onClick={deleteTagHandler}
                 >
                   태그 삭제{" "}

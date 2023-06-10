@@ -158,3 +158,50 @@ li {
 .btn-hover.color-1 {
     background-image: linear-gradient(to right, #f5eeebe7, #ebe2de, #e1d6d1, #f5eeebe0);
 }
+
+
+.post-box {
+  font-size: 0.75rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0;
+  padding-right: 0;
+  height: 1.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: width 0.3s;
+  display: inline-block;
+  margin-left: 0.125rem;
+  margin-right: 0.25rem;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+  border-radius: 1rem;
+  align-items: baseline;
+  background-color: #EEE1DC;
+  color: #444444;
+  display: flex;
+  
+}
+
+.post-box-after {
+  visibility: hidden;
+  margin-right: 0.4rem;
+}
+
+.post-box:hover .post-box-after {
+  visibility: hidden;
+}
+
+.post-box:hover {
+  white-space: normal;
+  overflow: visible;
+}
+
+.post-box:hover::after {
+  content: '...';
+  visibility: hidden;
+}
+
+.post-box:hover .hidden {
+  display: none;
+}
