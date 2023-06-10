@@ -14,7 +14,7 @@ export default function Calendar() {
   // 현재는 너비는 max만 설정하고 높이는 직접 설정함
   // 배경색은 zinc로 함
   const calendar_container = 
-    `w-full h-full p-3 pt-0 bg-white `
+    `w-full h-full p-3 pt-0 bg-white mr-4`
   
 
   const { data: session } = useSession();
@@ -180,10 +180,10 @@ export default function Calendar() {
           setSelectedYear={setSelectedYear}
           setSelectedMonth={setSelectedMonth} />
 
-        <a class="button focus:button cursor-pointer mt-2">
-          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white">+</span>
+        <a class="button focus:button cursor-pointer mt-2 mr-4">
+          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white mr-6">+</span>
           <span
-            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 mr-1.5 ml-2 hover:bg-[#B9A49A]"
+            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 mr-1.5 hover:bg-[#B9A49A]"
             onClick={() => {
               setModalPaper(true);
             }}

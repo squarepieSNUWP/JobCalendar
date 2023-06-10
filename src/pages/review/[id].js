@@ -172,9 +172,9 @@ export default function Review() {
           <p className="text-xl font-semibold mt-3 text-primary">Evaluation</p>
           <a
             onClick={() => setShowCreateGeneralReview(!showCreateGeneralReview)}
-            class="button cursor-pointer pr-4 mt-3"
+            class="button2 cursor-pointer pr-4 mt-3"
           >
-            <span class="icon font-normal ">+</span>
+            <span class="icon bg-[#d4b5a7] font-normal ">+</span>
             {showCreateGeneralReview ? "취소" : "총평 작성"}
           </a>
         </div>
@@ -295,7 +295,7 @@ export default function Review() {
           <p className="text-xl font-semibold mt-3 text-primary">Interview</p>
           <a
             onClick={() => setShowCreateReview(!showCreateReview)}
-            class="button cursor-pointer pr-4 mt-3"
+            class="button2 cursor-pointer pr-4 mt-3"
           >
             <span class="icon font-normal ">+</span>
             {showCreateReview ? "취소" : "추가하기"}

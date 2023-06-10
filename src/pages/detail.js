@@ -141,34 +141,46 @@ export default function Detail() {
       );
     }
     return (
-      <div className="bg-white rounded-2xl shadow drop-shadow-md w-full h-full"></div>
+      <div className="bg-white rounded-2xl shadow drop-shadow-sm w-full h-full"></div>
     );
   };
 
   return (
     <Layout>
       <div>
-        <div className="flex justify-end mb-6">
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 m1-2">
-            <a
-              href="https://www.wanted.co.kr/wd/161336"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              공고 링크
+
+        <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#F9F5F3] px-5 py-8 mb-6 rounded-3xl relative">
+          <div className="flex flex-col justify-end mr-7 absolute
+                        top-1/2 right-0 transform -translate-y-1/2 ">
+            <a href="https://www.wanted.co.kr/wd/161336" class="relative inline-flex mb-2.5 items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group">
+              <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold fon w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">공고 보러가기</span>
+              <span class="relative invisible text-sm">공고 보러가기</span>
             </a>
-          </button>
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
-            일정 추가
-          </button>
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
-            <Link href="/review">회고 하기</Link>
-          </button>
+            
+            <a href="/review" class="relative inline-flex items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group">
+              <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">회고 보러가기</span>
+              <span class="relative invisible text-sm">회고 보러가기</span>
+            </a>
+
+          </div>
+          
+          <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
+            {job.title}
+          </h1>
+          <p className="text-xl font-base text-stone-600/90 pl-4 tracking-tight text-left">
+            {job.company} - {job.occupation}
+          </p>
         </div>
 
-        <h1 className="text-4xl font-extrabold text-center text-primary mb-10">
-          공고 제목
-        </h1>
+        
 
         {/* <Link
         <div className="inset-0 flex flex-col justify-end">
@@ -188,10 +200,11 @@ export default function Detail() {
         {/* 탭버튼 UI */}
         <div>
           <button
-            className={`bg-secondary/20 hover:bg-secondary/50 py-2 px-4 rounded-t-2xl mt-2 mr-2 border-secondary 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 mr-2 
             ${
-              activeTab == "files" ? "border-t-2 border-l-2 border-r-2" : null
+              activeTab == "files" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
             } `}
+            style={{ opacity: activeTab === "files" ? 1 : 0.7 }}
             onClick={() => {
               setActiveTab("files");
             }}
@@ -199,10 +212,12 @@ export default function Detail() {
             이력서/포트폴리오
           </button>
           <button
-            className={`bg-secondary/20 hover:bg-secondary/50 py-2 px-4 rounded-t-2xl mt-2 border-secondary
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 
             ${
-              activeTab == "letter" ? "border-t-2 border-l-2 border-r-2" : null
-            } `}
+              activeTab == "letter" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
+            }
+             `}
+            style={{ opacity: activeTab === "letter" ? 1 : 0.7 }}
             onClick={() => {
               setActiveTab("letter");
             }}
@@ -213,136 +228,99 @@ export default function Detail() {
 
         {/* 여기부터 pdf 파일 삽입 및 확인 구간 */}
         {activeTab === "files" && (
-          <div className="place-self-center bg-secondary p-4 rounded-r-2xl rounded-b-2xl mt-0 mb-0 w-full">
+          <div className="place-self-center bg-[#EADFDA] p-4 rounded-r-2xl rounded-b-2xl mt-0 w-full">
             <div className="flex">
-              <div className="w-1/4">
-                <div className="bg-white p-3 rounded-2xl mb-3">
-                  <div className="flex flex-col mb-1">
-                    <span className="font-normal ml-2">이력서</span>
-                    {files.resume ? (
-                      <div className="flex space-x-2 justify-center">
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileView("resume")}
-                        >
-                          파일 보기
-                        </button>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileChange("resume")}
-                        >
-                          파일 삭제
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                          onClick={() => openFileExplorer("resume")}
-                        >
-                          PDF 파일 선택
-                        </button>
-                        <select className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2">
-                          <option
-                            className="text-center"
-                            value=""
-                            disabled
-                            selected
-                          >
-                            불러오기
-                          </option>
-                          {myPageFiles.resumes.map((resume) => {
-                            return (
-                              <option value={resume.id}>{resume.title}</option>
-                            );
-                          })}
-                        </select>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      ref={fileInputRefs.resume}
-                      style={{ display: "none" }}
-                      onChange={(e) => handleFileUpload(e, "resume")}
-                    />
-                  </div>
-                </div>
-                {/* <div className="bg-white p-3 rounded-2xl mb-3">
-                <div className="flex flex-col mb-1">
-                  <span className="font-normal ml-2">자소서</span>
-                  {files.coverLetter ? (
-                    <div className="flex space-x-2 justify-center">
-                      <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2" onClick={() => handleFileView("coverLetter")}>
-                        파일 보기
-                      </button>
-                      <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2" onClick={() => handleFileChange("coverLetter")}>
-                        파일 삭제
-                      </button>
+              <div className="flex flex-col w-1/4">
+
+              <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+
+                <div className="flex flex-col items-center mt-5 w-full">
+                  <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
+                    <div className="flex flex-col mb-1">
+                      <span className="font-normal ml-2">이력서</span>
+                      
+                          
+                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                            <option
+                              className="text-center "
+                              value=""
+                              disabled
+                              selected
+                            >
+                              불러오기
+                            </option>
+                            {myPageFiles.resumes.map((resume) => {
+                              return (
+                                <option value={resume.id}>{resume.title}</option>
+                              );
+                            })}
+                          </select>
+                        
+                
+                      <input
+                        type="file"
+                        ref={fileInputRefs.resume}
+                        style={{ display: "none" }}
+                        onChange={(e) => handleFileUpload(e, "resume")}
+                      />
                     </div>
-                  ) : (
-                    <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2" onClick={() => openFileExplorer("coverLetter")}>
-                      PDF 파일 선택
-                    </button>
-                  )}
-                  <input type="file" ref={fileInputRefs.coverLetter} style={{ display: "none" }} onChange={(e) => handleFileUpload(e, "coverLetter")} />
-                </div>
-              </div> */}
-                <div className="bg-white p-3 rounded-2xl">
-                  <div className="flex flex-col mb-1">
-                    <span className="font-normal ml-2">포트폴리오</span>
-                    {files.portfolio ? (
-                      <div className="flex space-x-2 justify-center">
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileView("portfolio")}
-                        >
-                          파일 보기
-                        </button>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileChange("portfolio")}
-                        >
-                          파일 삭제
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                          onClick={() => openFileExplorer("portfolio")}
-                        >
-                          PDF 파일 선택
-                        </button>
-                        <select className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2">
-                          <option
-                            className="text-center"
-                            value=""
-                            disabled
-                            selected
+                  </div>
+                  <button
+                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                            rounded-2xl mt-1 mr-5"
+                            onClick={() => handleFileView("resume")}
                           >
-                            불러오기
-                          </option>
-                          {myPageFiles.portfolios.map((portfolio) => {
+                            파일 보기
+                  </button>
+                </div>
+                
+                <div className="mt-5 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+
+                <div className="flex flex-col items-center mt-5 w-full">
+                  <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
+                    <div className="flex flex-col mb-1">
+                      <span className="font-normal ml-2">포트폴리오</span>
+                          
+                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                            <option
+                              className="text-center"
+                              value=""
+                              disabled
+                              selected
+                            >
+                              불러오기
+                            </option>
+                            {myPageFiles.portfolios.map((portfolio) => {
                             return (
                               <option value={portfolio.id}>
                                 {portfolio.title}
                               </option>
                             );
                           })}
-                        </select>
-                      </>
-                    )}
-                    <input
+                          </select>
+                        </div>
+                
+                      <input
                       type="file"
                       ref={fileInputRefs.portfolio}
                       style={{ display: "none" }}
                       onChange={(e) => handleFileUpload(e, "portfolio")}
-                    />
+                      />
+             
                   </div>
+                  <button
+                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                            rounded-2xl mt-1 mr-5"
+                            onClick={() => handleFileView("portfolio")}
+                          >
+                            파일 보기
+                  </button>
                 </div>
+
+                <div className="mt-5 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
               </div>
               <div className="w-3/4">
-                <div className="p-4 rounded-2xl h-full">
+                <div className="pl-2 rounded-2xl h-[400px]">
                   {renderFileContent()}
                 </div>
               </div>
@@ -352,13 +330,14 @@ export default function Detail() {
 
         {/* 자소서 질문-딥변 입력 부분 */}
         {activeTab == "letter" && (
-          <div className="p-4 border-secondary border-2 rounded-r-2xl rounded-b-2xl">
-            <div className="flex flex-col">
+          <div className="p-4 bg-[#EADFDA] rounded-b-2xl rounded-tr-2xl">
+            <div className="flex flex-col mt-3 px-4">
               {job.coverLetters.map((coverLetter, index) => {
                 return (
                   <div
                     key={index}
-                    className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4 cursor-pointer"
+                    className="w-full pr-4 pl-6 py-6 rounded-3xl 
+                    bg-white mb-4 cursor-pointer hover:shadow-lg"
                     onClick={() =>
                       setOpen((prevArr) => {
                         const newArr = [...prevArr];
@@ -371,7 +350,7 @@ export default function Detail() {
                       {edit[index] ? (
                         <input
                           type="text"
-                          className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                          className="w-full bg-tertiary px-5 py-3 rounded-3xl mb-4 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                           placeholder="질문을 입력하세요"
                           value={editData.question}
                           onChange={(e) =>
@@ -382,17 +361,16 @@ export default function Detail() {
                           }
                         />
                       ) : (
-                        <p className="text-xl font-bold text-primary">
-                          Q.
-                          {coverLetter.question}
+                        <p className="text-lg font-bold text-primary">
+                           Q. {coverLetter.question}
                         </p>
                       )}
 
                       <div>
                         {edit[index] ? (
                           <div className="flex ml-6">
-                            <button
-                              className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 mr-4"
+                            <svg
+                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-1.5"
                               onClick={() => {
                                 setJob({
                                   ...job,
@@ -411,11 +389,20 @@ export default function Detail() {
                                 });
                                 console.log("SETEDIT");
                               }}
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              stroke-width="2"
+                              stroke="currentColor"
+                              fill="none"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
                             >
-                              Save
-                            </button>
-                            <button
-                              className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95"
+                              <path stroke="none" d="M0 0h24v24H0z" />
+                              <path d="M5 12l5 5l10 -10" />
+                            </svg>
+                            <svg
+                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%]"
                               onClick={() => {
                                 setEdit((prevArr) => {
                                   const newArr = [...prevArr];
@@ -423,12 +410,23 @@ export default function Detail() {
                                   return newArr;
                                 });
                               }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
+                              width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                            <line x1="18" y1="6" x2="6" y2="18" />{" "}
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </div>
                         ) : (
-                          <button
+                          <svg
+                            class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"
                             onClick={() => {
                               setEditData({
                                 question: coverLetter.question,
@@ -440,10 +438,17 @@ export default function Detail() {
                                 return newArr;
                               });
                             }}
-                            className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            Edit
-                          </button>
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                            />
+                          </svg>
                         )}
                       </div>
                     </div>
@@ -453,7 +458,8 @@ export default function Detail() {
                           <textarea
                             rows={8}
                             cols={35}
-                            className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                            className="w-full border-2 border-primary px-5 py-4 ml-2 mr-3 
+                            rounded-2xl mb-2 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                             placeholder="답변을 입력하세요"
                             value={editData.answer}
                             onChange={(e) =>
@@ -464,8 +470,9 @@ export default function Detail() {
                             }
                           />
                         ) : (
-                          <p className="text-base font-bold text-[#ABA19C] my-4">
-                            A. {coverLetter.answer}
+                          <p className="bg-tertiary rounded-2xl px-5 mr-3 ml-2 py-3 mt-5 text-base 
+                          text-gray-500 pl-5 my-2">
+                            A.  {coverLetter.answer}
                           </p>
                         )}
                       </div>
@@ -475,10 +482,11 @@ export default function Detail() {
               })}
             </div>
 
-            <div className="my-10">
+            <div className="px-4 mb-12 rounded-3xl">
               <input
                 type="text"
-                className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                className="w-full bg-stone-100 border-2 border-gray-300 px-6 py-3 rounded-3xl mt-2
+                focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                 placeholder="질문을 입력하세요"
                 value={formData.question}
                 onChange={(e) =>
@@ -489,15 +497,18 @@ export default function Detail() {
               <textarea
                 rows={8}
                 cols={35}
-                className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                className="w-full border-2 bg-stone-100 border-gray-300 px-6 py-4 rounded-3xl mt-3 mb-2
+                focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                 placeholder="답변을 입력하세요"
                 value={formData.answer}
                 onChange={(e) =>
                   setFormData({ ...formData, answer: e.target.value })
                 }
               />
+
               <button
-                className="text-lg font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 float-right"
+                className="text-lg font-semibold text-white bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] 
+                hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
                 onClick={() => {
                   setJob({
                     ...job,

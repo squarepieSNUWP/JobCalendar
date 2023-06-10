@@ -63,7 +63,7 @@ li {
 
 .container {
   max-width: 82vw;
-  min-height: 95vh;
+  min-height: 94vh;
   margin-left: 247px;
   margin-top: 16px;
   margin-right: 15px;
@@ -92,19 +92,37 @@ li {
   max-width: 300px;
 }
 
+.button2 {
+  background: #d4b5a7;
+  text-decoration: none;
+  border-radius: 60px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  overflow:hidden;
+  width: auto;
+  max-width: 32px; /** I'm animating max-width because width needs to be auto, and auto can't be animated **/
+  -webkit-transition: max-width 0.5s;
+  transition: max-width 0.5s;
+}
+
+.button2:hover {
+  max-width: 300px;
+}
+
 .icon {
   font-size: 30px;
   margin-right: 14px;
   padding-top: 0px;
   padding-bottom: 5px;
-  padding-right: 5px;
+  padding-right: 6px;
   padding-left: 6px;
   display: flex;
   align-items: center;
 }
 
 .text {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 
