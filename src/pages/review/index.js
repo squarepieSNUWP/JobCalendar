@@ -33,9 +33,6 @@ export default function ReviewList() {
                         <path stroke="none" d="M0 0h24v24H0z"/>
                         <polyline points="9 6 15 12 9 18" />
                     </svg>
-                    <p>
-                        <span className="text-base text-[#C5C0BE]"> {(new Date(j.endDate)).toLocaleDateString()}</span>
-                    </p>
                     <h2 className="text-xl font-bold tracking-tight text-gray-800/90 mt-3 mb-0.5">{j.title}</h2>
                     <h3 className="text-lg font-normal text-gray-800/70">{j.company}</h3>
                 </div>

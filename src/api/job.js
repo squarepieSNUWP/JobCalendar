@@ -33,6 +33,13 @@ export const createJob = async (newJob) => {
 
 };
 
-export const updateJob = () => {};
+export const updateJob = async (data) => {
+  console.log(data);
+  const jobDoc = await doc(jobsCollection, data.id);
+  await updateDoc(jobDoc, {
+        overall: data.overall,
+        rating: data.rating,
+    });
+};
 
 export const deleteJob = () => {};

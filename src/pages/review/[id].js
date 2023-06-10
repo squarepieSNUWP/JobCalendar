@@ -10,7 +10,7 @@ import Quo2Icon from "public/quote2SWP.png";
 import { createTag, getMyTags, deleteTag, getTags } from "@/api/tag";
 import { useSession } from "next-auth/react";
 import { createReview, deleteReview, getReviews, updateReview } from "@/api/review";
-import { getJob } from "@/api/job";
+import { getJob, updateJob } from "@/api/job";
 
 export default function Review() {
   const router = useRouter();
@@ -21,7 +21,6 @@ export default function Review() {
 
   const [job, setJob] = useState(null);
   const [reviews, setReviews] = useState([]);
-  console.log(reviews);
   const [open, setOpen] = useState([]);
   const [edit, setEdit] = useState([]);
   const [newTag, setNewTag] = useState(""); // 새로 생성하고 싶은 태그 이름
@@ -134,7 +133,8 @@ export default function Review() {
   }, [userId]);
 
   const applyTag = (tag) => {
-    appliedTags.includes(tag)
+    // appliedTags.includes(tag)
+    appliedTags.findIndex((t) => t.id === tag.id) !== -1
       ? setAppliedTags(appliedTags.filter((t) => t !== tag))
       : setAppliedTags([...appliedTags, tag]);
   };
@@ -220,7 +220,7 @@ export default function Review() {
                 <button
                   className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
                             hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
-                  onClick={() => {
+                  onClick={async () => {
                     setJob({
                       ...job,
                       overall: generalData.overall,
@@ -232,6 +232,11 @@ export default function Review() {
                     });
                     setAppliedRating(null);
                     setShowCreateGeneralReview(false);
+                    await updateJob({
+                      id: id,
+                      overall: generalData.overall,
+                      rating: appliedRating,
+                    });
                   }}
                 >
                   Add
@@ -357,7 +362,10 @@ export default function Review() {
                   <div
                     key={tag.id}
                     className={`px-3 py-1 text-sm rounded-3xl text-white font-base ${
-                      appliedTags.includes(tag)
+                      // appliedTags.includes(tag)
+                      //   ? "opacity-100 scale-[1.2]"
+                      //   : "opacity-40 scale-100"
+                      appliedTags.findIndex((t) => t.id === tag.id) !== -1 
                         ? "opacity-100 scale-[1.2]"
                         : "opacity-40 scale-100"
                     } mx-1  cursor-pointer hover:opacity-100`}
@@ -379,7 +387,7 @@ export default function Review() {
                         ...reviews,
                         {
                           ...formData,
-                          tags: appliedTags.map((tag) => tag.id),
+                          tags: appliedTags,
                         },
                       ]
                     );
@@ -509,7 +517,7 @@ export default function Review() {
                                 question: review.question,
                                 answer: review.answer,
                                 tags: review.tags,
-                              });
+                              });  
                               setEdit((prevArr) => {
                                 const newArr = [...prevArr];
                                 newArr[index] = !newArr[index];
@@ -577,21 +585,21 @@ export default function Review() {
                     </div>
                   )}
 
-                  <div className="flex mb-2 items-center ml-1.5">
-                    <div>
-                      {review.tags.map((tag, _) => (
-                        <button
-                          key={tag.id}
-                          className="ml-3 px-3 py-1 text-sm rounded-3xl text-white font-base"
-                          style={{
-                            backgroundColor: tag.color,
-                          }}
-                        >
-                          #{tag.title}
-                        </button>
-                      ))}
+                    <div className="flex mb-2 items-center ml-1.5">
+                      <div>
+                        {review.tags.map((tag, _) => (
+                          <button
+                            key={tag.id}
+                            className="ml-3 px-3 py-1 text-sm rounded-3xl text-white font-base"
+                            style={{
+                              backgroundColor: tag.color,
+                            }}
+                          >
+                            #{tag.title}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
                   
                 </div>
