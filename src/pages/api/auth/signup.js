@@ -8,8 +8,13 @@ import {
   setDoc,
 } from "firebase/firestore";
 
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 async function handler(req, res) {
   const collectionRef = collection(db, "users_collection");
+
+  const storage = getStorage();
+  const imageUrl = await getDownloadURL(ref(storage, "user2SWP.png"));
 
   const querySnapshot = await getDocs(collectionRef);
   const numUsers = querySnapshot.size;
@@ -72,6 +77,7 @@ async function handler(req, res) {
     name: name,
     email: email,
     password: password,
+    image: imageUrl,
   };
 
   try {
