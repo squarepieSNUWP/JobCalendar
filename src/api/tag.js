@@ -38,7 +38,7 @@ export async function getTags(reviewId) {
     reviewTags.push(tagModel);
   });
 
-  return userFiles;
+  return reviewTags;
 }
 
 //유저가 저장한 태그 모두 불러오기
