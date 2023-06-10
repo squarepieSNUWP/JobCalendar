@@ -1,3 +1,6 @@
+import { createApply } from "@/api/apply";
+import { createJob } from "@/api/job";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts, setPaperPosts}) {
@@ -37,14 +40,16 @@ export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts,
   const btn = `py-2 px-4 text-sm font-semibold rounded-3xl bg-[#D6BCB0] 
   text-white cursor-pointer mx-1 place-self-end mt-4 hover:bg-[#B9A49A]`;
 
-  // const [selectedOption, setSelectedOption] = useState("paper");
+  const { data: session } = useSession();
+  const userId = session.user.id;
   const [dateValue, setDateValue] = useState("");
   const [companyValue, setCompanyValue] = useState("");
   const [jobValue, setJobValue] = useState("");
   const [postLinkValue, setPostLinkValue] = useState("");
+  
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
-  function handleFormSubmit() {
+  async function handleFormSubmit() {
     // 빈 칸이 존재한다면 alert 창 띄움
     if (!date || !companyValue || !jobValue || !postLinkValue) {
       alert("빈 칸을 채워주세요");
@@ -52,29 +57,52 @@ export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts,
     }
 
     // 각 input의 값을 객체로 만들고 posts에 업데이트
-    const newPost = {
-      date: dateValue,
-      type: "paper",
+    const newJob = {
       company: companyValue,
-      job: jobValue,
-      postLink: postLinkValue.trim(),
+      title: jobValue,
+      link: postLinkValue.trim(),
+      ovreall: "",
+      rating: "",
+      userId: userId,
     };
 
-    fetch("api/post/new", {
-      method: "POST",
-      body: JSON.stringify(newPost),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        newPost.id = data.docId
-        newPost.jobId = data.jobId
-        setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-        setPaperPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-        setModalPaper(false);
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    const jobId = await createJob(newJob)
+    newJob.id = jobId
+    newJob.date = dateValue
+    setPaperPosts((prevPosts) => [...prevPosts, newJob]);
+
+
+    const newApply = {
+      date: dateValue,
+      type: "paper",
+      jobId: jobId
+    };
+
+    const postId = await createApply(newApply)
+    newApply.id = postId
+    newApply.company = companyValue;
+    newApply.title = jobValue;
+    newApply.link = postLinkValue.trim();
+
+    setPosts((prevPosts) => [...prevPosts, newApply]);
+    setModalPaper(false);
+
+
+    // fetch("api/post/new", {
+    //   method: "POST",
+    //   body: JSON.stringify(newPost),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     newPost.id = data.docId
+    //     newPost.jobId = data.jobId
+    //     setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+    //     setPaperPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+    //     setModalPaper(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error)
+    //   })
   }
 
   return (

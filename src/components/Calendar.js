@@ -8,6 +8,8 @@ import ModalInterview from "./ModalInterview"
 import { db } from "@/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useSession } from "next-auth/react";
+import { getJobs } from "@/api/job";
+import { getApplies } from "@/api/apply";
 
 export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
@@ -18,6 +20,7 @@ export default function Calendar() {
   
 
   const { data: session } = useSession();
+  const userId = session?.user?.id
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "Feburary", "March",
@@ -111,60 +114,96 @@ export default function Calendar() {
     return dates;
   }
 
+  // async function getPosts() {
+  //   console.log("일정 가져오기 함수 실행")
+  //   if (!session?.user?.id) return;
+
+  //   const userId = session.user.id
+  //   const usersCollection = collection(db, "users_collection");
+  //   const userQuery = query(usersCollection, where("id", "==", userId));
+  //   const userSnapshot = await getDocs(userQuery);
+
+
+  //   if (!userSnapshot.empty) {
+  //     const userDoc = userSnapshot.docs[0];
+  //     const userDocData = userDoc.data();
+
+  //     const paperIds = userDocData.papers || [];
+  //     const interviewIds = userDocData.interviews || [];
+
+  //     const newPosts = [];
+  //     const newPaperPosts = []
+
+  //     if (paperIds.length > 0) {
+  //       const paperCollection = collection(db, "paper_collection");
+  //       const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
+  //       const paperSnapshot = await getDocs(paperQuery);
+
+  //       paperSnapshot.docs.forEach((doc) => {
+  //         newPosts.push({ id: doc.id, ...doc.data() });
+  //       });
+
+  //       paperSnapshot.docs.forEach((doc) => {
+  //         newPaperPosts.push({ id: doc.id, ...doc.data() });
+  //       });
+
+  //       setPaperPosts(newPaperPosts)
+  //     }
+
+  //     if (interviewIds.length > 0) {
+  //       const interviewCollection = collection(db, "interview_collection");
+  //       const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
+  //       const interviewSnapshot = await getDocs(interviewQuery);
+
+  //       interviewSnapshot.docs.forEach((doc) => {
+  //         newPosts.push({ id: doc.id, ...doc.data() });
+  //       });
+  //     }
+
+  //     setPosts(newPosts);
+  //   } else {
+  //     console.log("존재X");
+  //   }
+  // }
+  
   async function getPosts() {
-    console.log("일정 가져오기 함수 실행")
-    if (!session?.user?.id) return;
+        if (userId) {
+          const userJobs = await getJobs(userId);
+          const jobIds = userJobs.map((j) => j.id);
+          const userPosts = await getApplies(jobIds)
 
-    const userId = session.user.id
-    const usersCollection = collection(db, "users_collection");
-    const userQuery = query(usersCollection, where("id", "==", userId));
-    const userSnapshot = await getDocs(userQuery);
+          if (userPosts && userJobs) {
+            const postsWithInfo = userPosts.map((p) => {
+              const matchingJob = userJobs.find((j) => j.id === p.jobId);
+              return {
+                ...p,
+                company: matchingJob.company,
+                title: matchingJob.title,
+                link: matchingJob.link,
+              };
+            });
 
+            const jobsWithInfo = userJobs
+              .filter((j) => {
+                const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
+                return matchingPaperPost;
+              })
+              .map((j) => {
+                const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
+                return {
+                  ...j,
+                  date: matchingPaperPost.date,
+                };
+              });
 
-    if (!userSnapshot.empty) {
-      const userDoc = userSnapshot.docs[0];
-      const userDocData = userDoc.data();
-
-      const paperIds = userDocData.papers || [];
-      const interviewIds = userDocData.interviews || [];
-
-      const newPosts = [];
-      const newPaperPosts = []
-
-      if (paperIds.length > 0) {
-        const paperCollection = collection(db, "paper_collection");
-        const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
-        const paperSnapshot = await getDocs(paperQuery);
-
-        paperSnapshot.docs.forEach((doc) => {
-          newPosts.push({ id: doc.id, ...doc.data() });
-        });
-
-        paperSnapshot.docs.forEach((doc) => {
-          newPaperPosts.push({ id: doc.id, ...doc.data() });
-        });
-
-        setPaperPosts(newPaperPosts)
-      }
-
-      if (interviewIds.length > 0) {
-        const interviewCollection = collection(db, "interview_collection");
-        const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
-        const interviewSnapshot = await getDocs(interviewQuery);
-
-        interviewSnapshot.docs.forEach((doc) => {
-          newPosts.push({ id: doc.id, ...doc.data() });
-        });
-      }
-
-      setPosts(newPosts);
-    } else {
-      console.log("존재X");
-    }
+            setPaperPosts(jobsWithInfo);
+            setPosts(postsWithInfo);          
+          }
+        }
   }
-
   useEffect(() => {
     getPosts()
+
   }, [session])
 
   return (
@@ -185,7 +224,9 @@ export default function Calendar() {
           <span
             className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 mr-1.5 ml-2 hover:bg-[#B9A49A]"
             onClick={() => {
-              setModalPaper(true);
+              if (session) {
+                setModalPaper(true);
+              }
             }}
           >
             Paper
@@ -193,7 +234,9 @@ export default function Calendar() {
           <span
             className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 hover:bg-[#B9A49A]"
             onClick={() => {
-              setModalInterview(true);
+              if (session) {
+                setModalInterview(true);
+              }
             }}
           >
             Interview
