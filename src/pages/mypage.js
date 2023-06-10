@@ -1,16 +1,33 @@
 import Layout from "@/components/Layout";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
-import { createFile } from "@/api/file";
+import { useState, useRef, useEffect } from "react";
+import { createFile, getMyFiles } from "@/api/file";
 
 export default function MyPage() {
   const { data: session } = useSession();
 
   const [tab, setTab] = useState("cv");
+  const [userId, setUserId] = useState(null);
+  const [userFiles, setUserFiles] = useState([]);
 
   if (!session && typeof window !== "undefined") {
     window.location.href = "/login";
   }
+
+  useEffect(() => {
+    const fetchUserFiles = async (userId) => {
+      try {
+        const files = await getMyFiles(userId);
+        setUserFiles(files);
+      } catch (error) {
+        console.log("Error fetching user files:", error.message);
+      }
+    };
+    if (session) {
+      setUserId(session.user.id);
+    } else console.log("no session");
+    fetchUserFiles(userId);
+  }, [userId, session]);
 
   const fileInputRefs = useRef(null);
 
@@ -29,7 +46,7 @@ export default function MyPage() {
     const newFile = {
       file: selectedFile,
       title: title,
-      userId: session.user.id,
+      userId: userId,
       fileType: tab,
     };
     createFile(newFile);
