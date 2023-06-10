@@ -55,10 +55,11 @@ export default function ModalDetail({
   const [titleValue, setTitleValue] = useState(selectedPost.title);
   const [linkValue, setLinkValue] = useState(selectedPost.link);
 
+  // 수정(연필 모양을 클릭) 여부를 판별하는 state
   const [isEditing, setIsEditing] = useState(false)
+  // 삭제 팝업 여닫힘 state
   const [popUp, setPopUp] = useState(false)
 
-  // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   async function handleEdit() {
     const editedPost = {
       id: selectedPost.id,
@@ -120,10 +121,14 @@ export default function ModalDetail({
 
   return (
     <>
+      {/* 현재 bg가 z-30, 모달이 z-40, 팝업이 z-50이라, 삭제 팝업창이 뜰 때 모달 bg가 모달 위에 올 수 있도록 popUp이 열리면 z-50으로 설정함 */}
       <div className={`${background} ${popUp ? "z-50" : null}`}></div>
 
       <div className={modal_container}>
-        <h1 className="font-bold text-lg text-gray-800">{selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}</h1>
+        <h1 className="font-bold text-lg text-gray-800">
+          {selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}
+        </h1>
+
         <div className={input_container}>
           <div className={`${input_wrapper} flex-col`}>
             <label htmlFor="date" className="mb-1">
@@ -141,6 +146,10 @@ export default function ModalDetail({
                   setDateValue(e.target.value);
                 }}
               />
+              {/* 날짜 input 옆에 연필(수정 아이콘)을 배치했으며
+              클릭해 수정 중이라면 체크(확인 아이콘)과 엑스(취소 아이콘)가 등장하도록 함
+              수정 완료되면(확인이나 취소 모두) 다시 연필 상태로 돌아감
+              */}
               {!isEditing && (
                 <span
                   className={`${btn} ml-2`}
@@ -227,14 +236,17 @@ export default function ModalDetail({
             ></input>
           </div>
         </div>
-
+        
+        {/* 자세히 보기, 삭제, 닫기 버튼 */}
         <div className="flex place-self-end">
+          {/* 수정 중일 땐 자세히 보기를 숨김 */}
           {!isEditing && (
             <a href={`/detail/${selectedPost.jobId}`} className={btn}>
               자세히 보기
             </a>
           )}
 
+          {/* 삭제 팝업창을 뜨게 하는 버튼 */}
           <button
             className={btn}
             onClick={() => {
@@ -243,7 +255,8 @@ export default function ModalDetail({
           >
             삭제
           </button>
-
+          
+          {/* 클릭 시 달력으로 돌아가는 버튼 */}
           <button
             className={btn}
             onClick={() => {
@@ -254,7 +267,8 @@ export default function ModalDetail({
           </button>
         </div>
       </div>
-
+      
+      {/* 현재는 bg, 모달, 팝업을 형제 요소로 정의함 */}
       {popUp && (
         <PopUp
           setModalDetail={setModalDetail}
