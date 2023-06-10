@@ -8,6 +8,7 @@ import FireIcon from "public/fireSWP.png";
 import LogOutIcon from "public/logoutSWP.png";
 import UserIcon from "public/user2SWP.png";
 import LogInIcon from "public/loginSWP.png";
+import RevIcon from "public/review2SWP.png";
 
 export default function Header() {
   const route = useRouter();
