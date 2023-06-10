@@ -6,7 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Quo1Icon from "public/quote1SWP.png";
 import Quo2Icon from "public/quote2SWP.png";
-import { addTag, getTags } from "../api/api";
+// import { addTag, getTags } from "../api/api";
+import { createTag, getMyTags, deleteTag } from "@/api/tag";
 import { useSession } from "next-auth/react";
 
 export default function Review() {
@@ -46,16 +47,52 @@ export default function Review() {
     setJob(job);
   }, [id]);
 
+  const createTagHandler = async () => {
+    const color = `rgba(${Math.random() * 256}, ${Math.random() * 256}, ${
+      Math.random() * 256
+    }, 0.7)`;
+
+    try {
+      const newTagData = {
+        title: newTag,
+        color: color,
+        userId: userId,
+      };
+
+      const docRef = await createTag(newTagData);
+
+      setTagTotal([
+        ...tagTotal,
+        {
+          id: docRef.id,
+          title: newTag,
+          color: color,
+        },
+      ]);
+
+      setNewTag("");
+    } catch (error) {
+      console.error("Error creating tag:", error.message);
+    }
+  };
+
+  const deleteTagHandler = () => {
+    const tagIds = appliedTags.map((tag) => tag.id);
+    deleteTag(tagIds);
+    const updatedTagTotal = tagTotal.filter((tag) => !tagIds.includes(tag.id));
+    setTagTotal(updatedTagTotal);
+  };
+
   useEffect(() => {
     if (!job) return;
 
-    const tags = job.reviews.reduce((acc, review) => {
-      for (let tag of review.tags) {
-        acc.add(tag);
-      }
-      return acc;
-    }, new Set());
-    setTagTotal(Array.from(tags));
+    // const tags = job.reviews.reduce((acc, review) => {
+    //   for (let tag of review.tags) {
+    //     acc.add(tag);
+    //   }
+    //   return acc;
+    // }, new Set());
+    // setTagTotal(Array.from(tags));
 
     // open, edit 배열 초기화 (질문 답변을 보여줄지 말지, 수정할지 말지 - 각 job별로 배열을 만들어서 관리)
     setOpen(job.reviews.map(() => false));
@@ -72,11 +109,11 @@ export default function Review() {
     const fetchTags = async () => {
       try {
         if (userId) {
-          const tags = await getTags(userId);
+          const tags = await getMyTags(userId);
           setTagTotal(tags);
         }
       } catch (error) {
-        console.log("Error retrieving tags:", error);
+        console.log("태그를 가져올 수 없습니다:", error.message);
       }
     };
 
@@ -291,23 +328,15 @@ export default function Review() {
                 />
                 <button
                   className="text-sm font-bold text-gray-800/80 bg-tertiary hover:bg-primary px-4 py-2 mt-3 mb-4 rounded-3xl hover:scale-95"
-                  onClick={async () => {
-                    const color = `rgba(${Math.random() * 256}, ${
-                      Math.random() * 256
-                    }, ${Math.random() * 256},0.7)`;
-                    await addTag(userId, newTag, color);
-                    setTagTotal([
-                      ...tagTotal,
-                      {
-                        id: tagTotal.length + 1,
-                        title: newTag,
-                        color: color,
-                      },
-                    ]);
-                    setNewTag("");
-                  }}
+                  onClick={createTagHandler}
                 >
                   태그 생성{" "}
+                </button>
+                <button
+                  className="text-sm font-bold text-gray-800/80 bg-tertiary hover:bg-primary px-4 py-2 mt-3 mb-4 rounded-3xl hover:scale-95"
+                  onClick={deleteTagHandler}
+                >
+                  태그 삭제{" "}
                 </button>
               </div>
 
