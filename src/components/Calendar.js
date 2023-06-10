@@ -180,23 +180,23 @@ export default function Calendar() {
           setSelectedYear={setSelectedYear}
           setSelectedMonth={setSelectedMonth} />
 
-        <a class="button mt-2">
-          <span className="icon font-normal">+</span>
+        <a class="button focus:button cursor-pointer mt-2">
+          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white">+</span>
           <span
-            className="text cursor-pointer"
+            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 mr-1.5 ml-2 hover:bg-[#B9A49A]"
             onClick={() => {
               setModalPaper(true);
             }}
           >
-            Add Paper
+            Paper
           </span>
           <span
-            className="text cursor-pointer"
+            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 hover:bg-[#B9A49A]"
             onClick={() => {
               setModalInterview(true);
             }}
           >
-            Add Interview
+            Interview
           </span>
         </a>
       </div>
