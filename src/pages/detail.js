@@ -148,30 +148,66 @@ export default function Detail() {
   return (
     <Layout>
       <div>
-
         <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#F9F5F3] px-5 py-8 mb-6 rounded-3xl relative">
-          <div className="flex flex-col justify-end mr-7 absolute
-                        top-1/2 right-0 transform -translate-y-1/2 ">
-            <a href="https://www.wanted.co.kr/wd/161336" class="relative inline-flex mb-2.5 items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
-            ease-out border-[1px] border-zinc-700 rounded-full group">
+          <div
+            className="flex flex-col justify-end mr-7 absolute
+                        top-1/2 right-0 transform -translate-y-1/2 "
+          >
+            <a
+              href="https://www.wanted.co.kr/wd/161336"
+              class="relative inline-flex mb-2.5 items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group"
+            >
               <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
               </span>
-              <span class="absolute flex items-center text-sm justify-center font-semibold fon w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">공고 보러가기</span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold fon w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">
+                공고 보러가기
+              </span>
               <span class="relative invisible text-sm">공고 보러가기</span>
             </a>
-            
-            <a href="/review" class="relative inline-flex items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
-            ease-out border-[1px] border-zinc-700 rounded-full group">
+
+            <a
+              href="/review"
+              class="relative inline-flex items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group"
+            >
               <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
               </span>
-              <span class="absolute flex items-center text-sm justify-center font-semibold w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">회고 보러가기</span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">
+                회고 보러가기
+              </span>
               <span class="relative invisible text-sm">회고 보러가기</span>
             </a>
-
           </div>
-          
+
           <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
             {job.title}
           </h1>
@@ -179,8 +215,6 @@ export default function Detail() {
             {job.company} - {job.occupation}
           </p>
         </div>
-
-        
 
         {/* <Link
         <div className="inset-0 flex flex-col justify-end">
@@ -201,9 +235,7 @@ export default function Detail() {
         <div>
           <button
             className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 mr-2 
-            ${
-              activeTab == "files" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
-            } `}
+            ${activeTab == "files" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"} `}
             style={{ opacity: activeTab === "files" ? 1 : 0.7 }}
             onClick={() => {
               setActiveTab("files");
@@ -213,9 +245,7 @@ export default function Detail() {
           </button>
           <button
             className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 
-            ${
-              activeTab == "letter" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
-            }
+            ${activeTab == "letter" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"}
              `}
             style={{ opacity: activeTab === "letter" ? 1 : 0.7 }}
             onClick={() => {
@@ -231,32 +261,29 @@ export default function Detail() {
           <div className="place-self-center bg-[#EADFDA] p-4 rounded-r-2xl rounded-b-2xl mt-0 w-full">
             <div className="flex">
               <div className="flex flex-col w-1/4">
-
-              <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+                <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
 
                 <div className="flex flex-col items-center mt-5 w-full">
                   <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
                     <div className="flex flex-col mb-1">
                       <span className="font-normal ml-2">이력서</span>
-                      
-                          
-                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
-                            <option
-                              className="text-center "
-                              value=""
-                              disabled
-                              selected
-                            >
-                              불러오기
-                            </option>
-                            {myPageFiles.resumes.map((resume) => {
-                              return (
-                                <option value={resume.id}>{resume.title}</option>
-                              );
-                            })}
-                          </select>
-                        
-                
+
+                      <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                        <option
+                          className="text-center "
+                          value=""
+                          disabled
+                          selected
+                        >
+                          불러오기
+                        </option>
+                        {myPageFiles.resumes.map((resume) => {
+                          return (
+                            <option value={resume.id}>{resume.title}</option>
+                          );
+                        })}
+                      </select>
+
                       <input
                         type="file"
                         ref={fileInputRefs.resume}
@@ -266,54 +293,53 @@ export default function Detail() {
                     </div>
                   </div>
                   <button
-                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                    className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
                             rounded-2xl mt-1 mr-5"
-                            onClick={() => handleFileView("resume")}
-                          >
-                            파일 보기
+                    onClick={() => handleFileView("resume")}
+                  >
+                    파일 보기
                   </button>
                 </div>
-                
+
                 <div className="mt-5 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
 
                 <div className="flex flex-col items-center mt-5 w-full">
                   <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
                     <div className="flex flex-col mb-1">
                       <span className="font-normal ml-2">포트폴리오</span>
-                          
-                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
-                            <option
-                              className="text-center"
-                              value=""
-                              disabled
-                              selected
-                            >
-                              불러오기
+
+                      <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                        <option
+                          className="text-center"
+                          value=""
+                          disabled
+                          selected
+                        >
+                          불러오기
+                        </option>
+                        {myPageFiles.portfolios.map((portfolio) => {
+                          return (
+                            <option value={portfolio.id}>
+                              {portfolio.title}
                             </option>
-                            {myPageFiles.portfolios.map((portfolio) => {
-                            return (
-                              <option value={portfolio.id}>
-                                {portfolio.title}
-                              </option>
-                            );
-                          })}
-                          </select>
-                        </div>
-                
-                      <input
+                          );
+                        })}
+                      </select>
+                    </div>
+
+                    <input
                       type="file"
                       ref={fileInputRefs.portfolio}
                       style={{ display: "none" }}
                       onChange={(e) => handleFileUpload(e, "portfolio")}
-                      />
-             
+                    />
                   </div>
                   <button
-                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                    className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
                             rounded-2xl mt-1 mr-5"
-                            onClick={() => handleFileView("portfolio")}
-                          >
-                            파일 보기
+                    onClick={() => handleFileView("portfolio")}
+                  >
+                    파일 보기
                   </button>
                 </div>
 
@@ -362,7 +388,7 @@ export default function Detail() {
                         />
                       ) : (
                         <p className="text-lg font-bold text-primary">
-                           Q. {coverLetter.question}
+                          Q. {coverLetter.question}
                         </p>
                       )}
 
@@ -370,7 +396,7 @@ export default function Detail() {
                         {edit[index] ? (
                           <div className="flex ml-6">
                             <svg
-                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-1.5"
+                              class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-1.5"
                               onClick={() => {
                                 setJob({
                                   ...job,
@@ -402,7 +428,7 @@ export default function Detail() {
                               <path d="M5 12l5 5l10 -10" />
                             </svg>
                             <svg
-                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%]"
+                              class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%]"
                               onClick={() => {
                                 setEdit((prevArr) => {
                                   const newArr = [...prevArr];
@@ -411,19 +437,19 @@ export default function Detail() {
                                 });
                               }}
                               width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                            <line x1="18" y1="6" x2="6" y2="18" />{" "}
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                          </svg>
-                        </div>
+                              height="24"
+                              viewBox="0 0 24 24"
+                              stroke-width="2"
+                              stroke="currentColor"
+                              fill="none"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                              <line x1="18" y1="6" x2="6" y2="18" />{" "}
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          </div>
                         ) : (
                           <svg
                             class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"
@@ -470,9 +496,11 @@ export default function Detail() {
                             }
                           />
                         ) : (
-                          <p className="bg-tertiary rounded-2xl px-5 mr-3 ml-2 py-3 mt-5 text-base 
-                          text-gray-500 pl-5 my-2">
-                            A.  {coverLetter.answer}
+                          <p
+                            className="bg-tertiary rounded-2xl px-5 mr-3 ml-2 py-3 mt-5 text-base 
+                          text-gray-500 pl-5 my-2"
+                          >
+                            A. {coverLetter.answer}
                           </p>
                         )}
                       </div>
