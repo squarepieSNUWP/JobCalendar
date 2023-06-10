@@ -35,7 +35,7 @@ export const createReview = async ( data ) => {
 
       addReviewIdToTag(tags, docRef.id)
 
-    return docRef;
+    return docRef.id;
 }
 
 export const updateReview = async (data) => {
