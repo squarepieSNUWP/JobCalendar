@@ -2,6 +2,7 @@ import { createApply, updateApply } from "@/api/apply";
 import { createJob, updateJobInfo } from "@/api/job";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import PopUp from "./PopUp";
 
 export default function ModalDetail({
   setModalDetail,
@@ -55,6 +56,7 @@ export default function ModalDetail({
   const [linkValue, setLinkValue] = useState(selectedPost.link);
 
   const [isEditing, setIsEditing] = useState(false)
+  const [popUp, setPopUp] = useState(false)
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
   async function handleEdit() {
@@ -118,7 +120,7 @@ export default function ModalDetail({
 
   return (
     <>
-      <div className={background}></div>
+      <div className={`${background} ${popUp ? "z-50" : null}`}></div>
 
       <div className={modal_container}>
         <h1 className="font-bold text-lg text-gray-800">{selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}</h1>
@@ -236,6 +238,15 @@ export default function ModalDetail({
           <button
             className={btn}
             onClick={() => {
+              setPopUp(true);
+            }}
+          >
+            삭제
+          </button>
+
+          <button
+            className={btn}
+            onClick={() => {
               setModalDetail(false);
             }}
           >
@@ -243,6 +254,23 @@ export default function ModalDetail({
           </button>
         </div>
       </div>
+
+      {popUp && (
+        <PopUp
+          setModalDetail={setModalDetail}
+          setPopUp={setPopUp}
+          selectedPostId={selectedPost.id}
+          selectedPostJobId={selectedPost.jobId}
+          date={dateValue}
+          company={companyValue}
+          title={titleValue}
+          type={selectedPost.type}
+          posts={posts}
+          setPosts={setPosts}
+          paperPosts={paperPosts}
+          setPaperPosts={setPaperPosts}
+        />
+      )}
     </>
   );
 }

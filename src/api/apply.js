@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 
 const applyCollection = collection(db, "apply");
 
@@ -31,4 +31,7 @@ export const updateApply = async (data) => {
     });
 };
 
-export const deleteApply = () => {};
+export const deleteApply = async (id) => {
+  const applyDoc = doc(applyCollection, id);
+  await deleteDoc(applyDoc);
+};
