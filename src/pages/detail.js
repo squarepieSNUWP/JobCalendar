@@ -141,7 +141,7 @@ export default function Detail() {
       );
     }
     return (
-      <div className="bg-white rounded-2xl shadow drop-shadow-md w-full h-full"></div>
+      <div className="bg-white rounded-2xl shadow drop-shadow-sm w-full h-full"></div>
     );
   };
 
@@ -200,10 +200,11 @@ export default function Detail() {
         {/* 탭버튼 UI */}
         <div>
           <button
-            className={`bg-secondary/20 hover:bg-secondary/50 py-2 px-4 rounded-t-2xl mt-2 mr-2 border-secondary 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 mr-2 
             ${
-              activeTab == "files" ? "border-t-2 border-l-2 border-r-2" : null
+              activeTab == "files" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
             } `}
+            style={{ opacity: activeTab === "files" ? 1 : 0.7 }}
             onClick={() => {
               setActiveTab("files");
             }}
@@ -211,10 +212,12 @@ export default function Detail() {
             이력서/포트폴리오
           </button>
           <button
-            className={`bg-secondary/20 hover:bg-secondary/50 py-2 px-4 rounded-t-2xl mt-2 border-secondary
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 
             ${
-              activeTab == "letter" ? "border-t-2 border-l-2 border-r-2" : null
-            } `}
+              activeTab == "letter" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"
+            }
+             `}
+            style={{ opacity: activeTab === "letter" ? 1 : 0.7 }}
             onClick={() => {
               setActiveTab("letter");
             }}
@@ -225,136 +228,99 @@ export default function Detail() {
 
         {/* 여기부터 pdf 파일 삽입 및 확인 구간 */}
         {activeTab === "files" && (
-          <div className="place-self-center bg-secondary p-4 rounded-r-2xl rounded-b-2xl mt-0 mb-0 w-full">
+          <div className="place-self-center bg-[#EADFDA] p-4 rounded-r-2xl rounded-b-2xl mt-0 w-full">
             <div className="flex">
-              <div className="w-1/4">
-                <div className="bg-white p-3 rounded-2xl mb-3">
-                  <div className="flex flex-col mb-1">
-                    <span className="font-normal ml-2">이력서</span>
-                    {files.resume ? (
-                      <div className="flex space-x-2 justify-center">
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileView("resume")}
-                        >
-                          파일 보기
-                        </button>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileChange("resume")}
-                        >
-                          파일 삭제
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                          onClick={() => openFileExplorer("resume")}
-                        >
-                          PDF 파일 선택
-                        </button>
-                        <select className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2">
-                          <option
-                            className="text-center"
-                            value=""
-                            disabled
-                            selected
-                          >
-                            불러오기
-                          </option>
-                          {myPageFiles.resumes.map((resume) => {
-                            return (
-                              <option value={resume.id}>{resume.title}</option>
-                            );
-                          })}
-                        </select>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      ref={fileInputRefs.resume}
-                      style={{ display: "none" }}
-                      onChange={(e) => handleFileUpload(e, "resume")}
-                    />
-                  </div>
-                </div>
-                {/* <div className="bg-white p-3 rounded-2xl mb-3">
-                <div className="flex flex-col mb-1">
-                  <span className="font-normal ml-2">자소서</span>
-                  {files.coverLetter ? (
-                    <div className="flex space-x-2 justify-center">
-                      <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2" onClick={() => handleFileView("coverLetter")}>
-                        파일 보기
-                      </button>
-                      <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2" onClick={() => handleFileChange("coverLetter")}>
-                        파일 삭제
-                      </button>
+              <div className="flex flex-col w-1/4">
+
+              <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+
+                <div className="flex flex-col items-center mt-5 w-full">
+                  <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
+                    <div className="flex flex-col mb-1">
+                      <span className="font-normal ml-2">이력서</span>
+                      
+                          
+                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                            <option
+                              className="text-center "
+                              value=""
+                              disabled
+                              selected
+                            >
+                              불러오기
+                            </option>
+                            {myPageFiles.resumes.map((resume) => {
+                              return (
+                                <option value={resume.id}>{resume.title}</option>
+                              );
+                            })}
+                          </select>
+                        
+                
+                      <input
+                        type="file"
+                        ref={fileInputRefs.resume}
+                        style={{ display: "none" }}
+                        onChange={(e) => handleFileUpload(e, "resume")}
+                      />
                     </div>
-                  ) : (
-                    <button className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2" onClick={() => openFileExplorer("coverLetter")}>
-                      PDF 파일 선택
-                    </button>
-                  )}
-                  <input type="file" ref={fileInputRefs.coverLetter} style={{ display: "none" }} onChange={(e) => handleFileUpload(e, "coverLetter")} />
-                </div>
-              </div> */}
-                <div className="bg-white p-3 rounded-2xl">
-                  <div className="flex flex-col mb-1">
-                    <span className="font-normal ml-2">포트폴리오</span>
-                    {files.portfolio ? (
-                      <div className="flex space-x-2 justify-center">
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileView("portfolio")}
-                        >
-                          파일 보기
-                        </button>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2 w-1/2"
-                          onClick={() => handleFileChange("portfolio")}
-                        >
-                          파일 삭제
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2"
-                          onClick={() => openFileExplorer("portfolio")}
-                        >
-                          PDF 파일 선택
-                        </button>
-                        <select className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mt-2">
-                          <option
-                            className="text-center"
-                            value=""
-                            disabled
-                            selected
+                  </div>
+                  <button
+                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                            rounded-2xl mt-1 mr-5"
+                            onClick={() => handleFileView("resume")}
                           >
-                            불러오기
-                          </option>
-                          {myPageFiles.portfolios.map((portfolio) => {
+                            파일 보기
+                  </button>
+                </div>
+                
+                <div className="mt-5 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+
+                <div className="flex flex-col items-center mt-5 w-full">
+                  <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
+                    <div className="flex flex-col mb-1">
+                      <span className="font-normal ml-2">포트폴리오</span>
+                          
+                          <select className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2">
+                            <option
+                              className="text-center"
+                              value=""
+                              disabled
+                              selected
+                            >
+                              불러오기
+                            </option>
+                            {myPageFiles.portfolios.map((portfolio) => {
                             return (
                               <option value={portfolio.id}>
                                 {portfolio.title}
                               </option>
                             );
                           })}
-                        </select>
-                      </>
-                    )}
-                    <input
+                          </select>
+                        </div>
+                
+                      <input
                       type="file"
                       ref={fileInputRefs.portfolio}
                       style={{ display: "none" }}
                       onChange={(e) => handleFileUpload(e, "portfolio")}
-                    />
+                      />
+             
                   </div>
+                  <button
+                            className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
+                            rounded-2xl mt-1 mr-5"
+                            onClick={() => handleFileView("portfolio")}
+                          >
+                            파일 보기
+                  </button>
                 </div>
+
+                <div className="mt-5 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
               </div>
               <div className="w-3/4">
-                <div className="p-4 rounded-2xl h-full">
+                <div className="pl-2 rounded-2xl h-[400px]">
                   {renderFileContent()}
                 </div>
               </div>
@@ -364,8 +330,8 @@ export default function Detail() {
 
         {/* 자소서 질문-딥변 입력 부분 */}
         {activeTab == "letter" && (
-          <div className="p-4 border-secondary border-2 rounded-r-2xl rounded-b-2xl">
-            <div className="flex flex-col">
+          <div className="p-4 bg-[#EADFDA] rounded-b-2xl rounded-tr-2xl">
+            <div className="flex flex-col mt-3">
               {job.coverLetters.map((coverLetter, index) => {
                 return (
                   <div
