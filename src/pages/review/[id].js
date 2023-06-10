@@ -383,16 +383,17 @@ export default function Review() {
                   className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
                             hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
                   onClick={async () => {
+                    const newId = await createReview( {...formData, jobId: id, tags: appliedTags.map((tag) => tag.id) });
+
                     setReviews([
                         ...reviews,
                         {
                           ...formData,
+                          id: newId,
                           tags: appliedTags,
                         },
                       ]
                     );
-
-                    await createReview( {...formData, jobId: id, tags: appliedTags.map((tag) => tag.id) });
 
                     setFormData({
                       question: "",
