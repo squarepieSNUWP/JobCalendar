@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="flex flex-col items-center mt-16">
+      <div className="flex flex-col items-center mt-16 mb-7">
         <Link href="/login" className="text-3xl font-bold tracking-wide text-primary/90">
               Log in
         </Link>

@@ -115,14 +115,14 @@ li {
   margin-right: 14px;
   padding-top: 0px;
   padding-bottom: 5px;
-  padding-right: 5px;
+  padding-right: 6px;
   padding-left: 6px;
   display: flex;
   align-items: center;
 }
 
 .text {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 

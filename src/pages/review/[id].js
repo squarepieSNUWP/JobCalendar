@@ -114,7 +114,7 @@ export default function Review() {
           <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
             {job.title}
           </h1>
-          <p className="text-xl font-base text-gray-600/90 pl-4 tracking-tight text-left">
+          <p className="text-xl font-base text-stone-600/90 pl-4 tracking-tight text-left">
             {job.company} - {job.occupation}
           </p>
         </div>

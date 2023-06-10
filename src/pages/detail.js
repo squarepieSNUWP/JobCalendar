@@ -148,27 +148,39 @@ export default function Detail() {
   return (
     <Layout>
       <div>
-        <div className="flex justify-end mb-6">
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 m1-2">
-            <a
-              href="https://www.wanted.co.kr/wd/161336"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              공고 링크
+
+        <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#F9F5F3] px-5 py-8 mb-6 rounded-3xl relative">
+          <div className="flex flex-col justify-end mr-7 absolute
+                        top-1/2 right-0 transform -translate-y-1/2 ">
+            <a href="https://www.wanted.co.kr/wd/161336" class="relative inline-flex mb-2.5 items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group">
+              <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold fon w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">공고 보러가기</span>
+              <span class="relative invisible text-sm">공고 보러가기</span>
             </a>
-          </button>
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
-            일정 추가
-          </button>
-          <button className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 ml-2">
-            <Link href="/review">회고 하기</Link>
-          </button>
+            
+            <a href="/review" class="relative inline-flex items-center justify-center px-5 py-2 overflow-hidden font-medium text-indigo-600 transition duration-300 
+            ease-out border-[1px] border-zinc-700 rounded-full group">
+              <span class="absolute inset-0 flex items-center justify-center w-full h-full text-secondary duration-200 -translate-x-full bg-zinc-700 group-hover:translate-x-0 ease">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </span>
+              <span class="absolute flex items-center text-sm justify-center font-semibold w-full h-full text-zinc-700 transition-all duration-300 transform group-hover:translate-x-full ease">회고 보러가기</span>
+              <span class="relative invisible text-sm">회고 보러가기</span>
+            </a>
+
+          </div>
+          
+          <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
+            {job.title}
+          </h1>
+          <p className="text-xl font-base text-stone-600/90 pl-4 tracking-tight text-left">
+            {job.company} - {job.occupation}
+          </p>
         </div>
 
-        <h1 className="text-4xl font-extrabold text-center text-primary mb-10">
-          공고 제목
-        </h1>
+        
 
         {/* <Link
         <div className="inset-0 flex flex-col justify-end">
