@@ -50,7 +50,6 @@ export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts,
 
     // 각 input의 값을 객체로 만들고 posts에 업데이트
     const newPost = {
-      jobId: Math.random().toString(36).substring(2, 11),
       date: dateValue,
       type: "paper",
       company: companyValue,
@@ -64,7 +63,8 @@ export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts,
     })
       .then((res) => res.json())
       .then((data) => {
-        newPost.id = data
+        newPost.id = data.docId
+        newPost.jobId = data.jobId
         setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
         setPaperPosts((prevJobPosts) => [...prevJobPosts, newPost]);
         setModalPaper(false);
