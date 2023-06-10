@@ -9,7 +9,7 @@ import Quo2Icon from "public/quote2SWP.png";
 // import { addTag, getTags } from "../api/api";
 import { createTag, getMyTags, deleteTag, getTags } from "@/api/tag";
 import { useSession } from "next-auth/react";
-import { createReview, getReviews, updateReview } from "@/api/review";
+import { createReview, deleteReview, getReviews, updateReview } from "@/api/review";
 import { getJob } from "@/api/job";
 
 export default function Review() {
@@ -35,6 +35,7 @@ export default function Review() {
   const [editData, setEditData] = useState({
     question: "",
     answer: "",
+    tags: [],
   });
   const [generalData, setGeneralData] = useState({
     overall: "",
@@ -447,7 +448,7 @@ export default function Review() {
                         <div className="flex ml-4">
                           <svg
                             class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-3"
-                            onClick={() => {
+                            onClick={async () => {
                               setReviews(
                                 reviews.map((r, i) => {
                                   if (i === index) {
@@ -462,6 +463,7 @@ export default function Review() {
                                 newArr[index] = !newArr[index];
                                 return newArr;
                               });
+                              await updateReview({id: review.id, ...editData});
                             }}
                             width="24"
                             height="24"
@@ -506,6 +508,7 @@ export default function Review() {
                               setEditData({
                                 question: review.question,
                                 answer: review.answer,
+                                tags: review.tags,
                               });
                               setEdit((prevArr) => {
                                 const newArr = [...prevArr];
@@ -527,10 +530,11 @@ export default function Review() {
 
                           <svg
                             class="h-6 w-6 text-gray-700 hover:scale-[80%] mt-1.5 mr-1"
-                            onClick={() => {
+                            onClick={async () => {
                               const ok = confirm("정말로 삭제하시겠습니까?");
                               if (ok) {
                                 setReviews( reviews.filter((r, i) => i !== index) );
+                                await deleteReview(review);
                               }
                             }}
                             viewBox="0 0 24 24"
