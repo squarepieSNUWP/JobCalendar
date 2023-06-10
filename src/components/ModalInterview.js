@@ -1,3 +1,6 @@
+import { createApply } from "@/api/apply";
+import { createJob } from "@/api/job";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function Modal({
@@ -6,7 +9,6 @@ export default function Modal({
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
-
   // 모달창의 가장 바깥 부분으로 검은 배경보다 위에 오도록 z-index는 40으로 설정
   // 일단은 전체 스크린 너비와 높이의 절반으로 설정
   // input 컨테이너와 button 컨테이너를 flex-col로 정렬
@@ -41,6 +43,9 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
 
   // const [selectedOption, setSelectedOption] = useState("paper");
   // const [paperPosts, setPaperPosts] = useState("");
+  const { data: session } = useSession();
+  const userId = session.user.id;
+
   const [selectedJobId, setSelectedJobId] = useState("new");
   const selectedPaperPost =
     selectedJobId !== "new" ? findPostByJobId(selectedJobId) : ""
@@ -51,66 +56,110 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
   const [postLinkValue, setPostLinkValue] = useState("");
 
   function findPostByJobId(selectedJobId) {
-    return paperPosts.find((p) => p.jobId === selectedJobId);
+    return paperPosts.find((p) => p.id === selectedJobId);
   }
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
-  function handleFormSubmit() {
+
+  async function handleFormSubmit() {
     // 빈 칸이 존재한다면 alert 창 띄움
     if (!selectedPaperPost
       && (!dateValue || !companyValue || !jobValue || !postLinkValue)) {
       alert("빈 칸을 채워주세요");
       return;
     }
-    let newPost
 
-   if (selectedPaperPost) {
-      newPost = {
-       date: dateValue,
-       type: "interview",
-       company: selectedPaperPost.company,
-       job: selectedPaperPost.job,
-       postLink: selectedPaperPost.postLink,
-       jobId: selectedPaperPost.jobId,
-     };
-   } else {
-      newPost = {
-       date: dateValue,
-       type: "interview",
-       company: companyValue,
-       job: jobValue,
-       postLink: postLinkValue.trim(),
-     };
-   }
 
-    const isAlreadyRegistered = posts.some((post) => {
-      return (
-        post.type === newPost.type &&
-        post.company === newPost.company &&
-        post.job === newPost.job &&
-        post.postLink === newPost.postLink
-      )
-    });
+    if (selectedPaperPost) {
+      const newApply = {
+        date: dateValue,
+        type: "interview",
+        jobId: selectedJobId
+      };
 
-    if (isAlreadyRegistered) {
-      alert("이미 등록된 면접입니다.");
-      return;
+      const isAlreadyRegistered = posts.some((p) => {
+        return (
+          p.type === "interview" &&
+          p.jobId === newApply.jobId 
+        )
+      });
+
+      if (isAlreadyRegistered) {
+        alert("이미 등록된 면접입니다.");
+        return;
+      }
+
+      const postId = await createApply(newApply);
+      newApply.id = postId;
+      newApply.company = selectedPaperPost.company;
+      newApply.title = selectedPaperPost.title;
+      newApply.link = selectedPaperPost.link;
+      setPosts((prevPosts) => [...prevPosts, newApply]);
+      setModalInterview(false);
+
+    } else {
+      const newJob = {
+        company: companyValue,
+        title: jobValue,
+        link: postLinkValue.trim(),
+        ovreall: "",
+        rating: "",
+        userId: userId,
+      };
+
+      const jobId = await createJob(newJob);
+
+      const newApply = {
+        date: dateValue,
+        type: "interview",
+        jobId: jobId,
+      };
+
+      const postId = await createApply(newApply);
+      newApply.id = postId;
+      newApply.company = companyValue;
+      newApply.title = jobValue;
+      newApply.link = postLinkValue.trim();
+      setPosts((prevPosts) => [...prevPosts, newApply]);
+      setModalInterview(false);
+
+      //   newPost = {
+      //    date: dateValue,
+      //    type: "interview",
+      //    company: companyValue,
+      //    job: jobValue,
+      //    postLink: postLinkValue.trim(),
+      //  };
     }
 
-    fetch("api/post/new", {
-      method: "POST",
-      body: JSON.stringify(newPost),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        newPost.id = data.docId;
-        newPost.jobId = selectedPaperPost ? selectedJobId : data.jobId,
-        setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-        setModalInterview(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // const isAlreadyRegistered = posts.some((post) => {
+    //   return (
+    //     post.type === newPost.type &&
+    //     post.company === newPost.company &&
+    //     post.job === newPost.job &&
+    //     post.postLink === newPost.postLink
+    //   )
+    // });
+
+    // if (isAlreadyRegistered) {
+    //   alert("이미 등록된 면접입니다.");
+    //   return;
+    // }
+
+    // fetch("api/post/new", {
+    //   method: "POST",
+    //   body: JSON.stringify(newPost),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     newPost.id = data.docId;
+    //     newPost.jobId = selectedPaperPost ? selectedJobId : data.jobId,
+    //     setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
+    //     setModalInterview(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   }
 
   return (
@@ -139,7 +188,9 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               {paperPosts &&
                 paperPosts.map((post, i) => {
                   return (
-                    <option key={i} value={post.jobId} selected={selectedJobId === post.jobId}>
+                    <option key={i}
+                      value={post.id}
+                      selected={selectedJobId === post.id}>
                       {post.company}
                     </option>
                   );
@@ -224,7 +275,7 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               id="job-title"
               className={`${input_box} h-8
               disabled:bg-gray-100 disabled:text-gray-700/50`}
-              defaultValue={selectedPaperPost ? selectedPaperPost.job : ""}
+              defaultValue={selectedPaperPost ? selectedPaperPost.title : ""}
               disabled={!!selectedPaperPost}
               onChange={(e) => {
                 setJobValue(e.target.value);
@@ -241,7 +292,7 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               id="postLink"
               className={`${input_box} h-8 
               disabled:bg-gray-100 disabled:text-gray-700/50`}
-              defaultValue={selectedPaperPost ? selectedPaperPost.postLink : ""}
+              defaultValue={selectedPaperPost ? selectedPaperPost.link : ""}
               disabled={!!selectedPaperPost}
               onChange={(e) => {
                 setPostLinkValue(e.target.value);
