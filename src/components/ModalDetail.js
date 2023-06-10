@@ -1,9 +1,16 @@
-import { createApply } from "@/api/apply";
-import { createJob } from "@/api/job";
+import { createApply, updateApply } from "@/api/apply";
+import { createJob, updateJobInfo } from "@/api/job";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function ModalDetail({setModalDetail, selectedPost}) {
+export default function ModalDetail({
+  setModalDetail,
+  selectedPost,
+  posts,
+  setPosts,
+  paperPosts,
+  setPaperPosts
+}) {
   // 모달 창 바깥의 검은색 배경(bg-black에 opacity-50으로 설정)
   // Date 컴포넌트에 z-index가 20까지 존재해 30으로 설정
   const background = `fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-30`;
@@ -42,129 +49,132 @@ export default function ModalDetail({setModalDetail, selectedPost}) {
 
   const { data: session } = useSession();
   const userId = session.user.id;
-  const [dateValue, setDateValue] = useState("");
-  const [companyValue, setCompanyValue] = useState("");
-  const [jobValue, setJobValue] = useState("");
-  const [postLinkValue, setPostLinkValue] = useState("");
+  const [dateValue, setDateValue] = useState(selectedPost.date);
+  const [companyValue, setCompanyValue] = useState(selectedPost.company);
+  const [titleValue, setTitleValue] = useState(selectedPost.title);
+  const [linkValue, setLinkValue] = useState(selectedPost.link);
+
+  const [isEditing, setIsEditing] = useState(false)
 
   // 등록 버튼을 눌렀을 때 일정 정보를 객체로 만들어 Calendar 컴포넌트의 posts에 업데이트하는 함수
-  async function handleFormSubmit() {
-    // 빈 칸이 존재한다면 alert 창 띄움
-    if (!date || !companyValue || !jobValue || !postLinkValue) {
-      alert("빈 칸을 채워주세요");
-      return;
+  async function handleEdit() {
+    const editedPost = {
+      id: selectedPost.id,
+      jobId: selectedPost.jobId,
+      date: dateValue,
+      company: companyValue,
+      title: titleValue,
+      link: linkValue
     }
 
-    // 각 input의 값을 객체로 만들고 posts에 업데이트
-    const newJob = {
-      company: companyValue,
-      title: jobValue,
-      link: postLinkValue.trim(),
-      ovreall: "",
-      rating: "",
-      userId: userId,
-    };
+    await updateApply(editedPost)
+    await updateJobInfo(editedPost)
 
-    const jobId = await createJob(newJob);
-    newJob.id = jobId;
-    newJob.date = dateValue;
-    setPaperPosts((prevPosts) => [...prevPosts, newJob]);
+    setPosts((prevPosts) => {
+      return prevPosts.map((post) => {
+        if (post.id === selectedPost.id) {
+          return {
+            ...post,
+            date: dateValue,
+            company: companyValue,
+            title: titleValue,
+            link: linkValue
+          };
+        }
+        if (post.jobId === selectedPost.jobId &&
+            post.type !== selectedPost.type) {
+          return {
+            ...post,
+            company: companyValue,
+            title: titleValue,
+            link: linkValue,
+          };
+          }
 
-    const newApply = {
-      date: dateValue,
-      type: "paper",
-      jobId: jobId,
-    };
+        return post;
+      });
+    });
 
-    const postId = await createApply(newApply);
-    newApply.id = postId;
-    newApply.company = companyValue;
-    newApply.title = jobValue;
-    newApply.link = postLinkValue.trim();
-
-    setPosts((prevPosts) => [...prevPosts, newApply]);
-    setModalPaper(false);
-
-    // fetch("api/post/new", {
-    //   method: "POST",
-    //   body: JSON.stringify(newPost),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     newPost.id = data.docId
-    //     newPost.jobId = data.jobId
-    //     setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-    //     setPaperPosts((prevJobPosts) => [...prevJobPosts, newPost]);
-    //     setModalPaper(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error)
-    //   })
+    if (selectedPost.type == "paper") {
+      setPaperPosts((prevPaperPosts) => {
+        return prevPaperPosts.map((paperPost) => {
+          if (paperPost.id === selectedPost.jobId) {
+            return {
+              ...paperPost,
+              date: dateValue,
+              company: companyValue,
+              title: titleValue,
+              link: linkValue
+            };
+          }
+          return paperPost;
+        });
+      });
+    }
+    
+    setIsEditing(false)
   }
+
 
   return (
     <>
       <div className={background}></div>
 
       <div className={modal_container}>
-        <h1 className="font-bold text-lg text-gray-800">
-          {selectedPost.type === "paper"
-            ? "서류 일정"
-            : "면접 일정"}
-        </h1>
+        <h1 className="font-bold text-lg text-gray-800">{selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}</h1>
         <div className={input_container}>
-          {/* <div class={input_wrapper}>
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-paper"
-                  type="radio"
-                  className={type_radio}
-                  value="paper"
-                  name="type"
-                  checked={selectedOption === "paper"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-paper" className="ml-2 text-sm">
-                  서류
-                </label>
-              </div>
-
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-interview"
-                  type="radio"
-                  className={type_radio}
-                  value="interview"
-                  name="type"
-                  checked={selectedOption === "interview"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-interview" className="ml-2 text-sm">
-                  면접
-                </label>
-              </div>
-            </div> */}
-
           <div className={`${input_wrapper} flex-col`}>
             <label htmlFor="date" className="mb-1">
-              {selectedPost.type === "paper"
-                ? "서류 제출 예정일"
-                : "면접 예정일"}
+              {selectedPost.type === "paper" ? "서류 제출 예정일" : "면접 예정일"}
             </label>
-            <input
-              type="date"
-              id="date"
-              className={`${input_box} w-1/3 h-8`}
-              value={selectedPost?.date || ""}
-              disabled
-              onChange={(e) => {
-                setDateValue(e.target.value);
-              }}
-            />
+            {/* <span className="text-sm text-gray-600/90">dasd</span> */}
+            <div>
+              <input
+                type="date"
+                id="date"
+                className={`${input_box} w-1/3 h-8`}
+                value={dateValue}
+                disabled={!isEditing}
+                onChange={(e) => {
+                  setDateValue(e.target.value);
+                }}
+              />
+              {!isEditing && (
+                <span
+                  className={`${btn} ml-2`}
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}
+                >
+                  ✎
+                </span>
+              )}
+
+              {isEditing && (
+                <>
+                  <span
+                    className={`${btn} ml-2`}
+                    onClick={() => {
+                      handleEdit();
+                    }}
+                  >
+                    ✔︎
+                  </span>
+                  <span
+                    className={`${btn} ml-2`}
+                    onClick={() => {
+                      setDateValue(selectedPost.date);
+                      setCompanyValue(selectedPost.company);
+                      setTitleValue(selectedPost.title);
+                      setLinkValue(selectedPost.link);
+                      setIsEditing(false);
+                    }}
+                  >
+                    ✘
+                  </span>
+                </>
+              )}
+            </div>
           </div>
 
           <div className={`${input_wrapper} flex-col`}>
@@ -175,8 +185,8 @@ export default function ModalDetail({setModalDetail, selectedPost}) {
               type="text"
               id="company"
               className={`${input_box} h-8`}
-              value={selectedPost?.company || ""}
-              disabled
+              value={companyValue}
+              disabled={!isEditing}
               onChange={(e) => {
                 setCompanyValue(e.target.value);
               }}
@@ -191,10 +201,10 @@ export default function ModalDetail({setModalDetail, selectedPost}) {
               type="text"
               id="job-title"
               className={`${input_box} h-8`}
-              value={selectedPost?.title || ""}
-              disabled
+              value={titleValue}
+              disabled={!isEditing}
               onChange={(e) => {
-                setJobValue(e.target.value);
+                setTitleValue(e.target.value);
               }}
             />
           </div>
@@ -207,20 +217,22 @@ export default function ModalDetail({setModalDetail, selectedPost}) {
               type="text"
               id="postLink"
               className={`${input_box} h-8`}
-              value={selectedPost?.link || ""}
-              disabled
+              value={linkValue}
+              disabled={!isEditing}
               onChange={(e) => {
-                setPostLinkValue(e.target.value);
+                setLinkValue(e.target.value);
               }}
             ></input>
           </div>
         </div>
 
         <div className="flex place-self-end">
-          {/* <button className={btn}>등록</button> */}
-          <a href={`/detail/${selectedPost.jobId}`} className={btn}>
-            자세히 보기
-          </a>
+          {!isEditing && (
+            <a href={`/detail/${selectedPost.jobId}`} className={btn}>
+              자세히 보기
+            </a>
+          )}
+
           <button
             className={btn}
             onClick={() => {

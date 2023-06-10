@@ -24,6 +24,11 @@ export const createApply = async (newApply) => {
   return applyDocRef.id
 };
 
-export const updateApply = () => {};
+export const updateApply = async (data) => {
+  const applyDoc = doc(applyCollection, data.id);
+    const res = await updateDoc(applyDoc, {
+        date: data.date,
+    });
+};
 
 export const deleteApply = () => {};

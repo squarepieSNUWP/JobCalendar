@@ -42,4 +42,13 @@ export const updateJob = async (data) => {
     });
 };
 
+export const updateJobInfo = async (data) => {
+  const jobDoc = doc(jobsCollection, data.jobId);
+  const res = await updateDoc(jobDoc, {
+    company: data.company,
+    title: data.title,
+    link: data.link
+  });
+}
+
 export const deleteJob = () => {};

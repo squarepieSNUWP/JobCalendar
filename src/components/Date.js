@@ -8,6 +8,9 @@ export default function Date(
     selectedYear,
     selectedMonth,
     posts,
+    setPosts,
+    paperPosts,
+    setPaperPosts,
     matchingPosts,
     postRange,
     indexRange,
@@ -165,8 +168,12 @@ export default function Date(
         
         {modalDetail &&
           <ModalDetail
-            setModalDetail={setModalDetail}
-            selectedPost={selectedPost}
+          setModalDetail={setModalDetail}
+          selectedPost={selectedPost}
+          posts={posts}
+          setPosts={setPosts}
+          paperPosts={paperPosts}
+          setPaperPosts={setPaperPosts}
           />}
       </div>
     );
