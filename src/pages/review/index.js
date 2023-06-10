@@ -1,9 +1,26 @@
+import { getJobs } from "@/api/job";
 import Layout from "@/components/Layout";
-import { jobs } from "@/data";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function ReviewList() {
     const router = useRouter();
+    const { data: session } = useSession();
+
+    const [jobs, setJobs] = useState([]);
+    useEffect(() => {
+        const jobsAPI = async ( userId ) => {
+            const data = await getJobs(userId);
+            setJobs(data);
+        }
+
+        if(session?.user?.id) {
+            jobsAPI(session.user.id);
+        }
+    }, [session]);
+
+
 
     return (
         <Layout>
