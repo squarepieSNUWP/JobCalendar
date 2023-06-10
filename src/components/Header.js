@@ -53,7 +53,7 @@ export default function Header() {
                   <Link
                   href="/mypage"
                   className={`text-primary tracking-wide font-semibold 
-                  text-center text-xs w-[120px] border border-gray-500 ${route.pathname === "/" ? "bg-tertiary" : "bg-[#DBCEC7] "} 
+                  text-center text-xs w-[120px] border border-gray-500 ${route.pathname === "/mypage" ? "bg-[#DBCEC7]" : "bg-tertiary "} 
                   hover:bg-[#DFDAD6]`}
                   style={{
                     padding: "7px 13px",
@@ -203,7 +203,7 @@ export default function Header() {
                 <Image
                   src={LogOutIcon}
                   alt="logout"
-                  className="h-4 w-4 mr-2 cursor-pointer"
+                  className="h-5 w-5 mr-2 cursor-pointer"
                   onClick={signOut}
                 />
                 <div
@@ -222,7 +222,7 @@ export default function Header() {
                 <Image
                   src={LogInIcon}
                   alt="Log in"
-                  className="h-4 w-4 mr-2"
+                  className="h-5 w-5 mr-2"
                 ></Image>
                 <Link
                   href="/login"
