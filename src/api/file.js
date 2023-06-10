@@ -14,11 +14,6 @@ import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 export async function getFiles(jobId) {
   const filesCollectionRef = collection(db, "files");
 
-  const user = auth.currentUser;
-  if (!user) {
-    throw new Error("인증되지 않은 유저입니다.");
-  }
-
   const q = query(filesCollectionRef, where("jobId", "==", jobId));
   const fileSnapshot = await getDocs(q);
 
@@ -35,7 +30,7 @@ export async function getFiles(jobId) {
       id: doc.id,
       fileUrl: fileData.fileUrl,
       title: fileData.title,
-      fileType: fileType,
+      fileType: fileData.fileType,
     };
     jobFiles.push(fileModel);
   });
@@ -46,11 +41,6 @@ export async function getFiles(jobId) {
 //유저가 올린 모든 파일 정보 가져오기
 export async function getMyFiles(userId) {
   const filesCollectionRef = collection(db, "files");
-
-  const user = auth.currentUser;
-  if (!user) {
-    throw new Error("인증되지 않은 유저입니다.");
-  }
 
   const q = query(filesCollectionRef, where("userId", "==", userId));
   const fileSnapshot = await getDocs(q);
@@ -73,6 +63,7 @@ export async function getMyFiles(userId) {
     userFiles.push(fileModel);
   });
 
+  console.log("userFiles", userFiles);
   return userFiles;
 }
 
