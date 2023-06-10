@@ -331,12 +331,13 @@ export default function Detail() {
         {/* 자소서 질문-딥변 입력 부분 */}
         {activeTab == "letter" && (
           <div className="p-4 bg-[#EADFDA] rounded-b-2xl rounded-tr-2xl">
-            <div className="flex flex-col mt-3">
+            <div className="flex flex-col mt-3 px-4">
               {job.coverLetters.map((coverLetter, index) => {
                 return (
                   <div
                     key={index}
-                    className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4 cursor-pointer"
+                    className="w-full pr-4 pl-6 py-6 rounded-3xl 
+                    bg-white mb-4 cursor-pointer hover:shadow-lg"
                     onClick={() =>
                       setOpen((prevArr) => {
                         const newArr = [...prevArr];
@@ -349,7 +350,7 @@ export default function Detail() {
                       {edit[index] ? (
                         <input
                           type="text"
-                          className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                          className="w-full bg-tertiary px-5 py-3 rounded-3xl mb-4 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                           placeholder="질문을 입력하세요"
                           value={editData.question}
                           onChange={(e) =>
@@ -360,17 +361,16 @@ export default function Detail() {
                           }
                         />
                       ) : (
-                        <p className="text-xl font-bold text-primary">
-                          Q.
-                          {coverLetter.question}
+                        <p className="text-lg font-bold text-primary">
+                           Q. {coverLetter.question}
                         </p>
                       )}
 
                       <div>
                         {edit[index] ? (
                           <div className="flex ml-6">
-                            <button
-                              className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95 mr-4"
+                            <svg
+                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-1.5"
                               onClick={() => {
                                 setJob({
                                   ...job,
@@ -389,11 +389,20 @@ export default function Detail() {
                                 });
                                 console.log("SETEDIT");
                               }}
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              stroke-width="2"
+                              stroke="currentColor"
+                              fill="none"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
                             >
-                              Save
-                            </button>
-                            <button
-                              className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95"
+                              <path stroke="none" d="M0 0h24v24H0z" />
+                              <path d="M5 12l5 5l10 -10" />
+                            </svg>
+                            <svg
+                            class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%]"
                               onClick={() => {
                                 setEdit((prevArr) => {
                                   const newArr = [...prevArr];
@@ -401,12 +410,23 @@ export default function Detail() {
                                   return newArr;
                                 });
                               }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
+                              width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                            <line x1="18" y1="6" x2="6" y2="18" />{" "}
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </div>
                         ) : (
-                          <button
+                          <svg
+                            class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"
                             onClick={() => {
                               setEditData({
                                 question: coverLetter.question,
@@ -418,10 +438,17 @@ export default function Detail() {
                                 return newArr;
                               });
                             }}
-                            className="text-base font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 rounded-xl hover:scale-95"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            Edit
-                          </button>
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                            />
+                          </svg>
                         )}
                       </div>
                     </div>
@@ -431,7 +458,8 @@ export default function Detail() {
                           <textarea
                             rows={8}
                             cols={35}
-                            className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                            className="w-full border-2 border-primary px-5 py-4 ml-2 mr-3 
+                            rounded-2xl mb-2 focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                             placeholder="답변을 입력하세요"
                             value={editData.answer}
                             onChange={(e) =>
@@ -442,8 +470,9 @@ export default function Detail() {
                             }
                           />
                         ) : (
-                          <p className="text-base font-bold text-[#ABA19C] my-4">
-                            A. {coverLetter.answer}
+                          <p className="bg-tertiary rounded-2xl px-5 mr-3 ml-2 py-3 mt-5 text-base 
+                          text-gray-500 pl-5 my-2">
+                            A.  {coverLetter.answer}
                           </p>
                         )}
                       </div>
@@ -453,10 +482,11 @@ export default function Detail() {
               })}
             </div>
 
-            <div className="my-10">
+            <div className="px-4 mb-12 rounded-3xl">
               <input
                 type="text"
-                className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                className="w-full bg-stone-100 border-2 border-gray-300 px-6 py-3 rounded-3xl mt-2
+                focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                 placeholder="질문을 입력하세요"
                 value={formData.question}
                 onChange={(e) =>
@@ -467,15 +497,18 @@ export default function Detail() {
               <textarea
                 rows={8}
                 cols={35}
-                className="w-full border-2 border-primary px-8 py-4 rounded-xl mb-4"
+                className="w-full border-2 bg-stone-100 border-gray-300 px-6 py-4 rounded-3xl mt-3 mb-2
+                focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                 placeholder="답변을 입력하세요"
                 value={formData.answer}
                 onChange={(e) =>
                   setFormData({ ...formData, answer: e.target.value })
                 }
               />
+
               <button
-                className="text-lg font-bold text-primary bg-secondary hover:text-[#ABA19C] hover:bg-primary px-4 py-2 mb-4 rounded-xl hover:scale-95 float-right"
+                className="text-lg font-semibold text-white bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] 
+                hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
                 onClick={() => {
                   setJob({
                     ...job,
