@@ -139,8 +139,8 @@ export default function Review() {
       : setAppliedTags([...appliedTags, tag]);
   };
 
-  return (
-    reviews.length > 0 && (
+  return job && (
+     (
       <Layout>
         <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#e1d6d1] px-5 py-8 mb-6 rounded-3xl relative">
           <Link href="/review">
@@ -259,7 +259,7 @@ export default function Review() {
           ></Image>
 
           <div className="flex flex-col">
-            {job && job.overall.length > 0 && job.rating ? (
+            {job && job.overall ? (
               <>
                 <p className="text-xl font-bold text-[#CEB5A8] text-center">
                   {job.overall}
