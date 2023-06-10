@@ -1,3 +1,6 @@
+import { useState } from "react";
+import ModalDetail from "./ModalDetail";
+
 export default function Date(
   { date,
     index,
@@ -70,6 +73,10 @@ export default function Date(
     // date_box_opacity처럼 기존 css의 :before처럼 만듦
     const d_day_box = `w-full h-full absolute flex items-center justify-center text-2xl font-bold text-white`;
 
+    const [modalDetail, setModalDetail] = useState(false)
+    const [selectedPost, setSelectedPost] = useState({})
+  
+  
     return (
       <div className={date_box}>
         {/* 일정에 마우스 오버했을 때 오늘 날짜 칸에 d_day_box를 생성함
@@ -120,6 +127,10 @@ export default function Date(
                   setDiff(0);
                   setHoveredPost(null);
                 }}
+                onClick={() => {
+                  setModalDetail(true)
+                  setSelectedPost({...item})
+                }}
                 // hoveredPost가 마우스 오버할 때만 정의되기 때문에
                 // inline style로 다른 일정 사라지는 애니메이션 구현
                 style={{
@@ -151,6 +162,12 @@ export default function Date(
           </div>
         </>
       )} */}
+        
+        {modalDetail &&
+          <ModalDetail
+            setModalDetail={setModalDetail}
+            selectedPost={selectedPost}
+          />}
       </div>
     );
   }
