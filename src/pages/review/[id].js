@@ -8,6 +8,7 @@ import Quo1Icon from "public/quote1SWP.png";
 import Quo2Icon from "public/quote2SWP.png";
 import { addTag, getTags } from "../api/api";
 import { useSession } from "next-auth/react";
+import { createReview, getReviews, updateReview } from "@/api/review";
 
 export default function Review() {
   const router = useRouter();
@@ -44,6 +45,12 @@ export default function Review() {
     // 해당 페이지의 id를 가진 job을 찾아서 setJob
     const job = jobs.find((j) => j.id === Number(id));
     setJob(job);
+
+    const getReviewAPI = async (jobId) => {
+      const reviews = await getReviews(jobId);
+      console.log("REVIEWS: ", reviews);
+    }
+    if(id) getReviewAPI(id);
   }, [id]);
 
   useEffect(() => {
@@ -333,7 +340,7 @@ export default function Review() {
                 <button
                   className="text-lg font-semibold text-primary bg-tertiary hover:text-[#ABA19C] 
                             hover:bg-primary px-4 py-1.5 mb-4 mr-2 rounded-3xl hover:scale-95 float-right"
-                  onClick={() => {
+                  onClick={async () => {
                     setJob({
                       ...job,
                       reviews: [
@@ -351,6 +358,8 @@ export default function Review() {
                     });
                     setAppliedTags([]);
                     setShowCreateReview(false);
+
+                    await createReview( {...formData, jobId: job.id });
                   }}
                 >
                   Add
