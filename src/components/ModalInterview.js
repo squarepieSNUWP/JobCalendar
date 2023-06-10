@@ -62,15 +62,26 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
       alert("빈 칸을 채워주세요");
       return;
     }
+    let newPost
 
-    const newPost = {
-      jobId: selectedPaperPost ? selectedJobId : Math.random().toString(36).substring(2, 11),
-      date: dateValue,
-      type: "interview",
-      company: selectedPaperPost ? selectedPaperPost.company : companyValue,
-      job: selectedPaperPost ? selectedPaperPost.job : jobValue,
-      postLink: selectedPaperPost ? selectedPaperPost.postLink : postLinkValue?.trim(),
-    };
+   if (selectedPaperPost) {
+      newPost = {
+       date: dateValue,
+       type: "interview",
+       company: selectedPaperPost.company,
+       job: selectedPaperPost.job,
+       postLink: selectedPaperPost.postLink,
+       jobId: selectedPaperPost.jobId,
+     };
+   } else {
+      newPost = {
+       date: dateValue,
+       type: "interview",
+       company: companyValue,
+       job: jobValue,
+       postLink: postLinkValue.trim(),
+     };
+   }
 
     const isAlreadyRegistered = posts.some((post) => {
       return (
@@ -92,7 +103,8 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
     })
       .then((res) => res.json())
       .then((data) => {
-        newPost.id = data;
+        newPost.id = data.docId;
+        newPost.jobId = selectedPaperPost ? selectedJobId : data.jobId,
         setPosts((prevJobPosts) => [...prevJobPosts, newPost]);
         setModalInterview(false);
       })

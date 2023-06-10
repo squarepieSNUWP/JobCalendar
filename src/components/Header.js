@@ -8,7 +8,6 @@ import FireIcon from "public/fireSWP.png";
 import LogOutIcon from "public/logoutSWP.png";
 import UserIcon from "public/user2SWP.png";
 import LogInIcon from "public/loginSWP.png";
-import RevIcon from "public/review2SWP.png";
 
 export default function Header() {
   const route = useRouter();
@@ -18,16 +17,18 @@ export default function Header() {
     <header className="fixed left-0 top-0 flex flex-col bg-tertiary items-center justify-between h-screen w-60 py-10 px-0">
       <div className="flex flex-col items-center">
         {/* <span className="mb-5 self-end cursor-pointer">fold</span> */}
-        <div className="mb-10 flex flex-col items-center">          
-          <Link href="/" className="flex flex-col items-center justify-center 
-          text-lg font-extrabold text-primary">
+        <div className="mb-10 flex flex-col items-center">
+          <Link
+            href="/"
+            className="flex flex-col items-center justify-center 
+          text-lg font-extrabold text-primary"
+          >
             <Image
               href="/"
               src={FireIcon}
               alt="fire"
               className="h-5 w-5 mb-1"
             ></Image>
-
             취뽀달력
           </Link>
         </div>
@@ -188,50 +189,54 @@ export default function Header() {
             ></Image>
             Review
           </Link>
-        
-          
         </nav>
       </div>
       <div>
         {session ? (
           <div className="flex flex-col items-center">
             <div className="mb-1 justify-center">
-              <div className="cursor-pointer bg-tertiary rounded-3xl hover:shadow-inner w-28 h-11 flex items-center justify-center" onClick={signOut}>
+              <div
+                className="cursor-pointer bg-tertiary rounded-3xl hover:shadow-inner w-28 h-11 flex items-center justify-center"
+                onClick={signOut}
+              >
                 <Image
                   src={LogOutIcon}
                   alt="logout"
-                  className="h-6 w-6 mr-3 cursor-pointer opacity-90"
+                  className="h-4 w-4 mr-2 cursor-pointer"
                   onClick={signOut}
                 />
-                <div className="cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5" onClick={signOut}>
-                Log out
+                <div
+                  className="cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5"
+                  onClick={signOut}
+                >
+                  Log out
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        ) : ( 
+        ) : (
           <div className="flex">
             <div className="mb-1 justify-center">
               <div className="cursor-pointer bg-tertiary rounded-3xl hover:shadow-inner w-28 h-11 flex items-center justify-center">
                 <Image
                   src={LogInIcon}
                   alt="Log in"
-                  className="h-6 w-6 mr-3 opacity-90"
+                  className="h-4 w-4 mr-2"
                 ></Image>
                 <Link
-                    href="/login"
-                    className={
-                      route.pathname === "/login"
-                        ? "cursor-pointer text-gray-900 hover:text-gray-900 font-semibold mb-0.5"
-                        : "cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5"
-                    }
-                  >
-                    Log in
-                  </Link>
+                  href="/login"
+                  className={
+                    route.pathname === "/login"
+                      ? "cursor-pointer text-gray-900 hover:text-gray-900 font-semibold mb-0.5"
+                      : "cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5"
+                  }
+                >
+                  Log in
+                </Link>
               </div>
             </div>
           </div>
-         )}
+        )}
       </div>
     </header>
   );

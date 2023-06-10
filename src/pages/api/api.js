@@ -14,6 +14,7 @@ import {
   where,
   setDoc,
   getDocs,
+  getDoc,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
@@ -161,4 +162,57 @@ export async function deletePdf(fileId, userId) {
   } catch (error) {
     console.log("error while deleting file", error.message);
   }
+}
+
+// 태그 관련 api
+export async function addTag(userId, tagContent, color) {
+  const tagCollectionRef = collection(db, "tags_collection");
+
+  const userRef = doc(db, "users_collection", `${userId}`);
+  const userDoc = await getDoc(userRef);
+  const userData = userDoc.data();
+
+  if (!userData.tags) {
+    userData.tags = [];
+  }
+
+  const querySnapshot = await getDocs(tagCollectionRef);
+  const numData = querySnapshot.size;
+
+  const newSet = {
+    id: numData + 1,
+    title: tagContent,
+    color: color,
+  };
+
+  const newDocRef = doc(tagCollectionRef, `${numData + 1}`);
+  await setDoc(newDocRef, newSet);
+
+  userData.tags.push(newSet.id);
+  await updateDoc(userDoc.ref, userData);
+}
+
+export async function getTags(userId) {
+  const tagCollectionRef = collection(db, "tags_collection");
+
+  const userRef = doc(db, "users_collection", `${userId}`);
+  const userDoc = await getDoc(userRef);
+  const userData = userDoc.data();
+
+  if (!userData.tags) {
+    return [];
+  }
+
+  const userTags = await userData.tags;
+
+  const tagQ = query(tagCollectionRef, where("id", "in", userTags));
+  const tagSnapshot = await getDocs(tagQ);
+
+  const tagsArr = [];
+
+  tagSnapshot.forEach((tagDoc) => {
+    tagsArr.push(tagDoc.data());
+  });
+
+  return tagsArr;
 }
