@@ -4,7 +4,7 @@ import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, setDoc, up
 const jobsCollection = collection(db, "jobs");
 
 export const getJobs = async (userId) => {
-  
+
   const q = query(jobsCollection, where("userId", "==", userId));
   const results = await getDocs(q);
 
@@ -15,6 +15,13 @@ export const getJobs = async (userId) => {
 
   return res;
 };
+
+export const getJob = async (jobId) => {
+  const jobDoc = await doc(jobsCollection, jobId);
+  const result = await getDoc(jobDoc);
+  
+  return result.data();
+}
 
 export const createJob = async (newJob) => {
   const jobsCollection = collection(db, "jobs");

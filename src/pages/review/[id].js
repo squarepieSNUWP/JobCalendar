@@ -9,6 +9,7 @@ import Quo2Icon from "public/quote2SWP.png";
 import { addTag, getTags } from "../api/api";
 import { useSession } from "next-auth/react";
 import { createReview, getReviews, updateReview } from "@/api/review";
+import { getJob } from "@/api/job";
 
 export default function Review() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function Review() {
   const [userId, setUserId] = useState(null);
 
   const [job, setJob] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [open, setOpen] = useState([]);
   const [edit, setEdit] = useState([]);
   const [newTag, setNewTag] = useState(""); // 새로 생성하고 싶은 태그 이름
@@ -33,8 +35,8 @@ export default function Review() {
     answer: "",
   });
   const [generalData, setGeneralData] = useState({
-    generalReview: "",
-    generalRating: null,
+    overall: "",
+    rating: null,
   });
   const [appliedRating, setAppliedRating] = useState(null);
 
@@ -42,32 +44,39 @@ export default function Review() {
   const [showCreateGeneralReview, setShowCreateGeneralReview] = useState(false);
 
   useEffect(() => {
-    // 해당 페이지의 id를 가진 job을 찾아서 setJob
-    const job = jobs.find((j) => j.id === Number(id));
-    setJob(job);
+    // job & reviews 세팅 
+    const getJobAPI = async (jobId) => {
+      const job = await getJob(jobId);
+      setJob(job);
+    }
 
     const getReviewAPI = async (jobId) => {
       const reviews = await getReviews(jobId);
-      console.log("REVIEWS: ", reviews);
+      setReviews(reviews);
     }
-    if(id) getReviewAPI(id);
+    if(id) {
+      getReviewAPI(id)
+      getJobAPI(id)
+    };
   }, [id]);
 
-  useEffect(() => {
-    if (!job) return;
+  console.log(job);
 
-    const tags = job.reviews.reduce((acc, review) => {
-      for (let tag of review.tags) {
-        acc.add(tag);
-      }
-      return acc;
-    }, new Set());
-    setTagTotal(Array.from(tags));
+  useEffect(() => {
+    if (reviews.length <= 0) return;
+
+    // const tags = reviews.reduce((acc, review) => {
+    //   for (let tag of review.tags) {
+    //     acc.add(tag);
+    //   }
+    //   return acc;
+    // }, new Set());
+    // setTagTotal(Array.from(tags));
 
     // open, edit 배열 초기화 (질문 답변을 보여줄지 말지, 수정할지 말지 - 각 job별로 배열을 만들어서 관리)
-    setOpen(job.reviews.map(() => false));
-    setEdit(job.reviews.map(() => false));
-  }, [job]);
+    setOpen(reviews.map(() => false));
+    setEdit(reviews.map(() => false));
+  }, [reviews]);
 
   useEffect(() => {
     if (session) {
@@ -97,8 +106,7 @@ export default function Review() {
   };
 
   return (
-    job &&
-    job.reviews && (
+    reviews.length > 0 && (
       <Layout>
         <div className="bg-gradient-to-r from-[#f5eeebe7] to-[#e1d6d1] px-5 py-8 mb-6 rounded-3xl relative">
           <Link href="/review">
@@ -122,7 +130,7 @@ export default function Review() {
             {job.title}
           </h1>
           <p className="text-xl font-base text-gray-600/90 pl-4 tracking-tight text-left">
-            {job.company} - {job.occupation}
+            {job.company}
           </p>
         </div>
 
@@ -147,11 +155,11 @@ export default function Review() {
                 className="w-full border-2 border-gray-300 px-6 py-4 rounded-3xl mb-3
                         focus:bg-white focus:outline-none focus:ring focus:ring-tertiary"
                 placeholder="총평을 입력하세요"
-                value={generalData.generalReview}
+                value={generalData.overall}
                 onChange={(e) =>
                   setGeneralData({
                     ...generalData,
-                    generalReview: e.target.value,
+                    overall: e.target.value,
                   })
                 }
               />
@@ -181,12 +189,12 @@ export default function Review() {
                   onClick={() => {
                     setJob({
                       ...job,
-                      generalReview: generalData.generalReview,
-                      generalRating: appliedRating,
+                      overall: generalData.overall,
+                      rating: appliedRating,
                     });
                     setGeneralData({
-                      generalReview: "",
-                      generalRating: null,
+                      overall: "",
+                      rating: null,
                     });
                     setAppliedRating(null);
                     setShowCreateGeneralReview(false);
@@ -217,10 +225,10 @@ export default function Review() {
           ></Image>
 
           <div className="flex flex-col">
-            {job.generalReview.length > 0 && job.generalRating ? (
+            {job && job.overall.length > 0 && job.rating ? (
               <>
                 <p className="text-xl font-bold text-[#CEB5A8] text-center">
-                  {job.generalReview}
+                  {job.overall}
                 </p>
               </>
             ) : (
@@ -241,10 +249,10 @@ export default function Review() {
             className="px-3 py-1.5 text-sm rounded-3xl 
                     text-white font-base mx-2"
             style={{
-              backgroundColor: job.generalRating.color,
+              backgroundColor: job?.rating.color,
             }}
           >
-            #{job.generalRating.title}
+            #{job?.rating.title}
           </span>
         </div>
 
@@ -378,9 +386,9 @@ export default function Review() {
         </div>
 
         <div className="flex flex-col bg-white pr-2 pl-1">
-          {job.reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             <>
-              {job.reviews.map((review, index) => (
+              {reviews.map((review, index) => (
                 <div
                   key={index}
                   className="w-full px-4 py-4 rounded-3xl mb-4 cursor-pointer shadow hover:shadow-lg"
@@ -415,16 +423,15 @@ export default function Review() {
                           <svg
                             class="h-7 w-7 text-gray-700 mb-4 hover:scale-[80%] mr-3"
                             onClick={() => {
-                              setJob({
-                                ...job,
-                                reviews: job.reviews.map((r, i) => {
+                              setReviews(
+                                reviews.map((r, i) => {
                                   if (i === index) {
                                     return editData;
                                   } else {
                                     return r;
                                   }
                                 }),
-                              });
+                              );
                               setEdit((prevArr) => {
                                 const newArr = [...prevArr];
                                 newArr[index] = !newArr[index];
@@ -498,12 +505,7 @@ export default function Review() {
                             onClick={() => {
                               const ok = confirm("정말로 삭제하시겠습니까?");
                               if (ok) {
-                                setJob({
-                                  ...job,
-                                  reviews: job.reviews.filter(
-                                    (r, i) => i !== index
-                                  ),
-                                });
+                                setReviews( reviews.filter((r, i) => i !== index) );
                               }
                             }}
                             viewBox="0 0 24 24"
@@ -547,7 +549,7 @@ export default function Review() {
                   )}
 
                   <div className="flex mb-2 items-center ml-1.5">
-                    <div>
+                    {/* <div>
                       {review.tags.map((tag, _) => (
                         <button
                           key={tag.id}
@@ -559,7 +561,7 @@ export default function Review() {
                           #{tag.title}
                         </button>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}
