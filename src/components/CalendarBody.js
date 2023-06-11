@@ -8,7 +8,11 @@ export default function CalendarBody(
     selectedYear,
     selectedMonth,
     dates,
-    posts }) {
+    posts,
+    setPosts,
+    paperPosts,
+    setPaperPosts
+  }) {
       // 요일 칸을 출력하는 Day 컴포넌트와 날짜 칸을 출력하는 Date 컴포넌트를 감싸는 body 컨테이너
       // flex-col로 배치하고 경계선은 black으로 함
       // cf. 요일 css는 Day 컴포넌트에서 구현
@@ -90,6 +94,9 @@ export default function CalendarBody(
                   selectedYear={selectedYear}
                   selectedMonth={selectedMonth}
                   posts={posts}
+                  setPosts={setPosts}
+                  paperPosts={paperPosts}
+                  setPaperPosts={setPaperPosts}
                   matchingPosts={matchingPosts}
                   postRange={postRange}
                   indexRange={indexRange}

@@ -181,57 +181,19 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
                 setSelectedJobId(e.target.value);
               }}
             >
-              <option value="new" selected
-              className="pl-4">
+              <option value="new" selected className="pl-4">
                 직접 입력하기
               </option>
               {paperPosts &&
                 paperPosts.map((post, i) => {
                   return (
-                    <option key={i}
-                      value={post.id}
-                      selected={selectedJobId === post.id}>
+                    <option key={i} value={post.id} selected={selectedJobId === post.id}>
                       {post.company}
                     </option>
                   );
                 })}
             </select>
           </div>
-          {/* <div class={input_wrapper}>
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-paper"
-                  type="radio"
-                  className={type_radio}
-                  value="paper"
-                  name="type"
-                  checked={selectedOption === "paper"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-paper" className="ml-2 text-sm">
-                  서류
-                </label>
-              </div>
-
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-interview"
-                  type="radio"
-                  className={type_radio}
-                  value="interview"
-                  name="type"
-                  checked={selectedOption === "interview"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-interview" className="ml-2 text-sm">
-                  면접
-                </label>
-              </div>
-            </div> */}
 
           <div className={`${input_wrapper} flex-col`}>
             <label htmlFor="date" className="mb-1">
@@ -258,6 +220,7 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               id="company"
               className={`${input_box} h-8 
               disabled:bg-gray-100 disabled:text-gray-700/50`}
+              placeholder="지원할 회사 이름을 입력해주세요."
               defaultValue={selectedPaperPost ? selectedPaperPost.company : ""}
               disabled={!!selectedPaperPost}
               onChange={(e) => {
@@ -275,6 +238,7 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               id="job-title"
               className={`${input_box} h-8
               disabled:bg-gray-100 disabled:text-gray-700/50`}
+              placeholder="지원할 직무 이름을 입력해주세요."
               defaultValue={selectedPaperPost ? selectedPaperPost.title : ""}
               disabled={!!selectedPaperPost}
               onChange={(e) => {
@@ -292,6 +256,7 @@ bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`; */}
               id="postLink"
               className={`${input_box} h-8 
               disabled:bg-gray-100 disabled:text-gray-700/50`}
+              placeholder="지원할 공고 링크를 입력해주세요."
               defaultValue={selectedPaperPost ? selectedPaperPost.link : ""}
               disabled={!!selectedPaperPost}
               onChange={(e) => {
