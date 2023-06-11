@@ -82,21 +82,12 @@ export default function MyPage() {
     session &&
     session.user && (
       <Layout>
-        <h1 className="text-6xl font-extrabold text-center text-primary">
-          My Page
-        </h1>
-
-        <div>
-          <h2 className="text-2xl font-bold text-primary mb-3">
-            {session.user.name}님의 활동기록
-          </h2>
-          <p className="text-xl text-primary mb-3">서류 제출 : 8회</p>
-          <p className="text-xl text-primary mb-3">면접 횟수 : 8회</p>
-        </div>
+        <h1 className="text-3xl place-self-start font-bold text-left mb-8 mt-2 pl-4 text-primary">
+          Documents</h1>
 
         <div>
           <button
-            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 mr-2 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-2 mr-2 
             ${tab == "cv" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"} `}
             style={{ opacity: tab === "cv" ? 1 : 0.7 }}
             onClick={() => {
@@ -106,7 +97,7 @@ export default function MyPage() {
             이력서
           </button>
           <button
-            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-2 
             ${tab == "portfolio" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"}
             `}
             style={{ opacity: tab === "portfolio" ? 1 : 0.7 }}
@@ -119,6 +110,7 @@ export default function MyPage() {
         </div>
 
         <div className="place-self-center bg-[#EADFDA] p-4 rounded-r-2xl rounded-b-2xl mt-0 w-full">
+
           <div className="flex">
             <div className="flex flex-col w-1/4">
               <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
@@ -145,17 +137,18 @@ export default function MyPage() {
                     />
                   </div>
                 </div>
-                <div className="bg-white p-3 rounded-2xl mb-1.5 w-64 h-64">
-                  <div className="flex flex-col mb-1">
-                    <span className="font-normal ml-2">
-                      {tab === "cv" ? "이력서 목록" : "포트폴리오 목록"}
-                    </span>
+
+                <div className="mt-4 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+
+                <div className="bg-white p-3 rounded-2xl mt-5 mb-1.5 w-64 overflow-auto h-[263px]">
+                  <div className="flex flex-col">
+        
                     {userFiles
                       .filter((file) => file.fileType === tab)
                       .map((file) => (
                         <div key={file.id} className="flex items-center">
                           <button
-                            className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2 mr-2"
+                            className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl my-1 mr-2 w-4/5"
                             onClick={() => {
                               setActiveFile(file.id);
                               renderFileContent(file.id);
@@ -163,94 +156,27 @@ export default function MyPage() {
                           >
                             {file.title}
                           </button>
-                          <button
-                            className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2 mr-2"
-                            onClick={() => handleFileDelete(file.id)}
-                          >
-                            삭제
-                          </button>
+                          <svg class="h-9 w-9 rounded-full px-2 py-2 bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] "  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                          onClick={() => handleFileDelete(file.id)}>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                          </svg>
                         </div>
                       ))}
                   </div>
                 </div>
+
+                <div className="mt-4 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
               </div>
             </div>
             <div className="w-3/4">
-              <div className="pl-2 rounded-2xl h-[400px]">
+              <div className="pl-2 rounded-2xl h-[465px]">
                 {renderFileContent(activeFile)}
               </div>
             </div>
           </div>
         </div>
 
-        {/* <div className="flex">
-          <button
-            className={`${
-              tab === "cv" ? "bg-secondary/50" : "bg-secondary/20"
-            } hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl mr-4`}
-            onClick={() => setTab("cv")}
-          >
-            이력서
-          </button>
-          <button
-            className={`${
-              tab === "portfolio" ? "bg-secondary/50" : "bg-secondary/20"
-            }  hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl`}
-            onClick={() => setTab("portfolio")}
-          >
-            포트폴리오
-          </button>
-        </div>
-
-        <div>
-          {tab === "cv" ? (
-            <div className="flex flex-col items-center">
-              <div className="flex flex-col items-center justify-center mt-10">
-                <p className="text-xl font-bold text-primary mb-3">이력서</p>
-                <p className="text-xl text-primary mb-3">
-                  최근 업데이트 : 2021.09.01
-                </p>
-              </div>
-              <button
-                className={
-                  "bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl"
-                }
-                onClick={openFileExplorer}
-              >
-                pdf 업로드하기
-              </button>
-              <input
-                type="file"
-                className="hidden"
-                ref={fileInputRefs}
-                onChange={handleFileSelect}
-              />
-            </div>
-          ) : (
-            <div className="flex flex-col items-center">
-              <div className="flex flex-col items-center justify-center mt-10">
-                <p className="text-xl font-bold text-primary mb-3">
-                  포트폴리오
-                </p>
-                <p className="text-xl text-primary mb-3">
-                  최근 업데이트 : 2021.09.01
-                </p>
-              </div>
-              <button
-                className="bg-secondary/20 hover:bg-secondary/50 text-secondary py-2 px-4 rounded-2xl"
-                onClick={openFileExplorer}
-              >
-                pdf 업로드하기
-              </button>
-              <input
-                type="file"
-                className="hidden"
-                ref={fileInputRefs}
-                onChange={handleFileSelect}
-              />
-            </div>
-          )}
-        </div> */}
+       
       </Layout>
     )
   );
