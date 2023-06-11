@@ -1,3 +1,6 @@
+import { useState } from "react";
+import ModalDetail from "./ModalDetail";
+
 export default function Date(
   { date,
     index,
@@ -5,6 +8,9 @@ export default function Date(
     selectedYear,
     selectedMonth,
     posts,
+    setPosts,
+    paperPosts,
+    setPaperPosts,
     matchingPosts,
     postRange,
     indexRange,
@@ -70,6 +76,10 @@ export default function Date(
     // date_box_opacity처럼 기존 css의 :before처럼 만듦
     const d_day_box = `w-full h-full absolute flex items-center justify-center text-2xl font-bold text-white`;
 
+    const [modalDetail, setModalDetail] = useState(false)
+    const [selectedPost, setSelectedPost] = useState({})
+  
+  
     return (
       <div className={date_box}>
         {/* 일정에 마우스 오버했을 때 오늘 날짜 칸에 d_day_box를 생성함
@@ -80,8 +90,7 @@ export default function Date(
         {/* <div className={date_box_opacity}></div> */}
 
         {/* 오늘인 경우 날짜 위에 오늘 표시의 원을 생성함 */}
-        {date.y === today.y && date.m === today.m && date.d == today.d &&
-          <div className={date_today}></div>}
+        {date.y === today.y && date.m === today.m && date.d == today.d && <div className={date_today}></div>}
 
         {/* 위의 세 요소는 absolute로 date_box의 하위 요소가 아닌 반면
       date_num이 flex-col의 첫번째 요소!! */}
@@ -99,7 +108,7 @@ export default function Date(
           <>
             {matchingPosts.map((item, index) => (
               <div
-                className={post_box}
+                className={`${post_box} relative ${isHovered ? "z-40" : ""}`}
                 key={item.id}
                 onMouseEnter={() => {
                   // 마우스 오버 하면 상위 컴포넌트로 다음의 값들 전달
@@ -120,19 +129,37 @@ export default function Date(
                   setDiff(0);
                   setHoveredPost(null);
                 }}
+                onClick={() => {
+                  setModalDetail(true);
+                  setSelectedPost({ ...item });
+                }}
                 // hoveredPost가 마우스 오버할 때만 정의되기 때문에
                 // inline style로 다른 일정 사라지는 애니메이션 구현
                 style={{
                   opacity: hoveredPost === null || item.id == hoveredPost.id ? 1 : 0,
                 }}
               >
-                <span className={post_type}>{item.type}</span>
-                <span className="post-box-text">{item.company.length > 7 ? item.company.slice(0, 7) + '...' : item.company}</span>
-{item.company.length > 7 && (
+                <span className={post_type}>{item.type == "paper" ? "서류" : "면접"}</span>
+                <span className="post-box-text">
+                  {item.company.length > 7
+                    ? item.company.slice(0, 7) + "..." : item.company}
+                </span>
+                {/* absolute 속성을 이용해 post_box를 기준으로 바로 위에 위치하도록 조정
+                너비는 post_box와 같도록 하고 높이는 최소한 post_box는 가지도록 함. background, text-color, border은 임의로 설정함
+                */}
+                {isHovered && item.company.length > 7 && (
+                  <div className={`absolute flex items-center justify-center text-center w-full min-h-full 
+                  ${item.company.length < 16 ? "-top-3/4" : "-top-full"} left-1/2 transform -translate-x-1/2 -translate-y-1/3 px-0.5 
+                  bg-white border border-gray-300 rounded text-xs text-gray-700 shadow-md`}>
+                    {item.company}
+                  </div>
+                )}
+
+                {/* {item.company.length > 7 && (
   <span className={`post-box-after ${item.company.length > 7 && 'hidden'}`}>
     {item.company.slice(7)}
   </span>
-)}
+)} */}
               </div>
             ))}
           </>
@@ -151,6 +178,8 @@ export default function Date(
           </div>
         </>
       )} */}
+
+        {modalDetail && <ModalDetail setModalDetail={setModalDetail} selectedPost={selectedPost} posts={posts} setPosts={setPosts} paperPosts={paperPosts} setPaperPosts={setPaperPosts} />}
       </div>
     );
   }
