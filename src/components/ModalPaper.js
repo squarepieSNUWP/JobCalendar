@@ -111,117 +111,80 @@ export default function ModalPaper({ setModalPaper, posts, setPosts, paperPosts,
 
       <div className={modal_container}>
         <h1 className="font-bold text-lg text-gray-800">서류 일정 등록</h1>
-          <div className={input_container}>
-            {/* <div class={input_wrapper}>
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-paper"
-                  type="radio"
-                  className={type_radio}
-                  value="paper"
-                  name="type"
-                  checked={selectedOption === "paper"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-paper" className="ml-2 text-sm">
-                  서류
-                </label>
-              </div>
-
-              <div class={type_radio_wrapper}>
-                <input
-                  id="radio-interview"
-                  type="radio"
-                  className={type_radio}
-                  value="interview"
-                  name="type"
-                  checked={selectedOption === "interview"}
-                  onChange={(e) => {
-                    setSelectedOption(e.target.value);
-                  }}
-                />
-                <label for="radio-interview" className="ml-2 text-sm">
-                  면접
-                </label>
-              </div>
-            </div> */}
-
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="date" className="mb-1">
-              {/* {selectedOption == "paper" ? "서류 제출일" : "면접일"} */}
+        <div className={input_container}>
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="date" className="mb-1">
               서류 제출 예정일
-              </label>
-              <input
-                type="date"
-                id="date"
-                className={`${input_box} w-1/3 h-8`}
-                onChange={(e) => {
-                  setDateValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="company" className="mb-1">
-                회사 이름
-              </label>
-              <input
-                type="text"
-                id="company"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setCompanyValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className={`${input_wrapper} flex-col`}>
-              <label htmlFor="job-title" className="mb-1">
-                직무 이름
-              </label>
-              <input
-                type="text"
-                id="job-title"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setJobValue(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col mb-3">
-              <label htmlFor="postLink" className="mb-1">
-                공고 링크
-              </label>
-              <input
-                type="text"
-                id="postLink"
-                className={`${input_box} h-8`}
-                onChange={(e) => {
-                  setPostLinkValue(e.target.value);
-                }}
-              ></input>
-            </div>
+            </label>
+            <input
+              type="date"
+              id="date"
+              className={`${input_box} w-1/3 h-8`}
+              onChange={(e) => {
+                setDateValue(e.target.value);
+              }}
+            />
           </div>
 
-          <div className="flex place-self-end">
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="company" className="mb-1">
+              회사 이름
+            </label>
+            <input
+              type="text"
+              id="company"
+              className={`${input_box} h-8`}
+              placeholder="지원할 회사 이름을 입력해주세요."
+              onChange={(e) => {
+                setCompanyValue(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className={`${input_wrapper} flex-col`}>
+            <label htmlFor="job-title" className="mb-1">
+              직무 이름
+            </label>
+            <input
+              type="text"
+              id="job-title"
+              className={`${input_box} h-8`}
+              placeholder="지원할 직무 이름을 입력해주세요."
+              onChange={(e) => {
+                setJobValue(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col mb-3">
+            <label htmlFor="postLink" className="mb-1">
+              공고 링크
+            </label>
+            <input
+              type="text"
+              id="postLink"
+              className={`${input_box} h-8`}
+              placeholder="지원할 공고 링크를 입력해주세요."
+              onChange={(e) => {
+                setPostLinkValue(e.target.value);
+              }}
+            ></input>
+          </div>
+        </div>
+
+        <div className="flex place-self-end">
+          <button className={btn} onClick={handleFormSubmit}>
+            등록
+          </button>
           <button
             className={btn}
-            onClick={ handleFormSubmit }
+            onClick={() => {
+              setModalPaper(false);
+            }}
           >
-              등록
-            </button>
-            <button
-              className={btn}
-              onClick={() => {
-                setModalPaper(false);
-              }}
-            >
-              닫기
-            </button>
-          </div>
+            닫기
+          </button>
+        </div>
       </div>
     </>
   );
