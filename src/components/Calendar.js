@@ -114,96 +114,60 @@ export default function Calendar() {
     return dates;
   }
 
-  // async function getPosts() {
-  //   console.log("일정 가져오기 함수 실행")
-  //   if (!session?.user?.id) return;
-
-  //   const userId = session.user.id
-  //   const usersCollection = collection(db, "users_collection");
-  //   const userQuery = query(usersCollection, where("id", "==", userId));
-  //   const userSnapshot = await getDocs(userQuery);
-
-
-  //   if (!userSnapshot.empty) {
-  //     const userDoc = userSnapshot.docs[0];
-  //     const userDocData = userDoc.data();
-
-  //     const paperIds = userDocData.papers || [];
-  //     const interviewIds = userDocData.interviews || [];
-
-  //     const newPosts = [];
-  //     const newPaperPosts = []
-
-  //     if (paperIds.length > 0) {
-  //       const paperCollection = collection(db, "paper_collection");
-  //       const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
-  //       const paperSnapshot = await getDocs(paperQuery);
-
-  //       paperSnapshot.docs.forEach((doc) => {
-  //         newPosts.push({ id: doc.id, ...doc.data() });
-  //       });
-
-  //       paperSnapshot.docs.forEach((doc) => {
-  //         newPaperPosts.push({ id: doc.id, ...doc.data() });
-  //       });
-
-  //       setPaperPosts(newPaperPosts)
-  //     }
-
-  //     if (interviewIds.length > 0) {
-  //       const interviewCollection = collection(db, "interview_collection");
-  //       const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
-  //       const interviewSnapshot = await getDocs(interviewQuery);
-
-  //       interviewSnapshot.docs.forEach((doc) => {
-  //         newPosts.push({ id: doc.id, ...doc.data() });
-  //       });
-  //     }
-
-  //     setPosts(newPosts);
-  //   } else {
-  //     console.log("존재X");
-  //   }
-  // }
-  
   async function getPosts() {
-        if (userId) {
-          const userJobs = await getJobs(userId);
-          const jobIds = userJobs.map((j) => j.id);
-          const userPosts = await getApplies(jobIds)
+    console.log("일정 가져오기 함수 실행")
+    if (!session?.user?.id) return;
 
-          if (userPosts && userJobs) {
-            const postsWithInfo = userPosts.map((p) => {
-              const matchingJob = userJobs.find((j) => j.id === p.jobId);
-              return {
-                ...p,
-                company: matchingJob.company,
-                title: matchingJob.title,
-                link: matchingJob.link,
-              };
-            });
+    const userId = session.user.id
+    const usersCollection = collection(db, "users_collection");
+    const userQuery = query(usersCollection, where("id", "==", userId));
+    const userSnapshot = await getDocs(userQuery);
 
-            const jobsWithInfo = userJobs
-              .filter((j) => {
-                const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
-                return matchingPaperPost;
-              })
-              .map((j) => {
-                const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
-                return {
-                  ...j,
-                  date: matchingPaperPost.date,
-                };
-              });
 
-            setPaperPosts(jobsWithInfo);
-            setPosts(postsWithInfo);          
-          }
-        }
+    if (!userSnapshot.empty) {
+      const userDoc = userSnapshot.docs[0];
+      const userDocData = userDoc.data();
+
+      const paperIds = userDocData.papers || [];
+      const interviewIds = userDocData.interviews || [];
+
+      const newPosts = [];
+      const newPaperPosts = []
+
+      if (paperIds.length > 0) {
+        const paperCollection = collection(db, "paper_collection");
+        const paperQuery = query(paperCollection, where("__name__", "in", paperIds));
+        const paperSnapshot = await getDocs(paperQuery);
+
+        paperSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        paperSnapshot.docs.forEach((doc) => {
+          newPaperPosts.push({ id: doc.id, ...doc.data() });
+        });
+
+        setPaperPosts(newPaperPosts)
+      }
+
+      if (interviewIds.length > 0) {
+        const interviewCollection = collection(db, "interview_collection");
+        const interviewQuery = query(interviewCollection, where("__name__", "in", interviewIds));
+        const interviewSnapshot = await getDocs(interviewQuery);
+
+        interviewSnapshot.docs.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() });
+        });
+      }
+
+      setPosts(newPosts);
+    } else {
+      console.log("존재X");
+    }
   }
+
   useEffect(() => {
     getPosts()
-
   }, [session])
 
   return (
@@ -220,26 +184,23 @@ export default function Calendar() {
           setSelectedMonth={setSelectedMonth} />
 
         <a class="button focus:button cursor-pointer mt-2 mr-4">
-          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white mr-6">+</span>
+          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white mr-3">+</span>
           <span
-            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 mr-1.5 hover:bg-[#B9A49A]"
+            className="text cursor-pointer bg-[#D6BCB0] rounded-3xl 
+            text-white px-3 py-1 mr-1.5 hover:bg-[#B9A49A]"
             onClick={() => {
-              if (session) {
-                setModalPaper(true);
-              }
+              setModalPaper(true);
             }}
           >
-            Paper
+            서류
           </span>
           <span
             className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 hover:bg-[#B9A49A]"
             onClick={() => {
-              if (session) {
-                setModalInterview(true);
-              }
+              setModalInterview(true);
             }}
           >
-            Interview
+            면접
           </span>
         </a>
       </div>
@@ -251,11 +212,7 @@ export default function Calendar() {
         selectedYear={selectedYear}
         selectedMonth={selectedMonth}
         dates={getDates(selectedYear, selectedMonth)}
-        posts={posts}
-        setPosts={setPosts}
-        paperPosts={paperPosts}
-        setPaperPosts={setPaperPosts} 
-      />
+        posts={posts} />
 
       {/* 일정 추가 모달 컴포넌트 */}
       {modalPaper &&

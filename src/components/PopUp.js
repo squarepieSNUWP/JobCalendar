@@ -58,12 +58,13 @@ export default function PopUp({
       </span>
 
       {/* 안내문구 */}
-      <span>일정을 지우더라도 공고별 서류 보관함과 회고록은 조회 가능합니다.</span>
+      <span className="mt-5">* 일정을 지우더라도 공고별 서류 보관함과 회고록은 조회 가능합니다.</span>
 
 
       <div className="flex justify-center">
         <button
-          className={btn}
+          className="py-2 px-4 text-sm font-semibold rounded-3xl bg-[#D6BCB0]/20
+          text-[#D6BCB0] cursor-pointer mx-1 place-self-end mt-4 hover:bg-[#D6BCB0]/50"
           onClick={() => {
             setPopUp(false);
           }}

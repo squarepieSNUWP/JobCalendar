@@ -45,8 +45,8 @@ export default function ModalDetail({
     bg-white rounded-xl checked:bg-teal-400 w-4 h-4 cursor-pointer`;
 
   // 등록과 닫기 버튼에 대한 css로 이는 Calendar 컴포넌트의 공고 등록 버튼과 동일
-  const btn = `py-2 px-4 text-sm font-semibold rounded-3xl bg-[#D6BCB0] 
-  text-white cursor-pointer mx-1 place-self-end mt-4 hover:bg-[#B9A49A]`;
+  const btn = `py-1.5 px-4 text-sm font-semibold rounded-3xl bg-[#D6BCB0] 
+  text-white border border-2 border-[#D6BCB0] cursor-pointer mx-0.5 place-self-end mt-4 hover:bg-[#B9A49A]`;
 
   const { data: session } = useSession();
   const userId = session.user.id;
@@ -125,9 +125,21 @@ export default function ModalDetail({
       <div className={`${background} ${popUp ? "z-50" : null}`}></div>
 
       <div className={modal_container}>
-        <h1 className="font-bold text-lg text-gray-800">
-          {selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-bold text-lg text-gray-800 mx-auto">
+            {selectedPost.type === "paper" ? "서류 일정" : "면접 일정"}
+          </h1>
+          {/* 클릭 시 달력으로 돌아가는 버튼 */}
+          <svg class="h-8 w-8 text-[#D6BCB0]"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+            onClick={() => {
+              setModalDetail(false);
+            }}>  
+            <path stroke="none" d="M0 0h24v24H0z"/>  
+            <line x1="18" y1="6" x2="6" y2="18" />  
+            <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </div>
+      
 
         <div className={input_container}>
           <div className={`${input_wrapper} flex-col`}>
@@ -146,45 +158,7 @@ export default function ModalDetail({
                   setDateValue(e.target.value);
                 }}
               />
-              {/* 날짜 input 옆에 연필(수정 아이콘)을 배치했으며
-              클릭해 수정 중이라면 체크(확인 아이콘)과 엑스(취소 아이콘)가 등장하도록 함
-              수정 완료되면(확인이나 취소 모두) 다시 연필 상태로 돌아감
-              */}
-              {!isEditing && (
-                <span
-                  className={`${btn} ml-2`}
-                  onClick={() => {
-                    setIsEditing(true);
-                  }}
-                >
-                  ✎
-                </span>
-              )}
-
-              {isEditing && (
-                <>
-                  <span
-                    className={`${btn} ml-2`}
-                    onClick={() => {
-                      handleEdit();
-                    }}
-                  >
-                    ✔︎
-                  </span>
-                  <span
-                    className={`${btn} ml-2`}
-                    onClick={() => {
-                      setDateValue(selectedPost.date);
-                      setCompanyValue(selectedPost.company);
-                      setTitleValue(selectedPost.title);
-                      setLinkValue(selectedPost.link);
-                      setIsEditing(false);
-                    }}
-                  >
-                    ✘
-                  </span>
-                </>
-              )}
+              
             </div>
           </div>
 
@@ -241,11 +215,49 @@ export default function ModalDetail({
         <div className="flex place-self-end">
           {/* 수정 중일 땐 자세히 보기를 숨김 */}
           {!isEditing && (
-            <a href={`/detail/${selectedPost.jobId}`} className={btn}>
-              자세히 보기
+            <a href={`/detail/${selectedPost.jobId}`} className='py-1.5 px-4 text-sm font-semibold 
+            border border-2 border-[#D6BCB0]/80 rounded-3xl bg-white 
+            text-[#D6BCB0] cursor-pointer mr-2 place-self-end mt-4 hover:bg-[#D6BCB0]/30'>
+              상세 정보
             </a>
           )}
 
+          {/* 날짜 input 옆에 연필(수정 아이콘)을 배치했으며
+              클릭해 수정 중이라면 체크(확인 아이콘)과 엑스(취소 아이콘)가 등장하도록 함
+              수정 완료되면(확인이나 취소 모두) 다시 연필 상태로 돌아감
+              */}
+              {!isEditing && (
+                <span
+                  className={`${btn} mr-1`}
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}
+                >
+                  수정
+                </span>
+              )}
+
+              {isEditing && (
+                <>
+                  <svg class="bg-[#D6BCB0] text-white hover:bg-[#D6BCB0]/30 rounded-full px-1 py-1 w-8 h-8 mr-2 mt-5"  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  onClick={() => {
+                    handleEdit();
+                  }}>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <svg class="bg-[#D6BCB0] text-white hover:bg-[#D6BCB0]/30 rounded-full px-1 py-1 w-8 h-8 mr-1.5 mt-5"  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  onClick={() => {
+                    setDateValue(selectedPost.date);
+                    setCompanyValue(selectedPost.company);
+                    setTitleValue(selectedPost.title);
+                    setLinkValue(selectedPost.link);
+                    setIsEditing(false);
+                  }}>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+
+                </>
+              )}
           {/* 삭제 팝업창을 뜨게 하는 버튼 */}
           <button
             className={btn}
@@ -256,15 +268,8 @@ export default function ModalDetail({
             삭제
           </button>
           
-          {/* 클릭 시 달력으로 돌아가는 버튼 */}
-          <button
-            className={btn}
-            onClick={() => {
-              setModalDetail(false);
-            }}
-          >
-            닫기
-          </button>
+          
+          
         </div>
       </div>
       

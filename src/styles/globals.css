@@ -75,7 +75,7 @@ li {
 }
 
 .button {
-  background: linear-gradient(to right, #d4b5a7, #D6BCB0, white, white, white,  white, white, white);
+  background: linear-gradient(to right, #d4b5a7, #D6BCB0, white,  white, white, white);
   text-decoration: none;
   border-radius: 60px;
   height: 32px;

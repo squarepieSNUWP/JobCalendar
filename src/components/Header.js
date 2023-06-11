@@ -53,33 +53,10 @@ export default function Header() {
           {session ? (
             <Link href="/mypage">
               <div className="flex flex-col items-center">
-                <div className="place-self-center mb-3">
+                <div className="place-self-center mb-1 mt-2">
                   {session.user.name}님 환영합니다!
                 </div>
 
-                <Link
-                  href="/mypage"
-                  className={`text-primary tracking-wide font-semibold 
-<<<<<<< HEAD
-                  text-center text-xs w-[120px] border border-gray-500 ${route.pathname === "/mypage" ? "bg-[#DBCEC7]" : "bg-tertiary "} 
-=======
-                  text-center text-xs w-[120px] border border-gray-500 ${
-                    route.pathname === "/" ? "bg-tertiary" : "bg-[#DBCEC7] "
-                  } 
->>>>>>> bdbb8cb0e68331226dd9eee4f7921fbaa1b97abb
-                  hover:bg-[#DFDAD6]`}
-                  style={{
-                    padding: "7px 13px",
-                    borderRadius: "18px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    transition: "background-color 0.1s",
-                  }}
-                >
-                  My Page
-                </Link>
               </div>
             </Link>
           ) : (
@@ -100,7 +77,7 @@ export default function Header() {
         </div>
         {/*</div>*/}
 
-        <nav className="space-y-3 mt-16 text-base font-semibold flex flex-col items-center">
+        <nav className="space-y-4 mt-24 text-base font-semibold flex flex-col items-center">
           <Link
             href="/"
             className={`text-primary tracking-wide ${
@@ -139,15 +116,15 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/jobs"
+            href="/mypage"
             className={`text-primary tracking-wide ${
-              route.pathname === "/jobs"
+              route.pathname === "/mypage"
                 ? "hover:text-gray-900 bg-gray-200"
                 : "hover:text-gray-900"
             } w-[180px]`}
             style={{
               backgroundColor:
-                route.pathname === "/jobs"
+                route.pathname === "/mypage"
                   ? "rgba(0, 0, 0, 0.1)"
                   : "transparent",
               padding: "10px 20px",
@@ -157,12 +134,12 @@ export default function Header() {
               transition: "background-color 0.1s",
             }}
             onMouseOver={(e) => {
-              if (route.pathname !== "/jobs") {
+              if (route.pathname !== "/mypage") {
                 e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
               }
             }}
             onMouseOut={(e) => {
-              if (route.pathname === "/jobs") {
+              if (route.pathname === "/mypage") {
                 e.target.style.backgroundColor = "#DBCEC7";
               } else {
                 e.target.style.backgroundColor = "transparent";
@@ -172,9 +149,9 @@ export default function Header() {
             <Image
               src={JobIcon}
               alt="Icon"
-              className="h-4 w-4 mr-4 ml-2"
+              className="h-5 w-5 mr-4 ml-1"
             ></Image>
-            Jobs
+            Documents
           </Link>
 
           <Link
@@ -228,7 +205,7 @@ export default function Header() {
                 <Image
                   src={LogOutIcon}
                   alt="logout"
-                  className="h-5 w-5 mr-2 cursor-pointer"
+                  className="h-6 w-6 mr-2 cursor-pointer"
                   onClick={signOut}
                 />
                 <div
@@ -247,7 +224,7 @@ export default function Header() {
                 <Image
                   src={LogInIcon}
                   alt="Log in"
-                  className="h-5 w-5 mr-2"
+                  className="h-6 w-6 mr-2"
                 ></Image>
                 <Link
                   href="/login"
