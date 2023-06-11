@@ -16,13 +16,15 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  getDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 //해당 job과 연결된 파일 정보 가져오기
 export async function getFiles(jobId) {
   const filesCollectionRef = collection(db, "files");
 
-  const q = query(filesCollectionRef, where("jobId", "==", jobId));
+  const q = query(filesCollectionRef, where("jobId", "array-contains", jobId));
   const fileSnapshot = await getDocs(q);
 
   if (fileSnapshot.empty) {
@@ -138,4 +140,13 @@ export async function deleteFile(fileId) {
   await deleteDoc(doc(filesCollectionRef, fileId));
 }
 
-export async function updateFile(fileId) {}
+export async function updateFile(req) {
+  const { fileId, jobId } = req;
+
+  const fileRef = doc(db, "files", `${fileId}`);
+  const fileDoc = await getDoc(fileRef);
+  const fileData = fileDoc.data();
+
+  fileData.jobId.push(jobId);
+  await updateDoc(fileDoc.ref, fileData);
+}
