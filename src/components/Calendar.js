@@ -196,7 +196,11 @@ export default function Calendar() {
         selectedYear={selectedYear}
         selectedMonth={selectedMonth}
         dates={getDates(selectedYear, selectedMonth)}
-        posts={posts} />
+        posts={posts}
+        setPosts={setPosts}
+        paperPosts={paperPosts}
+        setPaperPosts={setPaperPosts}
+      />
 
       {/* 일정 추가 모달 컴포넌트 */}
       {modalPaper &&
