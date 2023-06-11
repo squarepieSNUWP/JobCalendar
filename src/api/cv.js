@@ -28,7 +28,7 @@ export const createCV = async ( data ) => {
         jobId,
       });
 
-    return docRef;
+    return docRef.id;
 }
 
 export const updateCV = async (data) => {
