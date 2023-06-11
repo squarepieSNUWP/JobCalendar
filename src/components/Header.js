@@ -52,7 +52,7 @@ export default function Header() {
         <div>
           {session ? (
             <Link href="/mypage">
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col pl-5 items-center">
                 <div className="place-self-center mb-1 mt-2">
                   {session.user.name}님 환영합니다!
                 </div>

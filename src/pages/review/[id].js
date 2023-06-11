@@ -161,10 +161,10 @@ export default function Review() {
           </Link>
 
           <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
-            {job.title}
+            {job.company}
           </h1>
           <p className="text-xl font-base text-gray-600/90 pl-4 tracking-tight text-left">
-            {job.company}
+            {job.title}
           </p>
         </div>
 
@@ -271,7 +271,7 @@ export default function Review() {
                 </p>
               </>
             ) : (
-              <p className="text-xl font-bold text-[#ABA19C] mb-4">
+              <p className="text-xl font-bold text-[#ABA19C]/60 mb-4">
                 총평을 작성해주세요
               </p>
             )}
@@ -607,8 +607,8 @@ export default function Review() {
               ))}
             </>
           ) : (
-            <p className="text-xl font-bold text-[#ABA19C] mb-4">
-              회고를 작성해주세요
+            <p className="text-xl font-bold text-[#ABA19C]/60 mt-4 ml-8">
+              면접 내용을 추가해주세요
             </p>
           )}
         </div>

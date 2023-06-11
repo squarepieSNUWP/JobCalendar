@@ -209,10 +209,10 @@ export default function Detail() {
           </div>
 
           <h1 className="text-2xl font-bold mb-2 text-left pl-4 text-primary tracking-tight">
-            {job.title}
+            {job.company} - {job.occupation}
           </h1>
           <p className="text-xl font-base text-stone-600/90 pl-4 tracking-tight text-left">
-            {job.company} - {job.occupation}
+            {job.title}
           </p>
         </div>
 

@@ -87,7 +87,7 @@ export default function MyPage() {
 
         <div>
           <button
-            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-2 mr-2 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-1 mr-2 
             ${tab == "cv" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"} `}
             style={{ opacity: tab === "cv" ? 1 : 0.7 }}
             onClick={() => {
@@ -97,7 +97,7 @@ export default function MyPage() {
             이력서
           </button>
           <button
-            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-2 
+            className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out pb-[8px] pt-[10px] px-7 text-[17px] font-bold rounded-t-2xl mt-1 
             ${tab == "portfolio" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"}
             `}
             style={{ opacity: tab === "portfolio" ? 1 : 0.7 }}
