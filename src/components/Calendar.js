@@ -16,7 +16,7 @@ export default function Calendar() {
   // 현재는 너비는 max만 설정하고 높이는 직접 설정함
   // 배경색은 zinc로 함
   const calendar_container = 
-    `w-full h-full p-3 pt-0 bg-white mr-4`
+    `w-full h-full p-3 pt-0 bg-white`
   
 
   const { data: session } = useSession();
