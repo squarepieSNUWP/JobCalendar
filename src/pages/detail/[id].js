@@ -16,19 +16,12 @@ export default function Detail() {
   const [userId, setUserId] = useState(null);
   const [activeTab, setActiveTab] = useState("files");
 
-  const [files, setFiles] = useState({
-    resume: null,
-    coverLetter: null,
-    portfolio: null,
-  });
+  // const fileInputRefs = {
+  //   resume: useRef(null),
+  //   portfolio: useRef(null),
+  // };
 
-  const fileInputRefs = {
-    resume: useRef(null),
-    coverLetter: useRef(null),
-    portfolio: useRef(null),
-  };
-
-  const [activeFile, setActiveFile] = useState(null);
+  const [selectedFileId, setSelectedFileId] = useState(null);
 
   const [myPageFiles, setMyPageFiles] = useState({
     resumes: [],
@@ -160,7 +153,9 @@ export default function Detail() {
       : "portfolio";
 
     if (selectedFile) {
-      const confirmMessage = `${selectedFile.title}를 ${fileType}으로 등록하시겠습니까?`;
+      const confirmMessage = `${selectedFile.title}를 ${
+        fileType === "resume" ? "이력서" : "포트폴리오"
+      }로 등록하시겠습니까?`;
       const shouldRegister = window.confirm(confirmMessage);
 
       if (shouldRegister) {
@@ -188,45 +183,18 @@ export default function Detail() {
     }
   };
 
-  // const handleFileUpload = async (e, fileType) => {
-  //   //클릭한 곳의 파일이 발견되면
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     //파일 객체를 files 객체 안에 추가
-  //     setFiles((prevFiles) => ({ ...prevFiles, [fileType]: file }));
-  //     try {
-  //       await uploadPdf(file, fileType, userId);
-  //     } catch (error) {
-  //       console.error("Error uploading file", error.message);
-  //     }
-  //   }
-  // };
+  const handleFileView = (fileId) => {
+    setSelectedFileId(fileId);
+  };
 
-  // const openFileExplorer = (fileType) => {
-  //   fileInputRefs[fileType].current.click();
-  // };
+  const renderFileContent = (fileId) => {
+    let file = connectedFiles.resumes.find((file) => file.id === fileId);
 
-  // const handleFileView = (fileType) => {
-  //   setActiveFile(fileType);
-  // };
+    if (!file) {
+      file = connectedFiles.portfolios.find((file) => file.id === fileId);
+    }
 
-  // const handleFileChange = async (fileType) => {
-  //   const file = files[fileType];
-  //   setActiveFile(null);
-  //   setFiles((prevFiles) => ({ ...prevFiles, [fileType]: null }));
-  //   fileInputRefs[fileType].current.value = null;
-  //   try {
-  //     //deletePdf api를 불러서 선택된 파일을 storage에서 지움
-  //     await deletePdf(file, fileType, userId);
-  //   } catch (error) {
-  //     console.error("error while calling api");
-  //   }
-  // };
-
-  const renderFileContent = () => {
-    //기존에는 프론트에서 url을 생성하여 embed하던 것을 서버에서 응답으로 보낸 url을 활용하도록 변경
-    if (activeFile && files[activeFile]) {
-      const file = files[activeFile];
+    if (file) {
       return (
         <embed
           src={file.url}
@@ -375,19 +343,21 @@ export default function Detail() {
                           )}
                         </div>
 
-                        <input
+                        {/* <input
                           type="file"
                           ref={fileInputRefs.resume}
                           style={{ display: "none" }}
                           onChange={(e) => handleFileUpload(e, "resume")}
-                        />
+                        /> */}
                       </div>
                     </div>
                     {connectedFiles.resumes.length > 0 ? (
                       <button
                         className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
                             rounded-2xl mt-1 mr-5"
-                        onClick={() => handleFileView("resume")}
+                        onClick={() =>
+                          handleFileView(connectedFiles.resumes[0].id)
+                        }
                       >
                         파일 보기
                       </button>
@@ -428,18 +398,20 @@ export default function Detail() {
                         </div>
                       </div>
 
-                      <input
+                      {/* <input
                         type="file"
                         ref={fileInputRefs.portfolio}
                         style={{ display: "none" }}
                         onChange={(e) => handleFileUpload(e, "portfolio")}
-                      />
+                      /> */}
                     </div>
                     {connectedFiles.portfolios.length > 0 ? (
                       <button
                         className="place-self-end bg-[#C3B1A9]/80 hover:bg-[#C3B1A9] text-white text-sm py-2 px-5 
                             rounded-2xl mt-1 mr-5"
-                        onClick={() => handleFileView("resume")}
+                        onClick={() =>
+                          handleFileView(connectedFiles.portfolios[0].id)
+                        }
                       >
                         파일 보기
                       </button>
@@ -452,7 +424,7 @@ export default function Detail() {
                 </div>
                 <div className="w-3/4">
                   <div className="pl-2 rounded-2xl h-[400px]">
-                    {renderFileContent()}
+                    {renderFileContent(selectedFileId)}
                   </div>
                 </div>
               </div>
