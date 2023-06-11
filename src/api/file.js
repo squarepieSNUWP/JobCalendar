@@ -8,7 +8,15 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 //해당 job과 연결된 파일 정보 가져오기
 export async function getFiles(jobId) {
@@ -63,7 +71,6 @@ export async function getMyFiles(userId) {
     userFiles.push(fileModel);
   });
 
-  console.log("userFiles", userFiles);
   return userFiles;
 }
 
@@ -108,7 +115,6 @@ export async function createFile(req) {
     async () => {
       try {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log("File download URL:", downloadURL);
 
         const newFile = {
           fileUrl: downloadURL,
@@ -119,7 +125,6 @@ export async function createFile(req) {
         };
 
         const docRef = await addDoc(filesCollectionRef, newFile);
-        console.log("new tag doc id:", docRef.id);
         return docRef;
       } catch (error) {
         console.error("Error while uploading file to db: ", error.message);
@@ -128,6 +133,9 @@ export async function createFile(req) {
   );
 }
 
-export async function deleteFile(req) {}
+export async function deleteFile(fileId) {
+  const filesCollectionRef = collection(db, "files");
+  await deleteDoc(doc(filesCollectionRef, fileId));
+}
 
 export async function updateFile(fileId) {}

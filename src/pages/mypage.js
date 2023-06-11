@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
-import { createFile, getMyFiles } from "@/api/file";
+import { createFile, getMyFiles, deleteFile } from "@/api/file";
 
 export default function MyPage() {
   const { data: session } = useSession();
@@ -55,12 +55,9 @@ export default function MyPage() {
   };
 
   const renderFileContent = (fileId) => {
-    console.log("find file", fileId);
     const file = userFiles.find((file) => file.id === fileId);
-    console.log("file found!!!", file);
 
     if (file) {
-      console.log("file embed start");
       return (
         <embed
           src={file.fileUrl}
@@ -73,6 +70,12 @@ export default function MyPage() {
     return (
       <div className="bg-white rounded-2xl shadow drop-shadow-sm w-full h-full"></div>
     );
+  };
+
+  const handleFileDelete = async (fileId) => {
+    await deleteFile(fileId);
+    setActiveFile(null);
+    setUserFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
   };
 
   return (
@@ -105,7 +108,7 @@ export default function MyPage() {
           <button
             className={`transform translate-y-0 hover:translate-y-1 duration-300 ease-in-out py-[6px] px-5 font-bold rounded-t-2xl mt-2 
             ${tab == "portfolio" ? "bg-[#EADFDA]" : "bg-[#EADFDA]/50"}
-             `}
+            `}
             style={{ opacity: tab === "portfolio" ? 1 : 0.7 }}
             onClick={() => {
               setTab("portfolio");
@@ -150,16 +153,23 @@ export default function MyPage() {
                     {userFiles
                       .filter((file) => file.fileType === tab)
                       .map((file) => (
-                        <button
-                          className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2"
-                          key={file.id}
-                          onClick={() => {
-                            setActiveFile(file.id);
-                            renderFileContent(file.id);
-                          }}
-                        >
-                          {file.title}
-                        </button>
+                        <div key={file.id} className="flex items-center">
+                          <button
+                            className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2 mr-2"
+                            onClick={() => {
+                              setActiveFile(file.id);
+                              renderFileContent(file.id);
+                            }}
+                          >
+                            {file.title}
+                          </button>
+                          <button
+                            className="bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] py-2 px-4 rounded-2xl mt-2 mr-2"
+                            onClick={() => handleFileDelete(file.id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
                       ))}
                   </div>
                 </div>
