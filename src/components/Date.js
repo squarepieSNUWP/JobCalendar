@@ -139,14 +139,18 @@ export default function Date(
                   opacity: hoveredPost === null || item.id == hoveredPost.id ? 1 : 0,
                 }}
               >
-                <span className={post_type}>{item.type}</span>
+                <span className={post_type}>{item.type == "paper" ? "서류" : "면접"}</span>
                 <span className="post-box-text">
                   {item.company.length > 7
                     ? item.company.slice(0, 7) + "..." : item.company}
                 </span>
+                {/* absolute 속성을 이용해 post_box를 기준으로 바로 위에 위치하도록 조정
+                너비는 post_box와 같도록 하고 높이는 최소한 post_box는 가지도록 함. background, text-color, border은 임의로 설정함
+                */}
                 {isHovered && item.company.length > 7 && (
-                  <div className={`absolute w-full min-h-full 
-                  ${item.company.length > 16 ? "-top-3/4" : "-top-2/3"} left-1/2 transform -translate-x-1/2 -translate-y-1/3 px-0.5 bg-white border border-gray-300 rounded text-xs text-gray-700 shadow-md text-center align-baseline`}>
+                  <div className={`absolute flex items-center justify-center text-center w-full min-h-full 
+                  ${item.company.length < 16 ? "-top-3/4" : "-top-full"} left-1/2 transform -translate-x-1/2 -translate-y-1/3 px-0.5 
+                  bg-white border border-gray-300 rounded text-xs text-gray-700 shadow-md`}>
                     {item.company}
                   </div>
                 )}
