@@ -50,15 +50,18 @@ export default function Login() {
     signIn("kakao");
   };
 
-  const handleNaverLogin = () => {
-    signIn("naver");
-  };
+  // const handleNaverLogin = () => {
+  //   signIn("naver");
+  // };
 
   return (
     <Layout>
       <div className="flex flex-col items-center mt-16 mb-7">
-        <Link href="/login" className="text-3xl font-bold tracking-wide text-primary/90">
-              Log in
+        <Link
+          href="/login"
+          className="text-3xl font-bold tracking-wide text-primary/90"
+        >
+          Log in
         </Link>
       </div>
       <SignInForm
@@ -78,7 +81,6 @@ export default function Login() {
       <SnsSignInForm
         handleGoogleLogin={handleGoogleLogin}
         handleKakaoLogin={handleKakaoLogin}
-        handleNaverLogin={handleNaverLogin}
       />
       <div className="flex-row text-center w-full m-auto text-sm mt-7 text-gray-800">
         아직 취뽀달력의 회원이 아니신가요?
