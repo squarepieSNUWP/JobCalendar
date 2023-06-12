@@ -113,7 +113,7 @@ export default function MyPage() {
 
           <div className="flex">
             <div className="flex flex-col w-1/4">
-              <div className="mt-1 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+              <div className="mt-1 rounded-full w-60 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
 
               <div className="flex flex-col items-center mt-5 w-full">
                 <div className="bg-white p-3 rounded-2xl mb-1.5 w-64">
@@ -138,7 +138,7 @@ export default function MyPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+                <div className="mt-4 rounded-full w-60 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
 
                 <div className="bg-white p-3 rounded-2xl mt-5 mb-1.5 w-64 overflow-auto h-[263px]">
                   <div className="flex flex-col">
@@ -165,11 +165,11 @@ export default function MyPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-full w-64 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
+                <div className="mt-4 rounded-full w-60 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
               </div>
             </div>
             <div className="w-3/4">
-              <div className="pl-2 rounded-2xl h-[465px]">
+              <div className="pl-2 rounded-2xl h-full">
                 {renderFileContent(activeFile)}
               </div>
             </div>
