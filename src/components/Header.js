@@ -207,17 +207,17 @@ export default function Header() {
             <div className="mb-1 justify-center">
               <div
                 className="cursor-pointer bg-tertiary rounded-3xl hover:shadow-inner w-28 h-11 flex items-center justify-center"
-                onClick={signOut}
+                onClick={() => signOut({ callbackUrl: "/" })}
               >
                 <Image
                   src={LogOutIcon}
                   alt="logout"
                   className="h-6 w-6 mr-2 cursor-pointer"
-                  onClick={signOut}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                 />
                 <div
                   className="cursor-pointer text-gray-700 hover:text-gray-900 font-semibold mb-0.5"
-                  onClick={signOut}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                 >
                   Log out
                 </div>
