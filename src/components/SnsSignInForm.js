@@ -1,13 +1,9 @@
 import Image from "next/image";
 import kakao from "public/kakao.png";
-import naver from "public/naver.png";
+// import naver from "public/naver.png";
 import google from "public/google.png";
 
-export default function SnsSignInForm({
-  handleGoogleLogin,
-  handleKakaoLogin,
-  handleNaverLogin,
-}) {
+export default function SnsSignInForm({ handleGoogleLogin, handleKakaoLogin }) {
   return (
     <div>
       <div className="text-center text-sm mt-4 text-gray-800">
