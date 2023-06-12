@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getJob } from "@/api/job";
-import { createCV, getCV, updateCV } from "@/api/cv";
+import { createCV, deleteCV, getCV, updateCV } from "@/api/cv";
 import { getMyFiles, updateFile, getFiles } from "@/api/file";
 
 export default function Detail() {
@@ -464,12 +464,10 @@ export default function Detail() {
                             }
                           />
                         ) : (
-                          <p className="text-lg font-bold text-primary">
-                            Q. {coverLetter.question}
-                          </p>
+                          <p className="text-lg font-bold text-primary">Q. {coverLetter.question}</p>
                         )}
 
-                        <div>
+                        <div className="flex">
                           {edit[index] ? (
                             <div className="flex ml-6">
                               <svg
@@ -525,36 +523,57 @@ export default function Detail() {
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                               >
-                                <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                                <line x1="18" y1="6" x2="6" y2="18" />{" "}
-                                <line x1="6" y1="6" x2="18" y2="18" />
+                                <path stroke="none" d="M0 0h24v24H0z" /> <line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
                               </svg>
                             </div>
                           ) : (
-                            <svg
-                              class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"
-                              onClick={() => {
-                                setEditData({
-                                  question: coverLetter.question,
-                                  answer: coverLetter.answer,
-                                });
-                                setEdit((prevArr) => {
-                                  const newArr = [...prevArr];
-                                  newArr[index] = !newArr[index];
-                                  return newArr;
-                                });
-                              }}
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
+                            <>
+                              <svg
+                                class="h-6 w-6 text-gray-700 mr-4 hover:scale-[80%]"
+                                onClick={() => {
+                                  setEditData({
+                                    question: coverLetter.question,
+                                    answer: coverLetter.answer,
+                                  });
+                                  setEdit((prevArr) => {
+                                    const newArr = [...prevArr];
+                                    newArr[index] = !newArr[index];
+                                    return newArr;
+                                  });
+                                }}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                />
+                              </svg>
+
+                              <svg
+                                class="h-6 w-6 text-gray-700 hover:scale-[80%] mr-1"
+                                onClick={async () => {
+                                  const ok = confirm("정말로 삭제하시겠습니까?");
+                                  if (ok) {
+                                    setCoverLetters(coverLetters.filter((r, i) => i !== index));
+                                    await deleteCV(coverLetter);
+                                  }
+                                }}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                              />
-                            </svg>
+                              >
+                                {" "}
+                                <polyline points="3 6 5 6 21 6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> <line x1="10" y1="11" x2="10" y2="17" />{" "}
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                              </svg>
+                            </>
                           )}
                         </div>
                       </div>
