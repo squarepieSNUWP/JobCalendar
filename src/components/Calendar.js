@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CalendarBody from "./CalendarBody"
-import CalendarHeader from "./CalendarHeader"
+import CalendarBody from "./CalendarBody";
+import CalendarHeader from "./CalendarHeader";
 import Image from "next/image";
 import NextIcon from "public/nextSWP.png";
 import ModalPaper from "./ModalPaper";
-import ModalInterview from "./ModalInterview"
+import ModalInterview from "./ModalInterview";
 import { db } from "@/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useSession } from "next-auth/react";
@@ -15,32 +15,38 @@ export default function Calendar() {
   // 전체 달력의 크기 및 위치를 결정하는 css
   // 현재는 너비는 max만 설정하고 높이는 직접 설정함
   // 배경색은 zinc로 함
-  const calendar_container = 
-    `w-full h-full p-3 pt-0 bg-white`
-  
+  const calendar_container = `w-full h-full p-3 pt-0 bg-white`;
 
   const { data: session } = useSession();
-  const userId = session?.user?.id
+  const userId = session?.user?.id;
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
-    "January", "Feburary", "March",
-    "April", "May", "June",
-    "July", "August", "September",
-    "October", "November", "December"
-  ]
+    "January",
+    "Feburary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const today = {
     y: new Date().getFullYear(),
     m: new Date().getMonth() + 1,
-    d: new Date().getDate()
-  }
+    d: new Date().getDate(),
+  };
 
   const [selectedYear, setSelectedYear] = useState(today.y);
   const [selectedMonth, setSelectedMonth] = useState(today.m);
   const [modalPaper, setModalPaper] = useState(false);
   const [modalInterview, setModalInterview] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [paperPosts, setPaperPosts] = useState([])
+  const [paperPosts, setPaperPosts] = useState([]);
 
   // 연도와 달을 입력 받아 해당하는 날짜들 정보를 객체로 반환하는 함수
   // ex. {y: 2023, m: 6, d: 3, currentMonth: true, diff: 0}
@@ -59,7 +65,6 @@ export default function Calendar() {
     const nextYear = month === 12 ? year + 1 : year;
     const nextMonth = month === 12 ? 1 : month + 1;
 
-
     // 지난달 마지막 요일이 토요일이 아니라면 마지막 주의 날짜들을 삽입
     // 이번달 첫째 주 날짜들과 같은 줄에 보여주기 위한 작업
     // 이때 오늘 날짜와의 일수 차이를 계산 ex. 오늘 전이라면 음수, 다음이라면 양수
@@ -67,7 +72,9 @@ export default function Calendar() {
     if (prevLastDay !== 6) {
       for (let i = 0; i <= prevLastDay; i++) {
         const [y, m, d] = [prevYear, prevMonth - 1, prevLastDate - i];
-        const diff = Math.ceil((new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24));
+        const diff = Math.ceil(
+          (new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24)
+        );
 
         prevDates.unshift({
           y: prevYear,
@@ -83,7 +90,9 @@ export default function Calendar() {
     const thisDates = [];
     for (let i = 1; i <= thisLastDate; i++) {
       const [y, m, d] = [year, month - 1, i];
-      const diff = Math.ceil((new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24));
+      const diff = Math.ceil(
+        (new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24)
+      );
       thisDates.push({
         y: year,
         m: month,
@@ -99,7 +108,9 @@ export default function Calendar() {
 
     for (let i = 1; i <= remainingDays; i++) {
       const [y, m, d] = [nextYear, nextMonth - 1, i];
-      const diff = Math.ceil((new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24));
+      const diff = Math.ceil(
+        (new Date(y, m, d) - new Date()) / (1000 * 60 * 60 * 24)
+      );
       nextDates.push({
         y: nextYear,
         m: nextMonth,
@@ -133,11 +144,15 @@ export default function Calendar() {
 
         const jobsWithInfo = userJobs
           .filter((j) => {
-            const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
+            const matchingPaperPost = userPosts.find(
+              (p) => p.jobId === j.id && p.type === "paper"
+            );
             return matchingPaperPost;
           })
           .map((j) => {
-            const matchingPaperPost = userPosts.find((p) => p.jobId === j.id && p.type === "paper");
+            const matchingPaperPost = userPosts.find(
+              (p) => p.jobId === j.id && p.type === "paper"
+            );
             return {
               ...j,
               date: matchingPaperPost.date,
@@ -151,8 +166,8 @@ export default function Calendar() {
   }
 
   useEffect(() => {
-    getPosts()
-  }, [session])
+    getPosts();
+  }, [session]);
 
   return (
     <div className={calendar_container}>
@@ -165,15 +180,23 @@ export default function Calendar() {
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
           setSelectedYear={setSelectedYear}
-          setSelectedMonth={setSelectedMonth} />
+          setSelectedMonth={setSelectedMonth}
+        />
 
         <a class="button focus:button cursor-pointer mt-2 mr-4">
-          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white mr-3">+</span>
+          <span className="icon font-normal bg-[#D6BCB0] rounded-full text-white mr-3">
+            +
+          </span>
           <span
             className="text cursor-pointer bg-[#D6BCB0] rounded-3xl 
             text-white px-3 py-1 mr-1.5 hover:bg-[#B9A49A]"
             onClick={() => {
-              setModalPaper(true);
+              if (session && session.user) {
+                setModalPaper(true);
+              } else {
+                alert("로그인 후에 이용해 주세요.");
+                window.location.href = "/login";
+              }
             }}
           >
             서류
@@ -181,7 +204,12 @@ export default function Calendar() {
           <span
             className="text cursor-pointer bg-[#D6BCB0] rounded-3xl text-white px-3 py-1 hover:bg-[#B9A49A]"
             onClick={() => {
-              setModalInterview(true);
+              if (session && session.user) {
+                setModalInterview(true);
+              } else {
+                alert("로그인 후에 이용해 주세요.");
+                window.location.href = "/login";
+              }
             }}
           >
             면접
@@ -203,21 +231,25 @@ export default function Calendar() {
       />
 
       {/* 일정 추가 모달 컴포넌트 */}
-      {modalPaper &&
+      {modalPaper && (
         <ModalPaper
-        setModalPaper={setModalPaper}
-        posts={posts}
-        setPosts={setPosts}
-        paperPosts={paperPosts}
-        setPaperPosts={setPaperPosts} />}
+          setModalPaper={setModalPaper}
+          posts={posts}
+          setPosts={setPosts}
+          paperPosts={paperPosts}
+          setPaperPosts={setPaperPosts}
+        />
+      )}
 
-      {modalInterview &&
+      {modalInterview && (
         <ModalInterview
-        setModalInterview={setModalInterview}
-        posts={posts}
-        setPosts={setPosts}
-        paperPosts={paperPosts}
-        setPaperPosts={setPaperPosts}/>}
+          setModalInterview={setModalInterview}
+          posts={posts}
+          setPosts={setPosts}
+          paperPosts={paperPosts}
+          setPaperPosts={setPaperPosts}
+        />
+      )}
     </div>
   );
 }
