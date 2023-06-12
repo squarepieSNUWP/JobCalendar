@@ -80,7 +80,8 @@ export async function getMyFiles(userId) {
 export async function createFile(req) {
   const { file, title, userId, fileType } = req;
   if (file.type !== "application/pdf") {
-    throw new Error("Invalid file type. Please try uploading pdf files");
+    alert("pdf 형식의 파일만 업로드할 수 있습니다.");
+    return null;
   }
 
   const filesCollectionRef = collection(db, "files");

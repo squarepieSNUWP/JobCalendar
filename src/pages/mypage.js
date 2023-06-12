@@ -36,7 +36,7 @@ export default function MyPage() {
     fileInputRefs.current.click();
   };
 
-  const handleFileSelect = (event) => {
+  const handleFileSelect = async (event) => {
     const selectedFile = event.target.files[0];
 
     if (!selectedFile) {
@@ -50,8 +50,8 @@ export default function MyPage() {
       userId: userId,
       fileType: tab,
     };
-    createFile(newFile);
-    setUserFiles((prevUserFiles) => [...prevUserFiles, newFile]);
+    const result = await createFile(newFile);
+    if (result) setUserFiles((prevUserFiles) => [...prevUserFiles, newFile]);
   };
 
   const renderFileContent = (fileId) => {
@@ -83,7 +83,8 @@ export default function MyPage() {
     session.user && (
       <Layout>
         <h1 className="text-3xl place-self-start font-bold text-left mb-8 mt-2 pl-4 text-primary">
-          Documents</h1>
+          Documents
+        </h1>
 
         <div>
           <button
@@ -110,7 +111,6 @@ export default function MyPage() {
         </div>
 
         <div className="place-self-center bg-[#EADFDA] p-4 rounded-r-2xl rounded-b-2xl mt-0 w-full">
-
           <div className="flex">
             <div className="flex flex-col w-1/4">
               <div className="mt-1 rounded-full w-60 ml-3 h-1 p-0.1 bg-[#C3B1A9]/30 place-self-start"></div>
@@ -142,7 +142,6 @@ export default function MyPage() {
 
                 <div className="bg-white p-3 rounded-2xl mt-5 mb-1.5 w-64 overflow-auto h-[263px]">
                   <div className="flex flex-col">
-        
                     {userFiles
                       .filter((file) => file.fileType === tab)
                       .map((file) => (
@@ -156,9 +155,19 @@ export default function MyPage() {
                           >
                             {file.title}
                           </button>
-                          <svg class="h-9 w-9 rounded-full px-2 py-2 bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] "  fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                          onClick={() => handleFileDelete(file.id)}>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                          <svg
+                            class="h-9 w-9 rounded-full px-2 py-2 bg-secondary/30 hover:bg-secondary/50 text-[#C3B1A9] "
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            onClick={() => handleFileDelete(file.id)}
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
                           </svg>
                         </div>
                       ))}
@@ -175,8 +184,6 @@ export default function MyPage() {
             </div>
           </div>
         </div>
-
-       
       </Layout>
     )
   );
