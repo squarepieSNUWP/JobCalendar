@@ -51,14 +51,14 @@ export default function MyPage() {
       fileType: tab,
     };
     const result = await createFile(newFile);
-    console.log(result);
     if (result) {
-      setUserFiles((prevUserFiles) => [...prevUserFiles, newFile]);
+      setUserFiles((prevUserFiles) => [...prevUserFiles, result]);
     }
   };
 
   const renderFileContent = (fileId) => {
     const file = userFiles.find((file) => file.id === fileId);
+    console.log("file", file);
 
     if (file) {
       return (
