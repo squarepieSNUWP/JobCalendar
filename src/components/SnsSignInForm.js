@@ -29,15 +29,14 @@ export default function SnsSignInForm({
           onClick={handleKakaoLogin}
         >
           <Image src={kakao} alt="kakao logo" className="h-10 w-10"></Image>
-          
         </button>
-        <button
+        {/* <button
           className="bg-[#2DB400] inline-flex items-center h-11 w-11 justify-center rounded-full"
           onClick={handleNaverLogin}
         >
           <Image src={naver} alt="naver logo" className="h-11 w-11"></Image>
           
-        </button>
+        </button> */}
       </div>
     </div>
   );
