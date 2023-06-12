@@ -51,11 +51,14 @@ export default function MyPage() {
       fileType: tab,
     };
     const result = await createFile(newFile);
-    if (result) setUserFiles((prevUserFiles) => [...prevUserFiles, newFile]);
+    if (result) {
+      setUserFiles((prevUserFiles) => [...prevUserFiles, result]);
+    }
   };
 
   const renderFileContent = (fileId) => {
     const file = userFiles.find((file) => file.id === fileId);
+    console.log("file", file);
 
     if (file) {
       return (
@@ -73,9 +76,13 @@ export default function MyPage() {
   };
 
   const handleFileDelete = async (fileId) => {
-    await deleteFile(fileId);
-    setActiveFile(null);
-    setUserFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
+    const confirmResult = window.confirm("파일을 삭제하시겠습니까?");
+
+    if (confirmResult) {
+      await deleteFile(fileId);
+      setActiveFile(null);
+      setUserFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
+    }
   };
 
   return (
