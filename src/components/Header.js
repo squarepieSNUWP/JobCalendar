@@ -56,7 +56,6 @@ export default function Header() {
                 <div className="place-self-center mb-1 mt-2">
                   {session.user.name}님 환영합니다!
                 </div>
-
               </div>
             </Link>
           ) : (
@@ -115,83 +114,91 @@ export default function Header() {
             Calendar
           </Link>
 
-          <Link
-            href="/mypage"
-            className={`text-primary tracking-wide ${
-              route.pathname === "/mypage"
-                ? "hover:text-gray-900 bg-gray-200"
-                : "hover:text-gray-900"
-            } w-[180px]`}
-            style={{
-              backgroundColor:
+          {session ? (
+            <Link
+              href="/mypage"
+              className={`text-primary tracking-wide ${
                 route.pathname === "/mypage"
-                  ? "rgba(0, 0, 0, 0.1)"
-                  : "transparent",
-              padding: "10px 20px",
-              borderRadius: "20px",
-              display: "inline-flex",
-              alignItems: "center",
-              transition: "background-color 0.1s",
-            }}
-            onMouseOver={(e) => {
-              if (route.pathname !== "/mypage") {
-                e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
-              }
-            }}
-            onMouseOut={(e) => {
-              if (route.pathname === "/mypage") {
-                e.target.style.backgroundColor = "#DBCEC7";
-              } else {
-                e.target.style.backgroundColor = "transparent";
-              }
-            }}
-          >
-            <Image
-              src={JobIcon}
-              alt="Icon"
-              className="h-5 w-5 mr-4 ml-1"
-            ></Image>
-            Documents
-          </Link>
+                  ? "hover:text-gray-900 bg-gray-200"
+                  : "hover:text-gray-900"
+              } w-[180px]`}
+              style={{
+                backgroundColor:
+                  route.pathname === "/mypage"
+                    ? "rgba(0, 0, 0, 0.1)"
+                    : "transparent",
+                padding: "10px 20px",
+                borderRadius: "20px",
+                display: "inline-flex",
+                alignItems: "center",
+                transition: "background-color 0.1s",
+              }}
+              onMouseOver={(e) => {
+                if (route.pathname !== "/mypage") {
+                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
+                }
+              }}
+              onMouseOut={(e) => {
+                if (route.pathname === "/mypage") {
+                  e.target.style.backgroundColor = "#DBCEC7";
+                } else {
+                  e.target.style.backgroundColor = "transparent";
+                }
+              }}
+            >
+              <Image
+                src={JobIcon}
+                alt="Icon"
+                className="h-5 w-5 mr-4 ml-1"
+              ></Image>
+              Documents
+            </Link>
+          ) : (
+            <div></div>
+          )}
 
-          <Link
-            href="/review"
-            className={`text-primary tracking-wide ${
-              route.pathname === "/review"
-                ? "hover:text-gray-900 bg-gray-200"
-                : "hover:text-gray-900"
-            } w-[180px]`}
-            style={{
-              backgroundColor:
+          {session ? (
+            <Link
+              href="/review"
+              className={`text-primary tracking-wide ${
                 route.pathname === "/review"
-                  ? "rgba(0, 0, 0, 0.1)"
-                  : "transparent",
-              padding: "10px 20px",
-              borderRadius: "20px",
-              display: "inline-flex",
-              alignItems: "center",
-              transition: "background-color 0.1s",
-            }}
-            onMouseOver={(e) => {
-              if (route.pathname !== "/review") {
-                e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
-              }
-            }}
-            onMouseOut={(e) => {
-              if (route.pathname === "/review") {
-                e.target.style.backgroundColor = "#DBCEC7";
-              } else {
-                e.target.style.backgroundColor = "transparent";
-              }
-            }}
-          >
-            <Image
-              src={RevIcon}
-              alt="Icon"
-              className="h-4 w-4 mr-4 ml-2"
-            ></Image>
-            Review
-          </Link>
+                  ? "hover:text-gray-900 bg-gray-200"
+                  : "hover:text-gray-900"
+              } w-[180px]`}
+              style={{
+                backgroundColor:
+                  route.pathname === "/review"
+                    ? "rgba(0, 0, 0, 0.1)"
+                    : "transparent",
+                padding: "10px 20px",
+                borderRadius: "20px",
+                display: "inline-flex",
+                alignItems: "center",
+                transition: "background-color 0.1s",
+              }}
+              onMouseOver={(e) => {
+                if (route.pathname !== "/review") {
+                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
+                }
+              }}
+              onMouseOut={(e) => {
+                if (route.pathname === "/review") {
+                  e.target.style.backgroundColor = "#DBCEC7";
+                } else {
+                  e.target.style.backgroundColor = "transparent";
+                }
+              }}
+            >
+              <Image
+                src={RevIcon}
+                alt="Icon"
+                className="h-4 w-4 mr-4 ml-2"
+              ></Image>
+              Review
+            </Link>
+          ) : (
+            <div></div>
+          )}
         </nav>
       </div>
       <div>
