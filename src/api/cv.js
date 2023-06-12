@@ -1,5 +1,5 @@
 import { db } from "@/firebase"
-import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore"
 
 const cvCollection = collection(db, "coverletter");
 
