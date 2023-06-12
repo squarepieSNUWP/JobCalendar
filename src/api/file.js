@@ -28,7 +28,6 @@ export async function getFiles(jobId) {
   const fileSnapshot = await getDocs(q);
 
   if (fileSnapshot.empty) {
-    console.log("no files");
     return [];
   }
 
@@ -56,7 +55,6 @@ export async function getMyFiles(userId) {
   const fileSnapshot = await getDocs(q);
 
   if (fileSnapshot.empty) {
-    console.log("no files");
     return [];
   }
 
@@ -91,49 +89,69 @@ export async function createFile(req) {
 
   const uploadTask = uploadBytesResumable(storageRef, file);
 
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log("Upload is " + progress + "% done");
-      switch (snapshot.state) {
-        case "paused":
-          console.log("Upload is paused");
-          break;
-        case "running":
-          console.log("Upload is running");
-          break;
-      }
-    },
-    (error) => {
-      switch (error.code) {
-        case "storage/unauthorized":
-          console.error("Unauthorized access to storage.");
-          break;
-        case "storage/unknown":
-          console.error("Unknown storage error.");
-          break;
-      }
-    },
-    async () => {
-      try {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  const docRefPromise = new Promise((resolve, reject) => {
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case "storage/unauthorized":
+            console.error("Unauthorized access to storage.");
+            reject(error);
+            break;
+          case "storage/unknown":
+            console.error("Unknown storage error.");
+            reject(error);
+            break;
+        }
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-        const newFile = {
-          fileUrl: downloadURL,
-          title: title,
-          userId: userId,
-          fileType: fileType,
-          jobId: [],
-        };
+          const newFile = {
+            fileUrl: downloadURL,
+            title: title,
+            userId: userId,
+            fileType: fileType,
+            jobId: [],
+          };
 
-        const docRef = await addDoc(filesCollectionRef, newFile);
-        return docRef;
-      } catch (error) {
-        console.error("Error while uploading file to db: ", error.message);
+          const docRef = await addDoc(filesCollectionRef, newFile);
+          const docSnapshot = await getDoc(docRef);
+          const uploadedFile = {
+            id: docSnapshot.id,
+            ...docSnapshot.data(),
+          };
+
+          resolve(uploadedFile);
+        } catch (error) {
+          console.error("Error while uploading file to db: ", error.message);
+          reject(error);
+        }
       }
-    }
-  );
+    );
+  });
+
+  try {
+    const docRef = await docRefPromise;
+    return docRef;
+  } catch (error) {
+    console.error("An error occurred during file upload: ", error);
+    return null;
+  }
 }
 
 export async function deleteFile(fileId) {
